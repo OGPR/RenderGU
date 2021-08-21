@@ -64,8 +64,8 @@ int main()
     while (!WindowShouldClose(window))
     {
         processInput(window);
-        SwapBuffers(window);
         PollEvents();
+        SwapBuffers(window);
     }
     
 
