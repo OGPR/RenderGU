@@ -60,6 +60,7 @@ int main()
 
     glViewport(viewport.LowerLeftX, viewport.LowerLeftY, viewport.Width, viewport.Height);
 
+    // Game loop
     while (!WindowShouldClose(window))
     {
         processInput(window);
