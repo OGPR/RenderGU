@@ -50,9 +50,20 @@ unsigned int render_setup(float* vertex)
 
 
 }
-void render_draw(unsigned int shaderProgram, unsigned int VAO)
+void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue)
 {
     glUseProgram(shaderProgram);
+    
+    // TODO Investigate whether I can move the location code out (I think I can)
+    GLint locRChannelValue = glGetUniformLocation(shaderProgram, "R_ChannelValue");
+    GLint locGChannelValue = glGetUniformLocation(shaderProgram, "G_ChannelValue");
+    GLint locBChannelValue = glGetUniformLocation(shaderProgram, "B_ChannelValue");
+    if (locRChannelValue != -1 && locGChannelValue != -1 && locBChannelValue !=1)
+    {
+        glUniform1f(locRChannelValue, *channelValue++);
+        glUniform1f(locGChannelValue, *channelValue++);
+        glUniform1f(locBChannelValue, *channelValue++);
+    }
     glBindVertexArray(VAO);
     glPointSize(10);
     glDrawArrays(GL_POINTS, 0, 1);
