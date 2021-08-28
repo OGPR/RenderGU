@@ -66,6 +66,7 @@ int main()
     // Game loop
     GLfloat colorChannelValues[3] = { 0.f, 0.f, 0.f };
     GLboolean change = true;
+    GLint64 frameNumber = 0;
     while (!WindowShouldClose(window))
     {
         //// input
@@ -89,7 +90,10 @@ int main()
             colorChannelValues[1] = 0.f;
             colorChannelValues[2] = 0.f;
         }
-        change = !change;
+        if (++frameNumber % 20 == 0)
+        {
+            change = !change;
+        }
 
         //// check and call events, and swap buffers
         PollEvents();
