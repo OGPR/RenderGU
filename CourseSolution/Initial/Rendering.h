@@ -46,11 +46,6 @@ unsigned int render_setup(float* vertex)
     glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 0 , 0);
     glEnableVertexAttribArray(0);
 
-    // Color attribute
-    // Stride is zero for the moment as we only have one vertex (so one color)
-    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (const void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-
     return VAO;
 
 
