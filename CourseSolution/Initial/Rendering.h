@@ -42,11 +42,13 @@ unsigned int render_setup(float* vertex)
     glBindVertexArray(VAO);
 
     // Position attribute
-    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 6 * sizeof(float) , 0);
+    // Stride is zero for the moment as we only have one vertex (so one position)
+    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 0 , 0);
     glEnableVertexAttribArray(0);
 
     // Color attribute
-    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 6 * sizeof(float) , (const void*)12);
+    // Stride is zero for the moment as we only have one vertex (so one color)
+    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (const void*)(3*sizeof(float)));
     glEnableVertexAttribArray(1);
 
     return VAO;
