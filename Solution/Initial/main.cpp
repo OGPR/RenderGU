@@ -64,9 +64,19 @@ int main()
 
 
     // Game loop
-    GLfloat colorChannelValues[3] = { 0.f, 0.f, 0.f };
-    GLboolean change = true;
+    GLfloat colorChannelValues[8][3] =
+    {
+        {0.f, 0.f, 0.f},
+        {1.f, 0.f, 0.f},
+        {1.f, 1.f, 0.f},
+        {0.f, 1.f, 1.f},
+        {0.f, 0.f, 1.f},
+        {0.f, 1.f, 0.f}, 
+        {1.f, 0.f, 1.f},
+        {1.f, 1.f, 1.f},
+    };
     GLint64 frameNumber = 0;
+    GLchar colorChannelValuesIdx = 0;
     while (!WindowShouldClose(window))
     {
         //// input
@@ -77,22 +87,10 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
-        render_draw(shaderProgram, VAO, colorChannelValues);
-        if (change)
-        {
-            colorChannelValues[0] = 1.f;
-            colorChannelValues[1] = 1.f;
-            colorChannelValues[2] = 1.f;
-        }
-        else
-        {
-            colorChannelValues[0] = 0.f;
-            colorChannelValues[1] = 0.f;
-            colorChannelValues[2] = 0.f;
-        }
+        render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx]);
         if (++frameNumber % 20 == 0)
         {
-            change = !change;
+            colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
 
         //// check and call events, and swap buffers
