@@ -64,6 +64,19 @@ int main()
 
 
     // Game loop
+    GLfloat colorChannelValues[8][3] =
+    {
+        {0.f, 0.f, 0.f},
+        {1.f, 0.f, 0.f},
+        {1.f, 1.f, 0.f},
+        {0.f, 1.f, 1.f},
+        {0.f, 0.f, 1.f},
+        {0.f, 1.f, 0.f}, 
+        {1.f, 0.f, 1.f},
+        {1.f, 1.f, 1.f},
+    };
+    GLint64 frameNumber = 0;
+    GLchar colorChannelValuesIdx = 0;
     while (!WindowShouldClose(window))
     {
         //// input
@@ -74,8 +87,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
-        render_draw(shaderProgram, VAO);
-
+        render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx]);
+        if (++frameNumber % 20 == 0)
+        {
+            colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
+        }
 
         //// check and call events, and swap buffers
         PollEvents();
