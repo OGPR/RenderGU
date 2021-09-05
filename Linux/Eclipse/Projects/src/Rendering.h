@@ -2,6 +2,8 @@
 #include <glad/glad.h> // to get OpenGL includes
 #include <iostream>
 #include "data.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /**
 * The rendering window
@@ -86,7 +88,7 @@ unsigned int render_setup_tri(float* vertex, unsigned int numberOfEntries)
     return VAO;
 
 }
-void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue, bool triangle)
+void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue, bool triangle, glm::mat4& projMat)
 {
     glUseProgram(shaderProgram);
     
@@ -99,6 +101,13 @@ void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelV
         glUniform1f(locRChannelValue, *channelValue++);
         glUniform1f(locGChannelValue, *channelValue++);
         glUniform1f(locBChannelValue, *channelValue++);
+    }
+
+
+    GLint locProjMat = glGetUniformLocation(shaderProgram, "projMat");
+    if (locProjMat != -1)
+    {
+    	glUniformMatrix4fv(locProjMat,1,GL_FALSE,glm::value_ptr(projMat));
     }
     glBindVertexArray(VAO);
     if (!triangle)

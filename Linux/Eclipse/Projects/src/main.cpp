@@ -14,6 +14,8 @@
 #include "CompileShaders.h"
 #include "LinkShaders.h"
 #include "data.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -92,6 +94,10 @@ int main()
     };
     GLint64 frameNumber = 0;
     GLchar colorChannelValuesIdx = 0;
+
+    // We want the triangle to have sides of length 0.5f, centered at origin, for the view
+    float modelScaleFactor_f = float(modelScaleFactor);
+    glm::mat4 projMat = glm::ortho(-modelScaleFactor_f, modelScaleFactor_f, -modelScaleFactor_f, modelScaleFactor_f, 0.f, 0.1f);
     while (!WindowShouldClose(window))
     {
         //// input
@@ -107,7 +113,7 @@ int main()
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
-        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true, projMat);
 
         //// check and call events, and swap buffers
         PollEvents();

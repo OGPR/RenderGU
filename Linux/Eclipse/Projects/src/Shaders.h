@@ -36,11 +36,12 @@ const char* vertexShaderSource_Tri =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
     layout(location = 1) in vec3 aColour;
+    uniform mat4 projMat;
     out vec3 Colour;
 
     void main()
     {
-        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+        gl_Position = projMat * vec4(aPos, 1.0);
         Colour = aColour;
     }
 );
