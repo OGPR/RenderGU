@@ -14,7 +14,7 @@ struct Viewport
     GLsizei Height = 0;
 };
 
-unsigned int render_setup(float* vertex)
+unsigned int render_setup(float* vertex, unsigned int numberOfEntries)
 {
     ////// Vertex Specification
 
@@ -30,7 +30,7 @@ unsigned int render_setup(float* vertex)
     // so using sizeof(vertex) will only allocate 8 bytes (on 64 bit) of memory for the VBO 
     // In the case of only having the position information and (and only thinking 2-D), this is fine -
     // Not so when adding a z value, or more attributes
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertex, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numberOfEntries * sizeof(float), vertex, GL_STATIC_DRAW);
 
     //// Connecting vertex attributes (in the vertex shader) to currently bound VBO 
 
@@ -50,7 +50,7 @@ unsigned int render_setup(float* vertex)
 
 
 }
-void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue)
+void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue, bool triangle)
 {
     glUseProgram(shaderProgram);
     
@@ -65,7 +65,14 @@ void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelV
         glUniform1f(locBChannelValue, *channelValue++);
     }
     glBindVertexArray(VAO);
-    glPointSize(10);
-    glDrawArrays(GL_POINTS, 0, 1);
+    if (!triangle)
+    {
+		glPointSize(10);
+		glDrawArrays(GL_POINTS, 0, 1);
+    }
+    else
+    {
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
 }
 
