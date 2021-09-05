@@ -75,7 +75,7 @@ int main()
 
 
     unsigned int VAO = render_setup(vertex, 3);
-    unsigned int VAO_Triangle = render_setup(triangle, 3*3);
+    unsigned int VAO_Triangle = render_setup_tri(triangle, 3*6);
 
 
     // Game loop
