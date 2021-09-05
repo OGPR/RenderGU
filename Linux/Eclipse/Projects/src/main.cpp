@@ -69,7 +69,13 @@ int main()
         compileVertexShader(vertexShaderSource),
         compileFragmentShader(fragmentShaderSource));
 
-    unsigned int VAO = render_setup(vertex);
+    unsigned int shaderProgram_Tri = linkShaders(
+        compileVertexShader(vertexShaderSource_Tri),
+        compileFragmentShader(fragmentShaderSource_Tri));
+
+
+    unsigned int VAO = render_setup(vertex, 3);
+    unsigned int VAO_Triangle = render_setup_tri(triangle, 3*6);
 
 
     // Game loop
@@ -96,11 +102,12 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
-        render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx]);
+        //render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx], false);
         if (++frameNumber % 20 == 0)
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
+        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
 
         //// check and call events, and swap buffers
         PollEvents();
