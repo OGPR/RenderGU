@@ -73,9 +73,16 @@ int main()
         compileVertexShader(vertexShaderSource_Tri),
         compileFragmentShader(fragmentShaderSource_Tri));
 
+    unsigned int shaderProgram_Rect = linkShaders(
+        compileVertexShader(vertexShaderSource_Rect),
+        compileFragmentShader(fragmentShaderSource_Rect));
+
 
     unsigned int VAO = render_setup(vertex, 3);
     unsigned int VAO_Triangle = render_setup_tri(triangle, 3*6);
+
+    unsigned int EBO = render_setup_rect(rectangle, 21);
+
 
 
     // Game loop
@@ -107,7 +114,8 @@ int main()
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
-        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+        //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+        render_draw_indexArray(shaderProgram_Rect, EBO);
 
         //// check and call events, and swap buffers
         PollEvents();
