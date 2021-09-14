@@ -29,15 +29,10 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-    	int polygonMode;
-    	glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
-    	if (polygonMode == 6914)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    	else if (polygonMode == 6913)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    }
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 int main()
