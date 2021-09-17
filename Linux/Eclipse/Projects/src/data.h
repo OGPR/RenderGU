@@ -5,14 +5,17 @@ float vertex[] =
      0.0f, 0.0f, 0.0f, //Position
 };
 
-float triangle[3*6] =
+float triangle[] =
 {
-     -0.5f, -0.5f, 0.0f,
-     0.0f, 0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
+     -0.5f, -0.5f, 0.0f, // lower-left
+     0.0f, 0.5f, 0.0f,   // top-center
+     0.5f, -0.5f, 0.0f,  // lower-right
 	 1.f, 0.f, 0.f,    // Colors
 	 0.f, 1.f, 0.f,
 	 0.f, 0.f, 1.f,
+	 0.0f, 0.0f,  // texture lower left
+	 0.5f, 1.0f,  // texture top-center left
+	 1.0f, 0.0f,  // texture lower-right
 };
 
 float rectangle[] =

@@ -83,6 +83,12 @@ unsigned int render_setup_tri(float* vertex, unsigned int numberOfEntries)
     glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (void*)(9*sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(1);
 
+    // Texture attribute
+    // Note second arg needs to be 2 (we have 2 componentes per the texture vertex attribute)
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 0 , (void*)(18*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+
+
     return VAO;
 
 }

@@ -14,6 +14,10 @@
 #include "CompileShaders.h"
 #include "LinkShaders.h"
 #include "data.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -85,10 +89,34 @@ int main()
 
 
     unsigned int VAO = render_setup(vertex, 3);
-    unsigned int VAO_Triangle = render_setup_tri(triangle, 3*6);
+    unsigned int VAO_Triangle = render_setup_tri(triangle, 24);
 
-    unsigned int EBO = render_setup_rect(rectangle, 21);
+    //unsigned int EBO = render_setup_rect(rectangle, 32);
 
+
+
+	// OpenGL Texture Set up
+    // TODO move out to function/file
+	int img_width, img_height, img_nChannels;
+	unsigned char* img_data = stbi_load("wall.jpg", &img_width, &img_height, &img_nChannels,0);
+
+	if (!img_data)
+		printf("Failed to load texture...");
+
+	unsigned int texture;
+	glGenTextures(1,&texture);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
 
 
     // Game loop
@@ -120,8 +148,7 @@ int main()
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
-        //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        render_draw_indexArray(shaderProgram_Rect, EBO);
+        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
 
         //// check and call events, and swap buffers
         PollEvents();
