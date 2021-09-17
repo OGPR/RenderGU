@@ -27,6 +27,10 @@ float rectangle[] =
 	 1.f, 0.f, 0.f,    // Colors - only 3 as we want both triangles that will make this rect to have the same
 	 0.f, 1.f, 0.f,
 	 0.f, 0.f, 1.f,
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
 };
 
 unsigned int indexArray[3*2] =

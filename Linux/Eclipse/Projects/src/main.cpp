@@ -91,14 +91,14 @@ int main()
     unsigned int VAO = render_setup(vertex, 3);
     unsigned int VAO_Triangle = render_setup_tri(triangle, 24);
 
-    //unsigned int EBO = render_setup_rect(rectangle, 32);
+    unsigned int EBO = render_setup_rect(rectangle, 29);
 
 
 
 	// OpenGL Texture Set up
     // TODO move out to function/file
 	int img_width, img_height, img_nChannels;
-	unsigned char* img_data = stbi_load("wall.jpg", &img_width, &img_height, &img_nChannels,0);
+	unsigned char* img_data = stbi_load("container.jpg", &img_width, &img_height, &img_nChannels,0);
 
 	if (!img_data)
 		printf("Failed to load texture...");
@@ -148,7 +148,8 @@ int main()
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
-        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+        //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+        render_draw_indexArray(shaderProgram_Rect, EBO);
 
         //// check and call events, and swap buffers
         PollEvents();

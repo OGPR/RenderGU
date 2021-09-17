@@ -128,6 +128,10 @@ unsigned int render_setup_rect(float* vertex, unsigned int numberOfEntries)
     glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (void*)(12*sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(1);
 
+    // Texture attribute
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 0 , (void*)(21*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+
     // Create EBO
     unsigned int EBO;
     glGenBuffers(1, &EBO);
