@@ -28,6 +28,7 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 }
 
 static bool vertFlip = false;
+static float texture2Amount = 0.2f;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -44,6 +45,15 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
     	vertFlip = true;
+
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    	texture2Amount += 0.0025f;
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    	texture2Amount -= 0.0025f;
+
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    	texture2Amount = 0.2f;
 
 }
 
@@ -186,7 +196,7 @@ int main()
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
         //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip);
+        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip, texture2Amount);
 
         //// check and call events, and swap buffers
         PollEvents();
