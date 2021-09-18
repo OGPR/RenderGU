@@ -88,12 +88,15 @@ const char* fragmentShaderSource_Rect =
 
 	uniform sampler2D Texture1;
 	uniform sampler2D Texture2;
+	uniform bool vertFlip = false;
 
     void main()
     {
         //FragColor = vec4(Colour, 1.0f);
-        //FragColor = mix(texture(Texture1, TexCoord), texture(Texture2, TexCoord), 0.2);
-        FragColor = mix(texture(Texture1, TexCoord), texture(Texture2, vec2(1.0 - TexCoord.x, TexCoord.y)), 0.2);
+    	if (vertFlip)
+			FragColor = mix(texture(Texture1, TexCoord), texture(Texture2, vec2(1.0 - TexCoord.x, TexCoord.y)), 0.2);
+    	else
+			FragColor = mix(texture(Texture1, TexCoord), texture(Texture2, TexCoord), 0.2);
     }
 );
 

@@ -168,10 +168,11 @@ void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelV
     }
 }
 
-void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO)
+void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO, bool vertFlip = false)
 {
     glUseProgram(shaderProgram);
     glUniform1i(glGetUniformLocation(shaderProgram, "Texture2"), 1);
+    glUniform1i(glGetUniformLocation(shaderProgram, "vertFlip"), vertFlip);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -27,6 +27,7 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+static bool vertFlip = false;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -37,6 +38,13 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+    	vertFlip = false;
+
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    	vertFlip = true;
+
 }
 
 int main()
@@ -178,7 +186,7 @@ int main()
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
         //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        render_draw_indexArray(shaderProgram_Rect, EBO);
+        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip);
 
         //// check and call events, and swap buffers
         PollEvents();
