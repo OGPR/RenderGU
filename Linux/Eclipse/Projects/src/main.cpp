@@ -14,6 +14,10 @@
 #include "CompileShaders.h"
 #include "LinkShaders.h"
 #include "data.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -23,6 +27,8 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+static bool vertFlip = false;
+static float texture2Amount = 0.2f;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -33,6 +39,22 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+    	vertFlip = false;
+
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    	vertFlip = true;
+
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    	texture2Amount += 0.0025f;
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    	texture2Amount -= 0.0025f;
+
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    	texture2Amount = 0.2f;
+
 }
 
 int main()
@@ -85,9 +107,62 @@ int main()
 
 
     unsigned int VAO = render_setup(vertex, 3);
-    unsigned int VAO_Triangle = render_setup_tri(triangle, 3*6);
+    unsigned int VAO_Triangle = render_setup_tri(triangle, 24);
 
-    unsigned int EBO = render_setup_rect(rectangle, 21);
+    unsigned int EBO = render_setup_rect(rectangle, 29);
+
+
+
+	// OpenGL Texture Set up
+    // TODO move out to function/file
+	int img_width, img_height, img_nChannels;
+	unsigned char* img_data = stbi_load("container.jpg", &img_width, &img_height, &img_nChannels,0);
+
+	if (!img_data)
+		printf("Failed to load texture...");
+
+	unsigned int texture;
+	glGenTextures(1,&texture);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Second texture
+	//TODO it would be cool to fist check if we _need_ to do this - would have to check where 0.0 is on image y-axis
+	stbi_set_flip_vertically_on_load(true);
+
+	img_data = stbi_load("awesomeface.png", &img_width, &img_height, &img_nChannels, 0);
+
+
+	if (!img_data)
+		printf("Failed to load texture 2...");
+
+	unsigned int texture2;
+	glGenTextures(1, &texture2);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+
 
 
 
@@ -121,7 +196,7 @@ int main()
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
         //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        render_draw_indexArray(shaderProgram_Rect, EBO);
+        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip, texture2Amount);
 
         //// check and call events, and swap buffers
         PollEvents();

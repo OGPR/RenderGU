@@ -83,6 +83,12 @@ unsigned int render_setup_tri(float* vertex, unsigned int numberOfEntries)
     glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (void*)(9*sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(1);
 
+    // Texture attribute
+    // Note second arg needs to be 2 (we have 2 componentes per the texture vertex attribute)
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 0 , (void*)(18*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+
+
     return VAO;
 
 }
@@ -122,6 +128,10 @@ unsigned int render_setup_rect(float* vertex, unsigned int numberOfEntries)
     glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (void*)(12*sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(1);
 
+    // Texture attribute
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 0 , (void*)(21*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+
     // Create EBO
     unsigned int EBO;
     glGenBuffers(1, &EBO);
@@ -158,9 +168,12 @@ void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelV
     }
 }
 
-void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO)
+void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO, bool vertFlip = false, float texture2Amount = 0.2f)
 {
     glUseProgram(shaderProgram);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture2"), 1);
+    glUniform1i(glGetUniformLocation(shaderProgram, "vertFlip"), vertFlip);
+    glUniform1f(glGetUniformLocation(shaderProgram, "texture2Amount"), texture2Amount);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
