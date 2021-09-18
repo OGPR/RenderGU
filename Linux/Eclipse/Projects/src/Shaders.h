@@ -86,12 +86,13 @@ const char* fragmentShaderSource_Rect =
 	in vec3 Colour;
 	in vec2 TexCoord;
 
-	uniform sampler2D Texture;
+	uniform sampler2D Texture1;
+	uniform sampler2D Texture2;
 
     void main()
     {
         //FragColor = vec4(Colour, 1.0f);
-        FragColor = texture(Texture, TexCoord);
+        FragColor = mix(texture(Texture1, TexCoord), texture(Texture2, TexCoord), 0.2);
     }
 );
 
