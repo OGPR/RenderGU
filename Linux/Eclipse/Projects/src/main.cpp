@@ -167,7 +167,6 @@ int main()
 
 	//// Transformations
 	glm::mat4 model(1.f);
-	model = glm::rotate(model, glm::radians(-45.f), glm::vec3(1.f,0.f,0.f));
 	glm::mat4 view(1.f);
 	view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
 	glm::mat4 projection;
@@ -188,6 +187,7 @@ int main()
     };
     GLint64 frameNumber = 0;
     GLchar colorChannelValuesIdx = 0;
+    float count = 0.f;
     while (!WindowShouldClose(window))
     {
         //// input
@@ -204,6 +204,7 @@ int main()
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
         //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+		model = glm::rotate(model, glm::radians(count=-0.1f), glm::vec3(1.f,0.f,0.f));
         render_draw_indexArray(
         		shaderProgram_Rect,
 				EBO,
