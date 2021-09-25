@@ -16,6 +16,9 @@
 #include "data.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 
@@ -162,8 +165,9 @@ int main()
 
 	stbi_image_free(img_data);
 
-
-
+	//// Transformations
+	glm::mat4 Transform(1.0f);
+	Transform = glm::translate(Transform, glm::vec3(0.5f,-0.5f,0.f));
 
 
     // Game loop
@@ -196,7 +200,8 @@ int main()
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
         //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip, texture2Amount);
+        Transform = glm::rotate(Transform, (float)glfwGetTime(), glm::vec3(0.f,0.f,1.f));
+        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip, texture2Amount, Transform);
 
         //// check and call events, and swap buffers
         PollEvents();
