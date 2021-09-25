@@ -2,6 +2,9 @@
 #include <glad/glad.h> // to get OpenGL includes
 #include <iostream>
 #include "data.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /**
 * The rendering window
@@ -168,12 +171,14 @@ void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelV
     }
 }
 
-void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO, bool vertFlip = false, float texture2Amount = 0.2f)
+void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO, bool vertFlip = false, float texture2Amount = 0.2f,
+		glm::mat4 transform = glm::mat4(1.0f))
 {
     glUseProgram(shaderProgram);
     glUniform1i(glGetUniformLocation(shaderProgram, "Texture2"), 1);
     glUniform1i(glGetUniformLocation(shaderProgram, "vertFlip"), vertFlip);
     glUniform1f(glGetUniformLocation(shaderProgram, "texture2Amount"), texture2Amount);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
