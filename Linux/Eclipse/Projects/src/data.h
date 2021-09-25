@@ -38,3 +38,111 @@ unsigned int indexArray[3*2] =
     0, 1, 3, // first triangle
     0, 2, 3, // second triangle
 };
+
+float cube[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+};
+
+float cube_forIndexedDraw[] =
+{
+	//front face
+    -0.5f,-0.5f,0.5f, // bottom left
+     0.5f,-0.5f,0.5f, // bottom right
+    -0.5f, 0.5f,0.5f, // top left
+     0.5f, 0.5f,0.5f, // top right
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
+
+	//back face
+    -0.5f,-0.5f,-0.5f, // bottom left
+     0.5f,-0.5f,-0.5f, // bottom right
+    -0.5f, 0.5f,-0.5f, // top left
+     0.5f, 0.5f,-0.5f, // top right
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
+
+	//top face
+    -0.5f, 0.5f,0.5f, // front left
+     0.5f, 0.5f,0.5f, // front right
+    -0.5f, 0.5f,-0.5f, // back left
+     0.5f, 0.5f,-0.5f, // back right
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
+
+	//bottom face
+    -0.5f,-0.5f,0.5f, // front left
+     0.5f,-0.5f,0.5f, // front right
+    -0.5f, -0.5f,-0.5f, // back left
+     0.5f, -0.5f,-0.5f, // back right
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
+
+	//left face
+    -0.5f,-0.5f,0.5f, // front bottom
+     -0.5f,0.5f,0.5f, // front top
+    -0.5f, -0.5f,-0.5f, // back bottom
+     -0.5f, 0.5f,-0.5f, // back top
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
+
+	//right face
+    0.5f,-0.5f,0.5f, // front bottom
+    0.5f,0.5f,0.5f, // front top
+    0.5f, -0.5f,-0.5f, // back bottom
+    0.5f, 0.5f,-0.5f, // back top
+	 0.f,0.f,       // texture bottom left
+	 1.f,0.f,		//texture bottom right
+	 0.f,1.f,		//texture top left
+	 1.f, 1.f,		//top right
+};
+
