@@ -166,8 +166,12 @@ int main()
 	stbi_image_free(img_data);
 
 	//// Transformations
-	glm::mat4 Transform(1.0f);
-	Transform = glm::translate(Transform, glm::vec3(0.5f,-0.5f,0.f));
+	glm::mat4 model(1.f);
+	model = glm::rotate(model, glm::radians(-45.f), glm::vec3(1.f,0.f,0.f));
+	glm::mat4 view(1.f);
+	view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
 
     // Game loop
@@ -200,8 +204,14 @@ int main()
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
         //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        Transform = glm::rotate(Transform, (float)glfwGetTime(), glm::vec3(0.f,0.f,1.f));
-        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip, texture2Amount, Transform);
+        render_draw_indexArray(
+        		shaderProgram_Rect,
+				EBO,
+				vertFlip,
+				texture2Amount,
+				model,
+				view,
+				projection);
 
         //// check and call events, and swap buffers
         PollEvents();
