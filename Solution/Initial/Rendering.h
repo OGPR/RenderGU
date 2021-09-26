@@ -1,7 +1,10 @@
 #pragma once
-#include <GLAD/glad.h> // to get OpenGL includes
+#include <glad/glad.h> // to get OpenGL includes
 #include <iostream>
 #include "data.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /**
 * The rendering window
@@ -14,7 +17,7 @@ struct Viewport
     GLsizei Height = 0;
 };
 
-unsigned int render_setup(float* vertex)
+unsigned int render_setup(float* vertex, unsigned int numberOfEntries)
 {
     ////// Vertex Specification
 
@@ -30,7 +33,7 @@ unsigned int render_setup(float* vertex)
     // so using sizeof(vertex) will only allocate 8 bytes (on 64 bit) of memory for the VBO 
     // In the case of only having the position information and (and only thinking 2-D), this is fine -
     // Not so when adding a z value, or more attributes
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertex, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numberOfEntries * sizeof(float), vertex, GL_STATIC_DRAW);
 
     //// Connecting vertex attributes (in the vertex shader) to currently bound VBO 
 
@@ -42,15 +45,107 @@ unsigned int render_setup(float* vertex)
     glBindVertexArray(VAO);
 
     // Position attribute
-    // Stride is zero for the moment as we only have one vertex (so one position)
     glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 0 , 0);
     glEnableVertexAttribArray(0);
 
     return VAO;
 
+}
+unsigned int render_setup_tri(float* vertex, unsigned int numberOfEntries)
+{
+    ////// Vertex Specification
+
+    // Create VBO
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+
+    // Set openGL state to have above VBO bound
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // Allocate memory for the VBO
+    // NOTE: as we are passing in the vertex array, it decays to a pointer
+    // so using sizeof(vertex) will only allocate 8 bytes (on 64 bit) of memory for the VBO
+    // In the case of only having the position information and (and only thinking 2-D), this is fine -
+    // Not so when adding a z value, or more attributes
+    glBufferData(GL_ARRAY_BUFFER, numberOfEntries * sizeof(float), vertex, GL_STATIC_DRAW);
+
+    //// Connecting vertex attributes (in the vertex shader) to currently bound VBO
+
+    // Create VAO
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    // Set OpenGL state to have above VAO bound - need this to change VAO state (call to attrib pointer)
+    glBindVertexArray(VAO);
+
+    // Position attribute
+    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 0 , 0);
+    glEnableVertexAttribArray(0);
+
+    // Color attribute
+    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (void*)(9*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(1);
+
+    // Texture attribute
+    // Note second arg needs to be 2 (we have 2 componentes per the texture vertex attribute)
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 0 , (void*)(18*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+
+
+    return VAO;
 
 }
-void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue)
+
+unsigned int render_setup_rect(float* vertex, unsigned int numberOfEntries)
+{
+    ////// Vertex Specification
+
+    // Create VBO
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+
+    // Set openGL state to have above VBO bound
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // Allocate memory for the VBO
+    // NOTE: as we are passing in the vertex array, it decays to a pointer
+    // so using sizeof(vertex) will only allocate 8 bytes (on 64 bit) of memory for the VBO
+    // In the case of only having the position information and (and only thinking 2-D), this is fine -
+    // Not so when adding a z value, or more attributes
+    glBufferData(GL_ARRAY_BUFFER, numberOfEntries * sizeof(float), vertex, GL_STATIC_DRAW);
+
+    //// Connecting vertex attributes (in the vertex shader) to currently bound VBO
+
+    // Create VAO
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    // Set OpenGL state to have above VAO bound - need this to change VAO state (call to attrib pointer)
+    glBindVertexArray(VAO);
+
+    // Position attribute
+    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 0 , 0);
+    glEnableVertexAttribArray(0);
+
+    // Color attribute
+    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 0 , (void*)(12*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(1);
+
+    // Texture attribute
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 0 , (void*)(21*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+
+    // Create EBO
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numberOfEntries * sizeof(float), indexArray, GL_STATIC_DRAW);
+
+    return EBO;
+
+}
+void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue, bool triangle)
 {
     glUseProgram(shaderProgram);
     
@@ -65,7 +160,27 @@ void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelV
         glUniform1f(locBChannelValue, *channelValue++);
     }
     glBindVertexArray(VAO);
-    glPointSize(10);
-    glDrawArrays(GL_POINTS, 0, 1);
+    if (!triangle)
+    {
+		glPointSize(10);
+		glDrawArrays(GL_POINTS, 0, 1);
+    }
+    else
+    {
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
+}
+
+void render_draw_indexArray(unsigned int shaderProgram, unsigned int EBO, bool vertFlip = false, float texture2Amount = 0.2f,
+		glm::mat4 transform = glm::mat4(1.0f))
+{
+    glUseProgram(shaderProgram);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture2"), 1);
+    glUniform1i(glGetUniformLocation(shaderProgram, "vertFlip"), vertFlip);
+    glUniform1f(glGetUniformLocation(shaderProgram, "texture2Amount"), texture2Amount);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 

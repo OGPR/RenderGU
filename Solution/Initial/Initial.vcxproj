@@ -118,12 +118,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Libs\Libs\glfw-3.3.4-x64\include;$(SolutionDir)..\Libs\Libs\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Libs\Libs\glfw-3.3.4-x64\include;$(SolutionDir)..\Libs\Libs\glad\include;$(SolutionDir)..\Libs\Libs\glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\Libs\glfw-3.3.4-x64\lib-vc2019;$(SolutionDir)..\Libs\Libs\glad\lib\Release\x64\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\Libs\glfw-3.3.4-x64\lib-vc2019;$(SolutionDir)..\Libs\Libs\glad\lib\Debug\x64\</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;GLAD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -135,7 +135,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Libs\Libs\glfw-3.3.4-x64\include;$(SolutionDir)..\Libs\Libs\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Libs\Libs\glfw-3.3.4-x64\include;$(SolutionDir)..\Libs\Libs\glad\include;$(SolutionDir)..\Libs\Libs\glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
