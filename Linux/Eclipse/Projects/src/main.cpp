@@ -186,7 +186,6 @@ int main()
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
-    // Game loop
     GLfloat colorChannelValues[8][3] =
     {
         {0.f, 0.f, 0.f},
@@ -200,6 +199,26 @@ int main()
     };
     GLint64 frameNumber = 0;
     GLchar colorChannelValuesIdx = 0;
+
+    // These are abosolute world positions - model matrix
+    // will need to be reset to place cubes as desired (otherwise we will get
+    // relative positions)
+    const char numberOfCubePositions = 10;
+    glm::vec3 cubePositions[numberOfCubePositions] =
+    {
+        glm::vec3(0.f, 0.f, 0.f),
+        glm::vec3(2.f, 5.f, -15.f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3( 2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3( 1.3f, -2.0f, -2.5f),
+		glm::vec3( 1.5f,  2.0f, -2.5f),
+		glm::vec3( 1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    // Game loop
     while (!WindowShouldClose(window))
     {
         //// input
@@ -220,15 +239,24 @@ int main()
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
-		model = glm::rotate(model, (float)glfwGetTime() * 0.001f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
-        render_draw_cube(
-        		shaderProgram_Cube,
-				VAO_Cube,
-				vertFlip,
-				texture2Amount,
-				model,
-				view,
-				projection);
+
+        // Place many cubes
+        for (char i = 0; i < numberOfCubePositions; i++)
+        {
+        	model = glm::mat4(1.f);
+        	model = glm::translate(model, cubePositions[i]);
+			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
+
+			render_draw_cube(
+					shaderProgram_Cube,
+					VAO_Cube,
+					vertFlip,
+					texture2Amount,
+					model,
+					view,
+					projection);
+
+        }
 
         //// check and call events, and swap buffers
         PollEvents();
