@@ -37,6 +37,12 @@ static bool wireframeMode = false;
 static bool w_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
+static float cameraPosZ = -3.f;
+static float cameraMoveStepZ = 0.1f;
+static float cameraPosX = 0.f;
+static float cameraMoveStepX = 0.1f;
+static float cameraPosY = 0.f;
+static float cameraMoveStepY = 0.1f;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -96,6 +102,31 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     	texture2Amount = 0.2f;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
+    	cameraPosZ -= cameraMoveStepZ;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
+    	cameraPosZ += cameraMoveStepZ;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
+    	cameraPosX += cameraMoveStepX;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
+    	cameraPosX -= cameraMoveStepX;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
+    	cameraPosY -= cameraMoveStepY;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
+    	cameraPosY += cameraMoveStepY;
+
+    if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS)
+    {
+    	cameraPosZ = -3.f;
+    	cameraPosX = 0.f;
+    	cameraPosY = 0.f;
+    }
 }
 
 int main()
@@ -213,7 +244,6 @@ int main()
 	glm::mat4 model(1.f);
 	glm::mat4 view(1.f);
 	//model = glm::rotate(model, glm::radians(45.f), glm::vec3(0.f,1.f,0.f));
-	view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
@@ -277,6 +307,9 @@ int main()
         	model = glm::mat4(1.f);
         	model = glm::translate(model, cubePositions[i]);
 			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
+
+			view = glm::mat4(1.f);
+			view = glm::translate(view, glm::vec3(cameraPosX, cameraPosY, cameraPosZ));
 
 			render_draw_cube(
 					shaderProgram_Cube,
