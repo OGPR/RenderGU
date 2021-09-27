@@ -32,6 +32,7 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
+static bool depthTest = true;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -57,6 +58,12 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     	texture2Amount = 0.2f;
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+    	depthTest = true;
+
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+    	depthTest = false;
 
 }
 
@@ -108,11 +115,17 @@ int main()
         compileVertexShader(vertexShaderSource_Rect),
         compileFragmentShader(fragmentShaderSource_Rect));
 
+    unsigned int shaderProgram_Cube = linkShaders(
+        compileVertexShader(vertexShaderSource_Cube),
+        compileFragmentShader(fragmentShaderSource_Cube));
+
 
     unsigned int VAO = render_setup(vertex, 3);
     unsigned int VAO_Triangle = render_setup_tri(triangle, 24);
 
     unsigned int EBO = render_setup_rect(rectangle, 29);
+
+    unsigned int VAO_Cube = render_setup_cube(cube, 5*6*6);
 
 
 
@@ -166,11 +179,13 @@ int main()
 	stbi_image_free(img_data);
 
 	//// Transformations
-	glm::mat4 Transform(1.0f);
-	Transform = glm::translate(Transform, glm::vec3(0.5f,-0.5f,0.f));
+	glm::mat4 model(1.f);
+	glm::mat4 view(1.f);
+	//model = glm::rotate(model, glm::radians(45.f), glm::vec3(0.f,1.f,0.f));
+	view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
-
-    // Game loop
     GLfloat colorChannelValues[8][3] =
     {
         {0.f, 0.f, 0.f},
@@ -184,14 +199,39 @@ int main()
     };
     GLint64 frameNumber = 0;
     GLchar colorChannelValuesIdx = 0;
+
+    // These are abosolute world positions - model matrix
+    // will need to be reset to place cubes as desired (otherwise we will get
+    // relative positions)
+    const char numberOfCubePositions = 10;
+    glm::vec3 cubePositions[numberOfCubePositions] =
+    {
+        glm::vec3(0.f, 0.f, 0.f),
+        glm::vec3(2.f, 5.f, -15.f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3( 2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3( 1.3f, -2.0f, -2.5f),
+		glm::vec3( 1.5f,  2.0f, -2.5f),
+		glm::vec3( 1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    // Game loop
     while (!WindowShouldClose(window))
     {
         //// input
         processInput(window);
 
+        if (depthTest)
+			glEnable(GL_DEPTH_TEST);
+        else
+			glDisable(GL_DEPTH_TEST);
+
         // clear results from previous frame (iteration of loop)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
         //render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx], false);
@@ -199,9 +239,24 @@ int main()
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
         }
-        //render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
-        Transform = glm::rotate(Transform, (float)glfwGetTime(), glm::vec3(0.f,0.f,1.f));
-        render_draw_indexArray(shaderProgram_Rect, EBO, vertFlip, texture2Amount, Transform);
+
+        // Place many cubes
+        for (char i = 0; i < numberOfCubePositions; i++)
+        {
+        	model = glm::mat4(1.f);
+        	model = glm::translate(model, cubePositions[i]);
+			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
+
+			render_draw_cube(
+					shaderProgram_Cube,
+					VAO_Cube,
+					vertFlip,
+					texture2Amount,
+					model,
+					view,
+					projection);
+
+        }
 
         //// check and call events, and swap buffers
         PollEvents();
