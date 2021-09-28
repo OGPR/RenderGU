@@ -35,6 +35,7 @@ static float texture2Amount = 0.2f;
 static bool depthTest = true;
 static bool wireframeMode = false;
 static bool w_pressed = false;
+static bool f_pressed = false;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -42,6 +43,9 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE && w_pressed)
     	w_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && f_pressed)
+    	f_pressed = false;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && !wireframeMode)
     {
@@ -57,11 +61,18 @@ void processInput(GLFWwindow *window)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    	vertFlip = false;
-
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && !vertFlip)
+    {
+    	f_pressed = true;
     	vertFlip = true;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && vertFlip)
+    {
+    	f_pressed = true;
+    	vertFlip = false;
+    }
+
 
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     	texture2Amount += 0.0025f;
