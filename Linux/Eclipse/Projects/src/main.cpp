@@ -33,16 +33,29 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
 static bool depthTest = true;
+static bool wireframeMode = false;
+static bool w_pressed = false;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE && w_pressed)
+    	w_pressed = false;
 
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && !wireframeMode)
+    {
+    	w_pressed = true;
+    	wireframeMode = true;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && wireframeMode)
+    {
+    	w_pressed = true;
+    	wireframeMode = false;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
     	vertFlip = false;
