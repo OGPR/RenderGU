@@ -30,6 +30,10 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+// Camera set up
+glm::vec3 cameraPos = glm::vec3(0.f, 0.f, -3.f);
+glm::vec3 cameraMoveStep = glm::vec3(0.1f, 0.1f, 0.1f);
+
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
 static bool depthTest = true;
@@ -37,12 +41,6 @@ static bool wireframeMode = false;
 static bool w_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
-static float cameraPosZ = -3.f;
-static float cameraMoveStepZ = 0.1f;
-static float cameraPosX = 0.f;
-static float cameraMoveStepX = 0.1f;
-static float cameraPosY = 0.f;
-static float cameraMoveStepY = 0.1f;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -104,29 +102,25 @@ void processInput(GLFWwindow *window)
     	texture2Amount = 0.2f;
 
     if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
-    	cameraPosZ -= cameraMoveStepZ;
+    	cameraPos.z -= cameraMoveStep.z;
 
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
-    	cameraPosZ += cameraMoveStepZ;
+    	cameraPos.z += cameraMoveStep.z;
 
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
-    	cameraPosX += cameraMoveStepX;
+    	cameraPos.x += cameraMoveStep.x;
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
-    	cameraPosX -= cameraMoveStepX;
+    	cameraPos.x -= cameraMoveStep.x;
 
     if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
-    	cameraPosY -= cameraMoveStepY;
+    	cameraPos.y -= cameraMoveStep.y;
 
     if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
-    	cameraPosY += cameraMoveStepY;
+    	cameraPos.y += cameraMoveStep.y;
 
     if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS)
-    {
-    	cameraPosZ = -3.f;
-    	cameraPosX = 0.f;
-    	cameraPosY = 0.f;
-    }
+    	cameraPos = glm::vec3(0.f, 0.f, -3.f);
 }
 
 int main()
@@ -309,7 +303,7 @@ int main()
 			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
 
 			view = glm::mat4(1.f);
-			view = glm::translate(view, glm::vec3(cameraPosX, cameraPosY, cameraPosZ));
+			view = glm::translate(view, cameraPos);
 
 			render_draw_cube(
 					shaderProgram_Cube,
