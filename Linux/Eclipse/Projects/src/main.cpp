@@ -20,9 +20,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-
-
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 {
@@ -31,7 +28,10 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 }
 
 // Camera set up
-glm::vec3 cameraPos = glm::vec3(0.f, 0.f, -3.f);
+// Before we had -3 as we were translating the _scene_ back to give the impression of moving.
+// Now we have +3 as we are actually moving a camera into the direction we want (+z, out of the scree),
+// and keeping the scene fixed
+glm::vec3 cameraPos = glm::vec3(0.f, 0.f, 3.f);
 glm::vec3 cameraMoveStep = glm::vec3(0.1f, 0.1f, 0.1f);
 
 static bool vertFlip = false;
@@ -237,7 +237,6 @@ int main()
 	//// Transformations
 	glm::mat4 model(1.f);
 	glm::mat4 view(1.f);
-	//model = glm::rotate(model, glm::radians(45.f), glm::vec3(0.f,1.f,0.f));
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
@@ -303,7 +302,7 @@ int main()
 			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
 
 			view = glm::mat4(1.f);
-			view = glm::translate(view, cameraPos);
+			view = glm::lookAt(cameraPos, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
 
 			render_draw_cube(
 					shaderProgram_Cube,
