@@ -33,23 +33,61 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
 static bool depthTest = true;
+static bool wireframeMode = false;
+static bool w_pressed = false;
+static bool f_pressed = false;
+static bool z_pressed = false;
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE && w_pressed)
+    	w_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && f_pressed)
+    	f_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && z_pressed)
+    	z_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && !wireframeMode)
+    {
+    	w_pressed = true;
+    	wireframeMode = true;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
 
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && wireframeMode)
+    {
+    	w_pressed = true;
+    	wireframeMode = false;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    	vertFlip = false;
-
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && !vertFlip)
+    {
+    	f_pressed = true;
     	vertFlip = true;
+    }
 
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && vertFlip)
+    {
+    	f_pressed = true;
+    	vertFlip = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !z_pressed && !depthTest)
+    {
+    	z_pressed = true;
+    	depthTest = true;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !z_pressed && depthTest)
+    {
+    	z_pressed = true;
+    	depthTest = false;
+    }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     	texture2Amount += 0.0025f;
 
@@ -58,13 +96,6 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     	texture2Amount = 0.2f;
-
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-    	depthTest = true;
-
-    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-    	depthTest = false;
-
 }
 
 int main()
