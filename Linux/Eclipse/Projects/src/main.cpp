@@ -36,7 +36,7 @@ glm::vec3 cameraPosHome = glm::vec3(0.f, 0.f, 3.f);
 glm::vec3 cameraLookAtHome = glm::vec3(0.f, 0.f, 0.f);
 glm::vec3 cameraPos = cameraPosHome;
 glm::vec3 cameraLookAt = cameraLookAtHome;
-glm::vec3 cameraMoveStep = glm::vec3(0.1f, 0.1f, 0.1f);
+glm::vec3 cameraMoveStep = glm::vec3(1.f, 1.f, 1.f);
 float radius = cameraPosHome.z;
 glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
 const glm::vec3 cameraRotateStep = glm::vec3(0.01f, 0.01f, 0.01f);
@@ -48,7 +48,7 @@ static bool wireframeMode = false;
 static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow *window, float deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -109,20 +109,20 @@ void processInput(GLFWwindow *window)
     	texture2Amount = 0.2f;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    	cameraPos.z -= cameraMoveStep.z;
+    	cameraPos.z -= cameraMoveStep.z * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    	cameraPos.z += cameraMoveStep.z;
+    	cameraPos.z += cameraMoveStep.z * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-    	cameraPos.x -= cameraMoveStep.x;
+    	cameraPos.x -= cameraMoveStep.x * deltaTime;
     	cameraLookAt.x = cameraPos.x;
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-    	cameraPos.x += cameraMoveStep.x;
+    	cameraPos.x += cameraMoveStep.x * deltaTime;
     	cameraLookAt.x = cameraPos.x;
     }
 
@@ -328,11 +328,19 @@ int main()
 		glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
+    // Frame time management variables
+    float currFrameTime;
+    float lastFrameTime = 0.f;
+    float deltaTime;
+
     // Game loop
     while (!WindowShouldClose(window))
     {
+    	currFrameTime = glfwGetTime();
+    	deltaTime = currFrameTime - lastFrameTime;
+    	lastFrameTime = currFrameTime;
         //// input
-        processInput(window);
+        processInput(window, deltaTime);
 
         if (depthTest)
 			glEnable(GL_DEPTH_TEST);
