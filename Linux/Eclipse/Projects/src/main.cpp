@@ -30,9 +30,15 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 // Camera set up
 // Before we had -3 as we were translating the _scene_ back to give the impression of moving.
 // Now we have +3 as we are actually moving a camera into the direction we want (+z, out of the scree),
-// and keeping the scene fixed
-glm::vec3 cameraPos = glm::vec3(0.f, 0.f, 3.f);
+// and keeping the scene fixed. Swapping neg/pos applies to y and x also
+glm::vec3 cameraPosHome = glm::vec3(0.f, 0.f, 3.f);
+glm::vec3 cameraLookAtHome = glm::vec3(0.f, 0.f, 0.f);
+glm::vec3 cameraPos = cameraPosHome;
+glm::vec3 cameraLookAt = cameraLookAtHome;
 glm::vec3 cameraMoveStep = glm::vec3(0.1f, 0.1f, 0.1f);
+float radius = cameraPosHome.z;
+glm::vec3 cameraCurrRotAngle = glm::vec3(0.f, 0.f, 0.f);
+const glm::vec3 cameraRotateStep = glm::vec3(0.01f, 0.01f, 0.01f);
 
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
@@ -101,26 +107,70 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     	texture2Amount = 0.2f;
 
-    if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_3) == GLFW_PRESS)
     	cameraPos.z -= cameraMoveStep.z;
 
-    if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_1) == GLFW_PRESS)
     	cameraPos.z += cameraMoveStep.z;
 
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
+    	cameraPos.x -= cameraMoveStep.x;
+    	cameraLookAt.x = cameraPos.x;
+    }
+
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
-    	cameraPos.x += cameraMoveStep.x;
+    {
+    	cameraCurrRotAngle.y += cameraRotateStep.y;
+    	cameraPos.x = radius * sin(cameraCurrRotAngle.y);
+    	cameraPos.z = radius * cos(cameraCurrRotAngle.y);
+    }
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
-    	cameraPos.x -= cameraMoveStep.x;
+    {
+    	cameraCurrRotAngle.y -= cameraRotateStep.y;
+    	cameraPos.x = radius * sin(cameraCurrRotAngle.y);
+    	cameraPos.z = radius * cos(cameraCurrRotAngle.y);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
+    {
+    	cameraCurrRotAngle.x += cameraRotateStep.x;
+    	cameraPos.z = radius * cos(cameraCurrRotAngle.x);
+    	cameraPos.y = radius * sin(cameraCurrRotAngle.x);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
+    {
+    	cameraCurrRotAngle.x -= cameraRotateStep.x;
+    	cameraPos.z = radius * cos(cameraCurrRotAngle.x);
+    	cameraPos.y = radius * sin(cameraCurrRotAngle.x);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+    {
+    	cameraPos.x += cameraMoveStep.x;
+    	cameraLookAt.x = cameraPos.x;
+    }
 
     if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
-    	cameraPos.y -= cameraMoveStep.y;
+    {
+    	cameraPos.y += cameraMoveStep.y;
+    	cameraLookAt.y = cameraPos.y;
+    }
 
     if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
-    	cameraPos.y += cameraMoveStep.y;
+    {
+    	cameraPos.y -= cameraMoveStep.y;
+    	cameraLookAt.y = cameraPos.y;
+    }
 
     if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS)
-    	cameraPos = glm::vec3(0.f, 0.f, -3.f);
+    {
+    	cameraPos = cameraPosHome;
+    	cameraLookAt = cameraLookAtHome;
+    	cameraCurrRotAngle = glm::vec3(0.f, 0.f, 0.f);
+    }
 }
 
 int main()
@@ -299,13 +349,10 @@ int main()
         {
         	model = glm::mat4(1.f);
         	model = glm::translate(model, cubePositions[i]);
-			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
+			//model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
 
 			view = glm::mat4(1.f);
-			const float r = 3.f;
-			float camX = r * sin(glfwGetTime());
-			float camZ = r * cos(glfwGetTime());
-			view = glm::lookAt(glm::vec3(camX, 0.f, camZ), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+			view = glm::lookAt(cameraPos, cameraLookAt, glm::vec3(0.f, 1.f, 0.f));
 
 			render_draw_cube(
 					shaderProgram_Cube,
