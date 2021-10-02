@@ -39,7 +39,7 @@ glm::vec3 cameraLookAt = cameraLookAtHome;
 glm::vec3 cameraMoveStep = glm::vec3(1.f, 1.f, 1.f);
 float radius = cameraPosHome.z;
 glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
-const glm::vec3 cameraRotateStep = glm::vec3(0.01f, 0.01f, 0.01f);
+const glm::vec3 cameraRotateStep = glm::vec3(1.f, 1.f, 1.f);
 
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
@@ -128,7 +128,7 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.y += cameraRotateStep.y;
+    	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
     	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
@@ -136,7 +136,7 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.y -= cameraRotateStep.y;
+    	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
     	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
@@ -144,7 +144,7 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x -= cameraRotateStep.x;
+    	cameraCurrRotAngle.x -= cameraRotateStep.x * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
     	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
@@ -152,7 +152,7 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x += cameraRotateStep.x;
+    	cameraCurrRotAngle.x += cameraRotateStep.x * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
     	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
