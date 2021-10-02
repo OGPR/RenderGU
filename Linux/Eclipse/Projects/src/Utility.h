@@ -54,3 +54,14 @@ void SwapBuffers(GLFWwindow* window)
     glfwSwapBuffers(window);
 }
 
+void SetInputMode(GLFWwindow* window, int mode, int value)
+{
+	glfwSetInputMode(window, mode, value);
+}
+
+GLFWcursorposfun SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
+{
+	glfwSetCursorPosCallback(window, callback);
+
+}
+

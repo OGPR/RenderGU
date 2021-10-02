@@ -153,3 +153,44 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
     }
 }
+
+static float lastxpos = 0.f;
+static float lastypos = 0.f;
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+		if (xpos > lastxpos)
+		{
+			lastxpos = xpos;
+			cameraCurrRotAngle.y += cameraRotateStep.y * 0.005f;
+			cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+			cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+			cameraPos.y = radius * cos(cameraCurrRotAngle.x);
+		}
+
+		if (xpos < lastxpos)
+		{
+			lastxpos = xpos;
+			cameraCurrRotAngle.y -= cameraRotateStep.y * 0.005f;
+			cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+			cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+			cameraPos.y = radius * cos(cameraCurrRotAngle.x);
+		}
+
+		if (ypos > lastypos)
+		{
+			lastypos = ypos;
+			cameraCurrRotAngle.x -= cameraRotateStep.x * 0.005f;
+			cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+			cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+			cameraPos.y = radius * cos(cameraCurrRotAngle.x);
+		}
+
+		if (ypos < lastypos)
+		{
+			lastypos = ypos;
+			cameraCurrRotAngle.x += cameraRotateStep.x * 0.005f;
+			cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+			cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+			cameraPos.y = radius * cos(cameraCurrRotAngle.x);
+		}
+}

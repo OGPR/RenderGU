@@ -31,6 +31,7 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 
 
+
 int main()
 {
     Init();
@@ -48,6 +49,8 @@ int main()
     }
 
     MakeContextCurrent(window);
+    SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    SetCursorPosCallback(window, mouse_callback);
 
 
     int gladInitialise = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
