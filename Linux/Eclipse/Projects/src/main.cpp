@@ -45,7 +45,7 @@ static bool vertFlip = false;
 static float texture2Amount = 0.2f;
 static bool depthTest = true;
 static bool wireframeMode = false;
-static bool w_pressed = false;
+static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
 void processInput(GLFWwindow *window)
@@ -53,25 +53,25 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE && w_pressed)
-    	w_pressed = false;
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_RELEASE && l_pressed)
+    	l_pressed = false;
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && f_pressed)
-    	f_pressed = false;
+    	l_pressed = false;
 
     if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && z_pressed)
     	z_pressed = false;
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && !wireframeMode)
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !l_pressed && !wireframeMode)
     {
-    	w_pressed = true;
+    	l_pressed = true;
     	wireframeMode = true;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && wireframeMode)
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !l_pressed && wireframeMode)
     {
-    	w_pressed = true;
+    	l_pressed = true;
     	wireframeMode = false;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
@@ -108,15 +108,21 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     	texture2Amount = 0.2f;
 
-    if (glfwGetKey(window, GLFW_KEY_KP_3) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     	cameraPos.z -= cameraMoveStep.z;
 
-    if (glfwGetKey(window, GLFW_KEY_KP_1) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     	cameraPos.z += cameraMoveStep.z;
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
     	cameraPos.x -= cameraMoveStep.x;
+    	cameraLookAt.x = cameraPos.x;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+    	cameraPos.x += cameraMoveStep.x;
     	cameraLookAt.x = cameraPos.x;
     }
 
@@ -152,11 +158,6 @@ void processInput(GLFWwindow *window)
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-    {
-    	cameraPos.x += cameraMoveStep.x;
-    	cameraLookAt.x = cameraPos.x;
-    }
 
     if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
     {
