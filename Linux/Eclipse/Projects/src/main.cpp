@@ -161,13 +161,13 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
     {
-    	cameraPos.y += cameraMoveStep.y;
+    	cameraPos.y += cameraMoveStep.y * deltaTime;
     	cameraLookAt.y = cameraPos.y;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
     {
-    	cameraPos.y -= cameraMoveStep.y;
+    	cameraPos.y -= cameraMoveStep.y * deltaTime;
     	cameraLookAt.y = cameraPos.y;
     }
 
