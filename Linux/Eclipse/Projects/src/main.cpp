@@ -19,6 +19,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/constants.hpp>
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -37,7 +38,7 @@ glm::vec3 cameraPos = cameraPosHome;
 glm::vec3 cameraLookAt = cameraLookAtHome;
 glm::vec3 cameraMoveStep = glm::vec3(0.1f, 0.1f, 0.1f);
 float radius = cameraPosHome.z;
-glm::vec3 cameraCurrRotAngle = glm::vec3(0.f, 0.f, 0.f);
+glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
 const glm::vec3 cameraRotateStep = glm::vec3(0.01f, 0.01f, 0.01f);
 
 static bool vertFlip = false;
@@ -122,29 +123,33 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
     {
     	cameraCurrRotAngle.y += cameraRotateStep.y;
-    	cameraPos.x = radius * sin(cameraCurrRotAngle.y);
-    	cameraPos.z = radius * cos(cameraCurrRotAngle.y);
+    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
     {
     	cameraCurrRotAngle.y -= cameraRotateStep.y;
-    	cameraPos.x = radius * sin(cameraCurrRotAngle.y);
-    	cameraPos.z = radius * cos(cameraCurrRotAngle.y);
+    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x += cameraRotateStep.x;
-    	cameraPos.z = radius * cos(cameraCurrRotAngle.x);
-    	cameraPos.y = radius * sin(cameraCurrRotAngle.x);
+    	cameraCurrRotAngle.x -= cameraRotateStep.x;
+    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x -= cameraRotateStep.x;
-    	cameraPos.z = radius * cos(cameraCurrRotAngle.x);
-    	cameraPos.y = radius * sin(cameraCurrRotAngle.x);
+    	cameraCurrRotAngle.x += cameraRotateStep.x;
+    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
+    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
+    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
@@ -169,7 +174,7 @@ void processInput(GLFWwindow *window)
     {
     	cameraPos = cameraPosHome;
     	cameraLookAt = cameraLookAtHome;
-    	cameraCurrRotAngle = glm::vec3(0.f, 0.f, 0.f);
+    	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
     }
 }
 
