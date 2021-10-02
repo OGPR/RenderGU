@@ -302,7 +302,10 @@ int main()
 			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
 
 			view = glm::mat4(1.f);
-			view = glm::lookAt(cameraPos, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+			const float r = 3.f;
+			float camX = r * sin(glfwGetTime());
+			float camZ = r * cos(glfwGetTime());
+			view = glm::lookAt(glm::vec3(camX, 0.f, camZ), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
 
 			render_draw_cube(
 					shaderProgram_Cube,
