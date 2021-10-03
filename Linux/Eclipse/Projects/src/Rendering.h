@@ -183,6 +183,40 @@ unsigned int render_setup_cube(float* vertex, unsigned int numberOfEntries)
     return VAO;
 }
 
+unsigned int render_setup_cube_raw(float* vertex, unsigned int numberOfEntries)
+{
+    ////// Vertex Specification
+
+    // Create VBO
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+
+    // Set openGL state to have above VBO bound
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // Allocate memory for the VBO
+    // NOTE: as we are passing in the vertex array, it decays to a pointer
+    // so using sizeof(vertex) will only allocate 8 bytes (on 64 bit) of memory for the VBO
+    // In the case of only having the position information and (and only thinking 2-D), this is fine -
+    // Not so when adding a z value, or more attributes
+    glBufferData(GL_ARRAY_BUFFER, numberOfEntries * sizeof(float), vertex, GL_STATIC_DRAW);
+
+    //// Connecting vertex attributes (in the vertex shader) to currently bound VBO
+
+    // Create VAO
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    // Set OpenGL state to have above VAO bound - need this to change VAO state (call to attrib pointer)
+    glBindVertexArray(VAO);
+
+    // Position attribute
+    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 0 , 0);
+    glEnableVertexAttribArray(0);
+
+    return VAO;
+}
+
 void render_draw(unsigned int shaderProgram, unsigned int VAO, GLfloat* channelValue, bool triangle)
 {
     glUseProgram(shaderProgram);
@@ -248,6 +282,46 @@ void render_draw_cube(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void render_draw_cube_raw_target(
+		unsigned int shaderProgram,
+		unsigned int VAO,
+		glm::mat4 model = glm::mat4(1.0f),
+		glm::mat4 view = glm::mat4(1.0f),
+		glm::mat4 projection = glm::mat4(1.0f),
+		glm::vec3 reflectance = glm::vec3(0.0f),
+		glm::vec3 lightSource = glm::vec3(1.0f)
+		)
+{
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "reflectance"), 1, glm::value_ptr(reflectance));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "lightSource"), 1, glm::value_ptr(lightSource));
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void render_draw_cube_raw_lightsource(
+		unsigned int shaderProgram,
+		unsigned int VAO,
+		glm::mat4 model = glm::mat4(1.0f),
+		glm::mat4 view = glm::mat4(1.0f),
+		glm::mat4 projection = glm::mat4(1.0f),
+		glm::vec3 lightSource = glm::vec3(1.0f)
+		)
+{
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "lightSource"), 1,glm::value_ptr(lightSource));
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);

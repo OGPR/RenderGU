@@ -86,6 +86,13 @@ int main()
         compileVertexShader(vertexShaderSource_Cube),
         compileFragmentShader(fragmentShaderSource_Cube));
 
+    unsigned int shaderProgram_Cube_Raw_Target = linkShaders(
+        compileVertexShader(vertexShaderSource_Cube_Raw_Target),
+        compileFragmentShader(fragmentShaderSource_Cube_Raw_Target));
+
+    unsigned int shaderProgram_Cube_Raw_LightSource = linkShaders(
+        compileVertexShader(vertexShaderSource_Cube_Raw_LightSource),
+        compileFragmentShader(fragmentShaderSource_Cube_Raw_LightSource));
 
     unsigned int VAO = render_setup(vertex, 3);
     unsigned int VAO_Triangle = render_setup_tri(triangle, 24);
@@ -93,6 +100,9 @@ int main()
     unsigned int EBO = render_setup_rect(rectangle, 29);
 
     unsigned int VAO_Cube = render_setup_cube(cube, 5*6*6);
+
+    unsigned int VAO_Cube_Raw_Target = render_setup_cube_raw(cube_raw, 3*6*6 );
+    unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw(cube_raw, 3*6*6);
 
 
 
@@ -214,6 +224,7 @@ int main()
         }
 
         // Place many cubes
+        /*
         for (char i = 0; i < numberOfCubePositions; i++)
         {
         	model = glm::mat4(1.f);
@@ -232,7 +243,35 @@ int main()
 					view,
 					projection);
 
+
         }
+        */
+		view = glm::mat4(1.f);
+		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+        model = glm::mat4(1.f);
+        model = glm::translate(model, glm::vec3(-0.5f, 0.0f,0.0f));
+        glm::vec3 lightSource = glm::vec3(1.f, 1.f, 1.f);
+        glm::vec3 reflectance = glm::vec3(0.5f, 0.5f, 0.5f);
+        render_draw_cube_raw_target(
+        		shaderProgram_Cube_Raw_Target,
+				VAO_Cube_Raw_Target,
+				model,
+				view,
+				projection,
+				lightSource,
+				reflectance);
+
+        model = glm::mat4(1.f);
+        model = glm::translate(model, glm::vec3(1.0f,0.5f,0.0f));
+        model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+        render_draw_cube_raw_lightsource(
+        		shaderProgram_Cube_Raw_LightSource,
+				VAO_Cube_Raw_LightSource,
+				model,
+				view,
+				projection,
+				lightSource);
 
         //// check and call events, and swap buffers
         PollEvents();
