@@ -101,8 +101,8 @@ int main()
 
     unsigned int VAO_Cube = render_setup_cube(cube, 5*6*6);
 
-    unsigned int VAO_Cube_Raw_Target = render_setup_cube_raw(cube_raw, 3*6*6 );
-    unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw(cube_raw, 3*6*6);
+    unsigned int VAO_Cube_Raw_Target = render_setup_cube_raw(cube_raw, 6*6*6 );
+    unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw_lightsource(cube_raw, 6*6*6);
 
 
 
@@ -253,17 +253,19 @@ int main()
         model = glm::translate(model, glm::vec3(-0.5f, 0.0f,0.0f));
         glm::vec3 lightSource = glm::vec3(1.f, 1.f, 1.f);
         glm::vec3 reflectance = glm::vec3(0.5f, 0.5f, 0.5f);
+        glm::vec3 lightPos = glm::vec3(1.f, 0.5f, 0.f);
         render_draw_cube_raw_target(
         		shaderProgram_Cube_Raw_Target,
 				VAO_Cube_Raw_Target,
 				model,
 				view,
 				projection,
+				reflectance,
 				lightSource,
-				reflectance);
+				lightPos);
 
         model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(1.0f,0.5f,0.0f));
+        model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
         render_draw_cube_raw_lightsource(
         		shaderProgram_Cube_Raw_LightSource,

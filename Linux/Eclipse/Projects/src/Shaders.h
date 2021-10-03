@@ -146,27 +146,43 @@ const char* fragmentShaderSource_Cube =
 const char* vertexShaderSource_Cube_Raw_Target =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
+	layout(location = 1) in vec3 aNormal;
+
+	out vec3 Normal;
+	out vec3 FragPos;
 
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
 
+    vec4 vertexWS;
+
     void main()
     {
         gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+        vertexWS = model * vec4(aPos, 1.0f);
+        FragPos = vec3(vertexWS);
+        Normal = aNormal;
     }
 );
 
 const char* fragmentShaderSource_Cube_Raw_Target =
     GLSL(330 core,
+    in vec3 FragPos;
+    in vec3 Normal;
     out vec4 FragColor;
 
 	uniform vec3 reflectance;
 	uniform vec3 lightSource;
+	uniform vec3 lightPos;
+
+	float ambientStrength = 0.1f;
+	vec3 lightDir = normalize(lightPos - FragPos);
+	float diffuseReflectionFactor = max(dot(Normal, lightDir), 0.0f);
 
     void main()
     {
-    	FragColor = vec4(reflectance * lightSource, 1.0f);
+    	FragColor = vec4((ambientStrength + diffuseReflectionFactor) * reflectance * lightSource, 1.0f);
     }
 );
 
