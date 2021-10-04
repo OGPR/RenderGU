@@ -180,11 +180,11 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 
 	float ambientStrength = 0.1f;
 	vec3 lightDir = normalize(lightPos - FragPos);
-	float diffuseReflectionFactor = pow(max(dot(Normal, lightDir), 0.0f), PhongExp);
+	float diffuseReflectionFactor = max(dot(Normal, lightDir), 0.0f);
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
-	float specularReflectionFactor = max(dot(reflectDir, viewDir), 0.0f);
+	float specularReflectionFactor = pow(max(dot(reflectDir, viewDir), 0.0f), PhongExp);
 
     void main()
     {
