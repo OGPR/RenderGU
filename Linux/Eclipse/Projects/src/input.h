@@ -35,6 +35,12 @@ static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
 static char PhongExp = 32;
+static bool _1_pressed = false;
+static bool _2_pressed = false;
+static bool _3_pressed = false;
+static bool ambientLight = true;
+static bool diffuseLight = true;
+static bool specularLight = true;
 
 void processInput(GLFWwindow *window, float deltaTime)
 {
@@ -231,6 +237,32 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
     	PhongExp = 32;
 
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_RELEASE && _1_pressed)
+    	_1_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE && _2_pressed)
+    	_2_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_RELEASE && _3_pressed)
+    	_3_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !_1_pressed)
+    {
+    	_1_pressed = true;
+    	ambientLight = !ambientLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !_2_pressed)
+    {
+    	_2_pressed = true;
+    	diffuseLight = !diffuseLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && !_3_pressed)
+    {
+    	_3_pressed = true;
+    	specularLight = !specularLight;
+    }
 }
 
 static float lastxpos = 0.f;

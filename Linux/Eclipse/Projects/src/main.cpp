@@ -264,7 +264,11 @@ int main()
 				lightSource,
 				lightPos,
 				cameraPos,
-				PhongExp);
+				PhongExp,
+				ambientLight,
+				diffuseLight,
+				specularLight
+				);
 
         model = glm::mat4(1.f);
         model = glm::translate(model, lightPos);

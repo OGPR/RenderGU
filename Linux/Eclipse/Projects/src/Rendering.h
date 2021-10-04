@@ -335,7 +335,10 @@ void render_draw_cube_raw_target(
 		glm::vec3 lightSource = glm::vec3(1.0f),
 		glm::vec3 lightPos = glm::vec3(0.f),
 		glm::vec3 viewPos = glm::vec3(0.f),
-		char PhongExp = 32
+		char PhongExp = 32,
+		bool ambientLight = true,
+		bool diffuseLight = true,
+		bool specularLight = true
 		)
 {
     glUseProgram(shaderProgram);
@@ -347,6 +350,9 @@ void render_draw_cube_raw_target(
     glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightPos));
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
     glUniform1i(glGetUniformLocation(shaderProgram, "PhongExp"), PhongExp);
+    glUniform1i(glGetUniformLocation(shaderProgram, "ambientLight"), ambientLight);
+    glUniform1i(glGetUniformLocation(shaderProgram, "diffuseLight"), diffuseLight);
+    glUniform1i(glGetUniformLocation(shaderProgram, "specularLight"), specularLight );
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
