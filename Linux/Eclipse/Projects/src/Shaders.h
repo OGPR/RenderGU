@@ -176,7 +176,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform vec3 lightSource;
 	uniform vec3 lightPos;
 	uniform vec3 viewPos;
-	uniform int PhongExp;
+	uniform unsigned int PhongExp;
 	uniform bool ambientLight;
 	uniform bool diffuseLight;
 	uniform bool specularLight;
