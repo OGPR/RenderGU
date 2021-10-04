@@ -262,7 +262,8 @@ int main()
 				projection,
 				reflectance,
 				lightSource,
-				lightPos);
+				lightPos,
+				cameraPos);
 
         model = glm::mat4(1.f);
         model = glm::translate(model, lightPos);

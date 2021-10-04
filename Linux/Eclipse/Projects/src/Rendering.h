@@ -333,7 +333,8 @@ void render_draw_cube_raw_target(
 		glm::mat4 projection = glm::mat4(1.0f),
 		glm::vec3 reflectance = glm::vec3(0.0f),
 		glm::vec3 lightSource = glm::vec3(1.0f),
-		glm::vec3 lightPos = glm::vec3(0.f)
+		glm::vec3 lightPos = glm::vec3(0.f),
+		glm::vec3 viewPos = glm::vec3(0.f)
 		)
 {
     glUseProgram(shaderProgram);
@@ -342,7 +343,8 @@ void render_draw_cube_raw_target(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(glGetUniformLocation(shaderProgram, "reflectance"), 1, glm::value_ptr(reflectance));
     glUniform3fv(glGetUniformLocation(shaderProgram, "lightSource"), 1, glm::value_ptr(lightSource));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightSource));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightPos));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
