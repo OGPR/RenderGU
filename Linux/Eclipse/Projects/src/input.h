@@ -34,6 +34,7 @@ static bool wireframeMode = false;
 static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
+static char PhongExp = 32;
 
 void processInput(GLFWwindow *window, float deltaTime)
 {
@@ -217,6 +218,19 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraLookDirection = cameraLookAtHome;
     	cameraUp = glm::vec3(0.f, 1.f, 0.f);
     }
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+    	++PhongExp;
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+    {
+    	--PhongExp;
+    	PhongExp = PhongExp >=1 ? PhongExp : 1;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+    	PhongExp = 32;
+
 }
 
 static float lastxpos = 0.f;

@@ -263,7 +263,8 @@ int main()
 				reflectance,
 				lightSource,
 				lightPos,
-				cameraPos);
+				cameraPos,
+				PhongExp);
 
         model = glm::mat4(1.f);
         model = glm::translate(model, lightPos);
