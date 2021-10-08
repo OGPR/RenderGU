@@ -9,6 +9,7 @@
 #include "CustomMatrices.h"
 #include <vector>
 #include <iostream>
+#include <limits.h>
 
 // Camera set up
 // Before we had -3 as we were translating the _scene_ back to give the impression of moving.
@@ -36,6 +37,7 @@ static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
 static unsigned int PhongExp = 32;
+static unsigned int uintMax = UINT_MAX;
 static bool p_pressed = false;
 static bool o_pressed = false;
 static bool _1_pressed = false;
@@ -236,8 +238,10 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && !p_pressed)
     {
+
     	p_pressed = true;
-		PhongExp <<= 1;
+    	if (PhongExp != uintMax/2 + 1)
+			PhongExp <<= 1;
     	std::cout << PhongExp << std::endl;
     }
 
