@@ -10,6 +10,7 @@
 glm::vec3 cameraPosHome = glm::vec3(0.f, 0.f, 3.f);
 glm::vec3 cameraLookAtHome = glm::vec3(0.f, 0.f, 0.f);
 glm::vec3 cameraPos = cameraPosHome;
+glm::vec3 cameraFront = glm::vec3(0.f, 0.f, -1.f);
 glm::vec3 cameraLookAt = cameraLookAtHome;
 glm::vec3 cameraMoveStep = glm::vec3(1.f, 1.f, 1.f);
 float radius = cameraPosHome.z;
@@ -101,7 +102,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraLookAt.x = cameraPos.x;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
     	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
@@ -109,7 +111,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
     	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
@@ -117,7 +120,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
     	cameraCurrRotAngle.x -= cameraRotateStep.x * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
@@ -125,7 +129,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
     	cameraCurrRotAngle.x += cameraRotateStep.x * deltaTime;
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
@@ -146,7 +151,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraLookAt.y = cameraPos.y;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
     {
     	cameraPos = cameraPosHome;
     	cameraLookAt = cameraLookAtHome;
