@@ -109,11 +109,6 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float thetaPrev = cameraCurrRotAngle.y;
     	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
     	float theta = cameraCurrRotAngle.y -thetaPrev;
-    	/*
-    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
-    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
-    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
-    	*/
 
     	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
     	// row of zeros (and zero at the start of each row) because I wanted to offset the index
@@ -143,11 +138,6 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float thetaPrev = cameraCurrRotAngle.y;
     	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
     	float theta = cameraCurrRotAngle.y -thetaPrev;
-    	/*
-    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
-    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
-    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
-    	*/
 
     	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
     	// row of zeros (and zero at the start of each row) because I wanted to offset the index
@@ -174,19 +164,59 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x -= cameraRotateStep.x * deltaTime;
-    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
-    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
-    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
+    	float thetaPrev = cameraCurrRotAngle.x;
+    	cameraCurrRotAngle.x += cameraRotateStep.x * deltaTime;
+    	float theta = cameraCurrRotAngle.x -thetaPrev;
+
+    	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
+    	// row of zeros (and zero at the start of each row) because I wanted to offset the index
+    	// (i.e [1][1] is what you expect it to be. This will all go away when I use glm mats and vecs
+    	float RotMat_zy[4][4] =
+    	{
+    	    {0, 0, 0, 0},
+    	    {0, 1, 0, 0},
+    	    {0, 0, cos(theta), -sin(theta)},
+    	    {0, 0, sin(theta), cos(theta)},
+    	};
+
+    	glm::vec3 cameraFrontNew;
+    	cameraFrontNew.x =
+    			cameraFront.x * RotMat_zy[1][1] + cameraFront.y * RotMat_zy[1][2] + cameraFront.z * RotMat_zy[1][3];
+    	cameraFrontNew.y =
+    			cameraFront.x * RotMat_zy[2][1] + cameraFront.y * RotMat_zy[2][2] + cameraFront.z * RotMat_zy[2][3];
+    	cameraFrontNew.z =
+    			cameraFront.x * RotMat_zy[3][1] + cameraFront.y * RotMat_zy[3][2] + cameraFront.z * RotMat_zy[3][3];
+
+    	cameraFront = cameraFrontNew;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x += cameraRotateStep.x * deltaTime;
-    	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
-    	cameraPos.x = radius * sin(cameraCurrRotAngle.x) * sin(cameraCurrRotAngle.y) ;
-    	cameraPos.y = radius * cos(cameraCurrRotAngle.x);
+    	float thetaPrev = cameraCurrRotAngle.x;
+    	cameraCurrRotAngle.x -= cameraRotateStep.x * deltaTime;
+    	float theta = cameraCurrRotAngle.x -thetaPrev;
+
+    	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
+    	// row of zeros (and zero at the start of each row) because I wanted to offset the index
+    	// (i.e [1][1] is what you expect it to be. This will all go away when I use glm mats and vecs
+    	float RotMat_zy[4][4] =
+    	{
+    	    {0, 0, 0, 0},
+    	    {0, 1, 0, 0},
+    	    {0, 0, cos(theta), -sin(theta)},
+    	    {0, 0, sin(theta), cos(theta)},
+    	};
+
+    	glm::vec3 cameraFrontNew;
+    	cameraFrontNew.x =
+    			cameraFront.x * RotMat_zy[1][1] + cameraFront.y * RotMat_zy[1][2] + cameraFront.z * RotMat_zy[1][3];
+    	cameraFrontNew.y =
+    			cameraFront.x * RotMat_zy[2][1] + cameraFront.y * RotMat_zy[2][2] + cameraFront.z * RotMat_zy[2][3];
+    	cameraFrontNew.z =
+    			cameraFront.x * RotMat_zy[3][1] + cameraFront.y * RotMat_zy[3][2] + cameraFront.z * RotMat_zy[3][3];
+
+    	cameraFront = cameraFrontNew;
     }
 
 
