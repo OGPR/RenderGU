@@ -86,113 +86,21 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
     	cameraPos.z -= cameraMoveStep.z * deltaTime;
-
-    	if (cameraCurrRotAngle.y > 0.1f || cameraCurrRotAngle.y < -0.1f)
-    	{
-    		glm::vec3 v = glm::vec3(-cameraMoveStep.x * deltaTime, 0.f, cameraMoveStep.z * deltaTime);
-    		glm::vec3 cf_int =
-    				glm::vec3(cameraFront.x - cameraMoveStep.x * deltaTime, 0.f, cameraFront.z + cameraMoveStep.z * deltaTime);
-    		cameraFront = cf_int - v;
-			cameraPos.x -= cameraMoveStep.z * deltaTime;
-    	}
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
     	cameraPos.z += cameraMoveStep.z * deltaTime;
-
-    	if (cameraCurrRotAngle.y > 0.1f || cameraCurrRotAngle.y < -0.1f)
-    	{
-    		glm::vec3 v = glm::vec3(-cameraMoveStep.x * deltaTime, 0.f, cameraMoveStep.z * deltaTime);
-    		glm::vec3 cf_int =
-    				glm::vec3(cameraFront.x - cameraMoveStep.x * deltaTime, 0.f, cameraFront.z + cameraMoveStep.z * deltaTime);
-    		cameraFront = cf_int - v;
-			cameraPos.x += cameraMoveStep.z * deltaTime;
-    	}
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-
-    	if (cameraCurrRotAngle.y < -0.1f && cameraCurrRotAngle.y > - glm::half_pi<float>())
-    	{
-    		std::cout << "we are in right quadrant" << std::endl;
-			cameraPos.x -= cameraMoveStep.x * deltaTime;
-
-    		glm::vec3 v = glm::vec3(-cameraMoveStep.x * deltaTime, 0.f, cameraMoveStep.z * deltaTime);
-    		glm::vec3 cf_int =
-    				glm::vec3(cameraFront.x - cameraMoveStep.x * deltaTime, 0.f, cameraFront.z + cameraMoveStep.z * deltaTime);
-    		cameraFront = cf_int - v;
-			cameraPos.z += cameraMoveStep.z * deltaTime;
-    	}
-
-    	if (cameraCurrRotAngle.y > 0.1f && cameraCurrRotAngle.y < glm::half_pi<float>())
-    	{
-			cameraPos.x -= cameraMoveStep.x * deltaTime;
-
-    		glm::vec3 v = glm::vec3(cameraMoveStep.x * deltaTime, 0.f, -cameraMoveStep.z * deltaTime);
-    		glm::vec3 cf_int =
-    				glm::vec3(cameraFront.x - cameraMoveStep.x * deltaTime, 0.f, cameraFront.z + cameraMoveStep.z * deltaTime);
-    		cameraFront = cf_int - v;
-			cameraPos.z -= cameraMoveStep.z * deltaTime;
-    	}
-
-    	if (cameraCurrRotAngle.y > -glm::half_pi<float>() - (cameraRotateStep.y*deltaTime)
-    			&& cameraCurrRotAngle.y < -glm::half_pi<float>() + (cameraRotateStep.y*deltaTime))
-    	{
-    		std::cout << "we are at 90 deg" << "cameraCurrRotAngle is " << cameraCurrRotAngle.y << std::endl;
-    		cameraPos.z += cameraMoveStep.z * deltaTime;
-    	}
-
-    	if (cameraCurrRotAngle.y < glm::half_pi<float>() + (cameraRotateStep.y*deltaTime)
-    			&& cameraCurrRotAngle.y > glm::half_pi<float>() - (cameraRotateStep.y*deltaTime))
-    	{
-    		std::cout << "we are at 90 deg" << "cameraCurrRotAngle is " << cameraCurrRotAngle.y << std::endl;
-    		cameraPos.z -= cameraMoveStep.z * deltaTime;
-    	}
-
-    	cameraPos.x -= cameraMoveStep.z * deltaTime;
+    	cameraPos.x -= cameraMoveStep.x * deltaTime;
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-    	if (cameraCurrRotAngle.y > 0.1f && cameraCurrRotAngle.y <  glm::half_pi<float>())
-    	{
-			cameraPos.x -= cameraMoveStep.x * deltaTime;
-
-    		glm::vec3 v = glm::vec3(-cameraMoveStep.x * deltaTime, 0.f, cameraMoveStep.z * deltaTime);
-    		glm::vec3 cf_int =
-    				glm::vec3(cameraFront.x - cameraMoveStep.x * deltaTime, 0.f, cameraFront.z + cameraMoveStep.z * deltaTime);
-    		cameraFront = cf_int - v;
-			cameraPos.z -= cameraMoveStep.z * deltaTime;
-    	}
-
-    	if (cameraCurrRotAngle.y < -0.1f && cameraCurrRotAngle.y > -glm::half_pi<float>())
-    	{
-			cameraPos.x += cameraMoveStep.x * deltaTime;
-
-    		glm::vec3 v = glm::vec3(-cameraMoveStep.x * deltaTime, 0.f, cameraMoveStep.z * deltaTime);
-    		glm::vec3 cf_int =
-    				glm::vec3(cameraFront.x - cameraMoveStep.x * deltaTime, 0.f, cameraFront.z + cameraMoveStep.z * deltaTime);
-    		cameraFront = cf_int - v;
-			cameraPos.z -= cameraMoveStep.z * deltaTime;
-    	}
-
-    	if (cameraCurrRotAngle.y > -glm::half_pi<float>() - (cameraRotateStep.y*deltaTime)
-    			&& cameraCurrRotAngle.y < -glm::half_pi<float>() + (cameraRotateStep.y*deltaTime))
-    	{
-    		std::cout << "we are at 90 deg" << "cameraCurrRotAngle is " << cameraCurrRotAngle.y << std::endl;
-    		cameraPos.z += cameraMoveStep.z * deltaTime;
-    	}
-
-    	if (cameraCurrRotAngle.y < glm::half_pi<float>() + (cameraRotateStep.y*deltaTime)
-    			&& cameraCurrRotAngle.y > glm::half_pi<float>() - (cameraRotateStep.y*deltaTime))
-    	{
-    		std::cout << "we are at 90 deg" << "cameraCurrRotAngle is " << cameraCurrRotAngle.y << std::endl;
-    		cameraPos.z -= cameraMoveStep.z * deltaTime;
-    	}
-
-    	cameraPos.x += cameraMoveStep.z * deltaTime;
+    	cameraPos.x += cameraMoveStep.x * deltaTime;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
@@ -200,13 +108,6 @@ void processInput(GLFWwindow *window, float deltaTime)
     {
     	float thetaPrev = cameraCurrRotAngle.y;
     	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
-
-    	std::cout << "neg glm::half_pi is " << -glm::half_pi<float>() << std::endl;
-    	std::cout << "currRotAngle.y is " << cameraCurrRotAngle.y << std::endl;
-    	if (cameraCurrRotAngle.y > -glm::half_pi<float>() - (cameraRotateStep.y*deltaTime)
-    			&& cameraCurrRotAngle.y < -glm::half_pi<float>() + (cameraRotateStep.y*deltaTime))
-			std::cout << "WE ARE AT 90 DEG" << "cameraCurrRotAngle is " << cameraCurrRotAngle.y << std::endl;
-
     	float theta = cameraCurrRotAngle.y -thetaPrev;
     	/*
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
@@ -241,13 +142,6 @@ void processInput(GLFWwindow *window, float deltaTime)
     {
     	float thetaPrev = cameraCurrRotAngle.y;
     	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
-
-    	std::cout << "glm::half_pi is " << glm::half_pi<float>() << std::endl;
-    	std::cout << "currRotAngle.y is " << cameraCurrRotAngle.y << std::endl;
-    	if (cameraCurrRotAngle.y > glm::half_pi<float>() - (cameraRotateStep.y*deltaTime)
-    			&& cameraCurrRotAngle.y < glm::half_pi<float>() + (cameraRotateStep.y*deltaTime))
-			std::cout << "WE ARE AT 90 DEG" << "cameraCurrRotAngle is " << cameraCurrRotAngle.y << std::endl;
-
     	float theta = cameraCurrRotAngle.y -thetaPrev;
     	/*
     	cameraPos.z = radius * sin(cameraCurrRotAngle.x) * cos(cameraCurrRotAngle.y);
