@@ -2,6 +2,10 @@
 
 #include<glad/glad.h> // Need glad before glew as it includes OpenGL headers
 #include<GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/constants.hpp>
 
 // Camera set up
 // Before we had -3 as we were translating the _scene_ back to give the impression of moving.
@@ -10,11 +14,12 @@
 glm::vec3 cameraPosHome = glm::vec3(0.f, 0.f, 3.f);
 glm::vec3 cameraLookAtHome = glm::vec3(0.f, 0.f, 1.f);
 glm::vec3 cameraPos = cameraPosHome;
-glm::vec3 cameraFront = glm::vec3(0.f, 0.f, 1.f);
+glm::vec3 cameraLookDirection = glm::vec3(0.f, 0.f, -1.f);
 glm::vec3 cameraMoveStep = glm::vec3(1.f, 1.f, 1.f);
 float radius = cameraPosHome.z;
 glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
 const glm::vec3 cameraRotateStep = glm::vec3(1.f, 1.f, 1.f);
+glm::vec3 cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
@@ -85,22 +90,22 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-    	cameraPos.z -= cameraMoveStep.z * deltaTime;
+    	cameraPos += cameraMoveStep.z * deltaTime * cameraLookDirection;
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-    	cameraPos.z += cameraMoveStep.z * deltaTime;
+    	cameraPos -= cameraMoveStep.z * deltaTime * cameraLookDirection;
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-    	cameraPos.x -= cameraMoveStep.x * deltaTime;
+    	cameraPos -= glm::normalize(glm::cross(cameraLookDirection, cameraUp)) * cameraMoveStep.x * deltaTime;
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-    	cameraPos.x += cameraMoveStep.x * deltaTime;
+    	cameraPos += glm::normalize(glm::cross(cameraLookDirection, cameraUp)) * cameraMoveStep.x * deltaTime;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
@@ -123,13 +128,13 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
-    			cameraFront.x * RotMat_zx[1][1] + cameraFront.y * RotMat_zx[1][2] + cameraFront.z * RotMat_zx[1][3];
+    			-cameraLookDirection.x * RotMat_zx[1][1] - cameraLookDirection.y * RotMat_zx[1][2] - cameraLookDirection.z * RotMat_zx[1][3];
     	cameraFrontNew.y =
-    			cameraFront.x * RotMat_zx[2][1] + cameraFront.y * RotMat_zx[2][2] + cameraFront.z * RotMat_zx[2][3];
+    			-cameraLookDirection.x * RotMat_zx[2][1] - cameraLookDirection.y * RotMat_zx[2][2] - cameraLookDirection.z * RotMat_zx[2][3];
     	cameraFrontNew.z =
-    			cameraFront.x * RotMat_zx[3][1] + cameraFront.y * RotMat_zx[3][2] + cameraFront.z * RotMat_zx[3][3];
+    			-cameraLookDirection.x * RotMat_zx[3][1] - cameraLookDirection.y * RotMat_zx[3][2] - cameraLookDirection.z * RotMat_zx[3][3];
 
-    	cameraFront = cameraFrontNew;
+    	cameraLookDirection = -cameraFrontNew;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS
@@ -152,13 +157,13 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
-    			cameraFront.x * RotMat_zx[1][1] + cameraFront.y * RotMat_zx[1][2] + cameraFront.z * RotMat_zx[1][3];
+    			-cameraLookDirection.x * RotMat_zx[1][1] - cameraLookDirection.y * RotMat_zx[1][2] - cameraLookDirection.z * RotMat_zx[1][3];
     	cameraFrontNew.y =
-    			cameraFront.x * RotMat_zx[2][1] + cameraFront.y * RotMat_zx[2][2] + cameraFront.z * RotMat_zx[2][3];
+    			-cameraLookDirection.x * RotMat_zx[2][1] - cameraLookDirection.y * RotMat_zx[2][2] - cameraLookDirection.z * RotMat_zx[2][3];
     	cameraFrontNew.z =
-    			cameraFront.x * RotMat_zx[3][1] + cameraFront.y * RotMat_zx[3][2] + cameraFront.z * RotMat_zx[3][3];
+    			-cameraLookDirection.x * RotMat_zx[3][1] - cameraLookDirection.y * RotMat_zx[3][2] - cameraLookDirection.z * RotMat_zx[3][3];
 
-    	cameraFront = cameraFrontNew;
+    	cameraLookDirection = -cameraFrontNew;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS
@@ -181,13 +186,13 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
-    			cameraFront.x * RotMat_zy[1][1] + cameraFront.y * RotMat_zy[1][2] + cameraFront.z * RotMat_zy[1][3];
+    			-cameraLookDirection.x * RotMat_zy[1][1] - cameraLookDirection.y * RotMat_zy[1][2] - cameraLookDirection.z * RotMat_zy[1][3];
     	cameraFrontNew.y =
-    			cameraFront.x * RotMat_zy[2][1] + cameraFront.y * RotMat_zy[2][2] + cameraFront.z * RotMat_zy[2][3];
+    			-cameraLookDirection.x * RotMat_zy[2][1] - cameraLookDirection.y * RotMat_zy[2][2] - cameraLookDirection.z * RotMat_zy[2][3];
     	cameraFrontNew.z =
-    			cameraFront.x * RotMat_zy[3][1] + cameraFront.y * RotMat_zy[3][2] + cameraFront.z * RotMat_zy[3][3];
+    			-cameraLookDirection.x * RotMat_zy[3][1] - cameraLookDirection.y * RotMat_zy[3][2] - cameraLookDirection.z * RotMat_zy[3][3];
 
-    	cameraFront = cameraFrontNew;
+    	cameraLookDirection = -cameraFrontNew;
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS
@@ -210,14 +215,15 @@ void processInput(GLFWwindow *window, float deltaTime)
 
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
-    			cameraFront.x * RotMat_zy[1][1] + cameraFront.y * RotMat_zy[1][2] + cameraFront.z * RotMat_zy[1][3];
+    			-cameraLookDirection.x * RotMat_zy[1][1] - cameraLookDirection.y * RotMat_zy[1][2] - cameraLookDirection.z * RotMat_zy[1][3];
     	cameraFrontNew.y =
-    			cameraFront.x * RotMat_zy[2][1] + cameraFront.y * RotMat_zy[2][2] + cameraFront.z * RotMat_zy[2][3];
+    			-cameraLookDirection.x * RotMat_zy[2][1] - cameraLookDirection.y * RotMat_zy[2][2] - cameraLookDirection.z * RotMat_zy[2][3];
     	cameraFrontNew.z =
-    			cameraFront.x * RotMat_zy[3][1] + cameraFront.y * RotMat_zy[3][2] + cameraFront.z * RotMat_zy[3][3];
+    			-cameraLookDirection.x * RotMat_zy[3][1] - cameraLookDirection.y * RotMat_zy[3][2] - cameraLookDirection.z * RotMat_zy[3][3];
 
-    	cameraFront = cameraFrontNew;
+    	cameraLookDirection = -cameraFrontNew;
     }
+
 
 
     if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
@@ -235,7 +241,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     {
     	cameraPos = cameraPosHome;
     	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
-    	cameraFront = cameraLookAtHome;
+    	cameraLookDirection = cameraLookAtHome;
     }
 }
 
