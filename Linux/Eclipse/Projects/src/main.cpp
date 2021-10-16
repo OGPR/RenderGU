@@ -49,8 +49,8 @@ int main()
     }
 
     MakeContextCurrent(window);
-    SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    SetCursorPosCallback(window, mouse_callback);
+    //SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //SetCursorPosCallback(window, mouse_callback);
 
 
     int gladInitialise = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -221,7 +221,7 @@ int main()
 			//model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
 
 			view = glm::mat4(1.f);
-			view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, glm::vec3(0.f, 1.f, 0.f));
+			view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
 			render_draw_cube(
 					shaderProgram_Cube,

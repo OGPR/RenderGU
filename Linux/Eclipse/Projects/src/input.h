@@ -6,13 +6,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
+#include "CustomMatrices.h"
+#include <vector>
 
 // Camera set up
 // Before we had -3 as we were translating the _scene_ back to give the impression of moving.
 // Now we have +3 as we are actually moving a camera into the direction we want (+z, out of the scree),
 // and keeping the scene fixed. Swapping neg/pos applies to y and x also
 glm::vec3 cameraPosHome = glm::vec3(0.f, 0.f, 3.f);
-glm::vec3 cameraLookAtHome = glm::vec3(0.f, 0.f, 1.f);
+glm::vec3 cameraLookAtHome = glm::vec3(0.f, 0.f, -1.f);
 glm::vec3 cameraPos = cameraPosHome;
 glm::vec3 cameraLookDirection = glm::vec3(0.f, 0.f, -1.f);
 glm::vec3 cameraMoveStep = glm::vec3(1.f, 1.f, 1.f);
@@ -21,6 +23,10 @@ glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
 const glm::vec3 cameraRotateStep = glm::vec3(1.f, 1.f, 1.f);
 glm::vec3 cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
+std::vector < std::vector<float> > RotMat_zx;
+std::vector < std::vector<float> > RotMat_zy;
+std::vector < std::vector<float> > RotMat_xy;
+
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
 static bool depthTest = true;
@@ -28,6 +34,7 @@ static bool wireframeMode = false;
 static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
+
 void processInput(GLFWwindow *window, float deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -115,17 +122,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
     	float theta = cameraCurrRotAngle.y -thetaPrev;
 
-    	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
-    	// row of zeros (and zero at the start of each row) because I wanted to offset the index
-    	// (i.e [1][1] is what you expect it to be. This will all go away when I use glm mats and vecs
-    	float RotMat_zx[4][4] =
-    	{
-    	    {0, 0, 0, 0},
-    	    {0, cos(theta), 0, -sin(theta)},
-    	    {0, 0, 1, 0},
-    	    {0, sin(theta), 0, cos(theta)},
-    	};
-
+		RotMat_zx = YawMatrix(theta);
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
     			-cameraLookDirection.x * RotMat_zx[1][1] - cameraLookDirection.y * RotMat_zx[1][2] - cameraLookDirection.z * RotMat_zx[1][3];
@@ -144,17 +141,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
     	float theta = cameraCurrRotAngle.y -thetaPrev;
 
-    	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
-    	// row of zeros (and zero at the start of each row) because I wanted to offset the index
-    	// (i.e [1][1] is what you expect it to be. This will all go away when I use glm mats and vecs
-    	float RotMat_zx[4][4] =
-    	{
-    	    {0, 0, 0, 0},
-    	    {0, cos(theta), 0, -sin(theta)},
-    	    {0, 0, 1, 0},
-    	    {0, sin(theta), 0, cos(theta)},
-    	};
-
+    	RotMat_zx = YawMatrix(theta);
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
     			-cameraLookDirection.x * RotMat_zx[1][1] - cameraLookDirection.y * RotMat_zx[1][2] - cameraLookDirection.z * RotMat_zx[1][3];
@@ -173,17 +160,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraCurrRotAngle.x += cameraRotateStep.x * deltaTime;
     	float theta = cameraCurrRotAngle.x -thetaPrev;
 
-    	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
-    	// row of zeros (and zero at the start of each row) because I wanted to offset the index
-    	// (i.e [1][1] is what you expect it to be. This will all go away when I use glm mats and vecs
-    	float RotMat_zy[4][4] =
-    	{
-    	    {0, 0, 0, 0},
-    	    {0, 1, 0, 0},
-    	    {0, 0, cos(theta), -sin(theta)},
-    	    {0, 0, sin(theta), cos(theta)},
-    	};
-
+    	RotMat_zy = PitchMatrix(theta);
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
     			-cameraLookDirection.x * RotMat_zy[1][1] - cameraLookDirection.y * RotMat_zy[1][2] - cameraLookDirection.z * RotMat_zy[1][3];
@@ -202,17 +179,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraCurrRotAngle.x -= cameraRotateStep.x * deltaTime;
     	float theta = cameraCurrRotAngle.x -thetaPrev;
 
-    	// Note this is not a 4x4 in the homogeneous coordinate sense - I only put the extra
-    	// row of zeros (and zero at the start of each row) because I wanted to offset the index
-    	// (i.e [1][1] is what you expect it to be. This will all go away when I use glm mats and vecs
-    	float RotMat_zy[4][4] =
-    	{
-    	    {0, 0, 0, 0},
-    	    {0, 1, 0, 0},
-    	    {0, 0, cos(theta), -sin(theta)},
-    	    {0, 0, sin(theta), cos(theta)},
-    	};
-
+    	RotMat_zy = PitchMatrix(theta);
     	glm::vec3 cameraFrontNew;
     	cameraFrontNew.x =
     			-cameraLookDirection.x * RotMat_zy[1][1] - cameraLookDirection.y * RotMat_zy[1][2] - cameraLookDirection.z * RotMat_zy[1][3];
@@ -224,6 +191,46 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraLookDirection = -cameraFrontNew;
     }
 
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+    {
+    	float thetaPrev = cameraCurrRotAngle.z;
+    	cameraCurrRotAngle.z += cameraRotateStep.z * deltaTime;
+    	float theta = cameraCurrRotAngle.z -thetaPrev;
+
+    	RotMat_xy = RollMatrix(theta);
+    	glm::vec3 cameraUpNew;
+    	cameraUpNew.x =
+    			cameraUp.x * RotMat_xy[1][1] + cameraUp.y * RotMat_xy[1][2] + cameraUp.z * RotMat_xy[1][3];
+    	cameraUpNew.y =
+    			cameraUp.x * RotMat_xy[2][1] + cameraUp.y * RotMat_xy[2][2] + cameraUp.z * RotMat_xy[2][3];
+    	cameraUpNew.z =
+    			cameraUp.x * RotMat_xy[3][1] + cameraUp.y * RotMat_xy[3][2] + cameraUp.z * RotMat_xy[3][3];
+
+    	cameraUp = cameraUpNew;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+    {
+    	float thetaPrev = cameraCurrRotAngle.z;
+    	cameraCurrRotAngle.z -= cameraRotateStep.z * deltaTime;
+    	float theta = cameraCurrRotAngle.z -thetaPrev;
+
+    	RotMat_xy = RollMatrix(theta);
+    	glm::vec3 cameraUpNew;
+    	cameraUpNew.x =
+    			cameraUp.x * RotMat_xy[1][1] + cameraUp.y * RotMat_xy[1][2] + cameraUp.z * RotMat_xy[1][3];
+    	cameraUpNew.y =
+    			cameraUp.x * RotMat_xy[2][1] + cameraUp.y * RotMat_xy[2][2] + cameraUp.z * RotMat_xy[2][3];
+    	cameraUpNew.z =
+    			cameraUp.x * RotMat_xy[3][1] + cameraUp.y * RotMat_xy[3][2] + cameraUp.z * RotMat_xy[3][3];
+
+    	cameraUp = cameraUpNew;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+    {
+    	cameraUp = glm::vec3(0.f, 1.f, 0.f);
+    }
 
 
     if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
@@ -242,6 +249,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraPos = cameraPosHome;
     	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
     	cameraLookDirection = cameraLookAtHome;
+    	cameraUp = glm::vec3(0.f, 1.f, 0.f);
     }
 }
 
