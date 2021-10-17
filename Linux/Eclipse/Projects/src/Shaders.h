@@ -142,3 +142,81 @@ const char* fragmentShaderSource_Cube =
 			FragColor = mix(texture(Texture1, TexCoord), texture(Texture2, TexCoord), texture2Amount);
     }
 );
+
+const char* vertexShaderSource_Cube_Raw_Target =
+    GLSL(330 core,
+    layout(location = 0) in vec3 aPos;
+	layout(location = 1) in vec3 aNormal;
+
+	out vec3 Normal;
+	out vec3 FragPos;
+
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+
+    vec4 vertexWS;
+
+    void main()
+    {
+        gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+        vertexWS = model * vec4(aPos, 1.0f);
+        FragPos = vec3(vertexWS);
+        Normal = aNormal;
+    }
+);
+
+const char* fragmentShaderSource_Cube_Raw_Target =
+    GLSL(330 core,
+    in vec3 FragPos;
+    in vec3 Normal;
+    out vec4 FragColor;
+
+	uniform vec3 reflectance;
+	uniform vec3 lightSource;
+	uniform vec3 lightPos;
+	uniform vec3 viewPos;
+	uniform unsigned int PhongExp;
+	uniform bool ambientLight;
+	uniform bool diffuseLight;
+	uniform bool specularLight;
+
+	float ambientStrength = ambientLight ?  0.1f : 0.f;
+	vec3 lightDir = normalize(lightPos - FragPos);
+	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
+	float specularStrength = 0.5f;
+	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 reflectDir = reflect(-lightDir, Normal);
+	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), PhongExp) : 0.f;
+
+    void main()
+    {
+    	FragColor = vec4((ambientStrength + diffuseReflectionFactor + specularReflectionFactor) * reflectance * lightSource, 1.0f);
+    }
+);
+
+const char* vertexShaderSource_Cube_Raw_LightSource =
+    GLSL(330 core,
+    layout(location = 0) in vec3 aPos;
+
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+
+    void main()
+    {
+        gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    }
+);
+
+const char* fragmentShaderSource_Cube_Raw_LightSource =
+    GLSL(330 core,
+    out vec4 FragColor;
+
+	uniform vec3 lightSource;
+
+    void main()
+    {
+    	FragColor = vec4(lightSource, 1.0f);
+    }
+);

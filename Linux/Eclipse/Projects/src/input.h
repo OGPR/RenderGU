@@ -8,6 +8,8 @@
 #include <glm/gtc/constants.hpp>
 #include "CustomMatrices.h"
 #include <vector>
+#include <iostream>
+#include <limits.h>
 
 // Camera set up
 // Before we had -3 as we were translating the _scene_ back to give the impression of moving.
@@ -34,6 +36,16 @@ static bool wireframeMode = false;
 static bool l_pressed = false;
 static bool f_pressed = false;
 static bool z_pressed = false;
+static unsigned int PhongExp = 32;
+static unsigned int uintMax = UINT_MAX;
+static bool p_pressed = false;
+static bool o_pressed = false;
+static bool _1_pressed = false;
+static bool _2_pressed = false;
+static bool _3_pressed = false;
+static bool ambientLight = true;
+static bool diffuseLight = true;
+static bool specularLight = true;
 
 void processInput(GLFWwindow *window, float deltaTime)
 {
@@ -216,6 +228,59 @@ void processInput(GLFWwindow *window, float deltaTime)
     	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
     	cameraLookDirection = cameraLookAtHome;
     	cameraUp = glm::vec3(0.f, 1.f, 0.f);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && p_pressed)
+    	p_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_RELEASE && o_pressed)
+    	o_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && !p_pressed)
+    {
+
+    	p_pressed = true;
+    	if (PhongExp != uintMax/2 + 1)
+			PhongExp <<= 1;
+    	std::cout << PhongExp << std::endl;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS && !o_pressed)
+    {
+    	o_pressed = true;
+    	PhongExp >>= 1;
+    	PhongExp = PhongExp >= 1 ? PhongExp : 1;
+    	std::cout << PhongExp << std::endl;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+    	PhongExp = 32;
+
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_RELEASE && _1_pressed)
+    	_1_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE && _2_pressed)
+    	_2_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_RELEASE && _3_pressed)
+    	_3_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !_1_pressed)
+    {
+    	_1_pressed = true;
+    	ambientLight = !ambientLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !_2_pressed)
+    {
+    	_2_pressed = true;
+    	diffuseLight = !diffuseLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && !_3_pressed)
+    {
+    	_3_pressed = true;
+    	specularLight = !specularLight;
     }
 }
 
