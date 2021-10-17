@@ -48,6 +48,21 @@ Matrix RollMatrix (float theta)
 	};
 }
 
+glm::vec3 TransformVec(glm::vec3 vec, Matrix transform)
+{
+	glm::vec3 result;
+	result.x =
+			vec.x * transform[1][1] + vec.y * transform[1][2] + vec.z * transform[1][3];
+	result.y =
+			vec.x * transform[2][1] + vec.y * transform[2][2] + vec.z * transform[2][3];
+	result.z =
+			vec.x * transform[3][1] + vec.y * transform[3][2] + vec.z * transform[3][3];
+
+	return result;
+}
+
+
+
 Matrix MatMul(Matrix M1, Matrix M2)
 {
 	/**

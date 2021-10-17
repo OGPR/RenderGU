@@ -123,13 +123,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float theta = cameraCurrRotAngle.y -thetaPrev;
 
 		RotMat_zx = YawMatrix(theta);
-    	glm::vec3 cameraFrontNew;
-    	cameraFrontNew.x =
-    			-cameraLookDirection.x * RotMat_zx[1][1] - cameraLookDirection.y * RotMat_zx[1][2] - cameraLookDirection.z * RotMat_zx[1][3];
-    	cameraFrontNew.y =
-    			-cameraLookDirection.x * RotMat_zx[2][1] - cameraLookDirection.y * RotMat_zx[2][2] - cameraLookDirection.z * RotMat_zx[2][3];
-    	cameraFrontNew.z =
-    			-cameraLookDirection.x * RotMat_zx[3][1] - cameraLookDirection.y * RotMat_zx[3][2] - cameraLookDirection.z * RotMat_zx[3][3];
+
+    	glm::vec3 cameraFrontNew = TransformVec(-cameraLookDirection, RotMat_zx);
 
     	cameraLookDirection = -cameraFrontNew;
     }
@@ -142,13 +137,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float theta = cameraCurrRotAngle.y -thetaPrev;
 
     	RotMat_zx = YawMatrix(theta);
-    	glm::vec3 cameraFrontNew;
-    	cameraFrontNew.x =
-    			-cameraLookDirection.x * RotMat_zx[1][1] - cameraLookDirection.y * RotMat_zx[1][2] - cameraLookDirection.z * RotMat_zx[1][3];
-    	cameraFrontNew.y =
-    			-cameraLookDirection.x * RotMat_zx[2][1] - cameraLookDirection.y * RotMat_zx[2][2] - cameraLookDirection.z * RotMat_zx[2][3];
-    	cameraFrontNew.z =
-    			-cameraLookDirection.x * RotMat_zx[3][1] - cameraLookDirection.y * RotMat_zx[3][2] - cameraLookDirection.z * RotMat_zx[3][3];
+
+    	glm::vec3 cameraFrontNew = TransformVec(-cameraLookDirection, RotMat_zx);
 
     	cameraLookDirection = -cameraFrontNew;
     }
@@ -161,13 +151,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float theta = cameraCurrRotAngle.x -thetaPrev;
 
     	RotMat_zy = PitchMatrix(theta);
-    	glm::vec3 cameraFrontNew;
-    	cameraFrontNew.x =
-    			-cameraLookDirection.x * RotMat_zy[1][1] - cameraLookDirection.y * RotMat_zy[1][2] - cameraLookDirection.z * RotMat_zy[1][3];
-    	cameraFrontNew.y =
-    			-cameraLookDirection.x * RotMat_zy[2][1] - cameraLookDirection.y * RotMat_zy[2][2] - cameraLookDirection.z * RotMat_zy[2][3];
-    	cameraFrontNew.z =
-    			-cameraLookDirection.x * RotMat_zy[3][1] - cameraLookDirection.y * RotMat_zy[3][2] - cameraLookDirection.z * RotMat_zy[3][3];
+    	glm::vec3 cameraFrontNew = TransformVec(-cameraLookDirection, RotMat_zy);
 
     	cameraLookDirection = -cameraFrontNew;
     }
@@ -180,13 +164,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float theta = cameraCurrRotAngle.x -thetaPrev;
 
     	RotMat_zy = PitchMatrix(theta);
-    	glm::vec3 cameraFrontNew;
-    	cameraFrontNew.x =
-    			-cameraLookDirection.x * RotMat_zy[1][1] - cameraLookDirection.y * RotMat_zy[1][2] - cameraLookDirection.z * RotMat_zy[1][3];
-    	cameraFrontNew.y =
-    			-cameraLookDirection.x * RotMat_zy[2][1] - cameraLookDirection.y * RotMat_zy[2][2] - cameraLookDirection.z * RotMat_zy[2][3];
-    	cameraFrontNew.z =
-    			-cameraLookDirection.x * RotMat_zy[3][1] - cameraLookDirection.y * RotMat_zy[3][2] - cameraLookDirection.z * RotMat_zy[3][3];
+    	glm::vec3 cameraFrontNew = TransformVec(-cameraLookDirection, RotMat_zy);
 
     	cameraLookDirection = -cameraFrontNew;
     }
@@ -198,13 +176,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float theta = cameraCurrRotAngle.z -thetaPrev;
 
     	RotMat_xy = RollMatrix(theta);
-    	glm::vec3 cameraUpNew;
-    	cameraUpNew.x =
-    			cameraUp.x * RotMat_xy[1][1] + cameraUp.y * RotMat_xy[1][2] + cameraUp.z * RotMat_xy[1][3];
-    	cameraUpNew.y =
-    			cameraUp.x * RotMat_xy[2][1] + cameraUp.y * RotMat_xy[2][2] + cameraUp.z * RotMat_xy[2][3];
-    	cameraUpNew.z =
-    			cameraUp.x * RotMat_xy[3][1] + cameraUp.y * RotMat_xy[3][2] + cameraUp.z * RotMat_xy[3][3];
+    	glm::vec3 cameraUpNew = TransformVec(cameraUp, RotMat_xy);
 
     	cameraUp = cameraUpNew;
     }
@@ -216,13 +188,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	float theta = cameraCurrRotAngle.z -thetaPrev;
 
     	RotMat_xy = RollMatrix(theta);
-    	glm::vec3 cameraUpNew;
-    	cameraUpNew.x =
-    			cameraUp.x * RotMat_xy[1][1] + cameraUp.y * RotMat_xy[1][2] + cameraUp.z * RotMat_xy[1][3];
-    	cameraUpNew.y =
-    			cameraUp.x * RotMat_xy[2][1] + cameraUp.y * RotMat_xy[2][2] + cameraUp.z * RotMat_xy[2][3];
-    	cameraUpNew.z =
-    			cameraUp.x * RotMat_xy[3][1] + cameraUp.y * RotMat_xy[3][2] + cameraUp.z * RotMat_xy[3][3];
+    	glm::vec3 cameraUpNew = TransformVec(cameraUp, RotMat_xy);
 
     	cameraUp = cameraUpNew;
     }
