@@ -19,9 +19,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-
-
+#include <glm/gtc/constants.hpp>
+#include "input.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -30,73 +29,8 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
-static bool vertFlip = false;
-static float texture2Amount = 0.2f;
-static bool depthTest = true;
-static bool wireframeMode = false;
-static bool w_pressed = false;
-static bool f_pressed = false;
-static bool z_pressed = false;
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE && w_pressed)
-    	w_pressed = false;
 
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && f_pressed)
-    	f_pressed = false;
-
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && z_pressed)
-    	z_pressed = false;
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && !wireframeMode)
-    {
-    	w_pressed = true;
-    	wireframeMode = true;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !w_pressed && wireframeMode)
-    {
-    	w_pressed = true;
-    	wireframeMode = false;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && !vertFlip)
-    {
-    	f_pressed = true;
-    	vertFlip = true;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && vertFlip)
-    {
-    	f_pressed = true;
-    	vertFlip = false;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !z_pressed && !depthTest)
-    {
-    	z_pressed = true;
-    	depthTest = true;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !z_pressed && depthTest)
-    {
-    	z_pressed = true;
-    	depthTest = false;
-    }
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-    	texture2Amount += 0.0025f;
-
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    	texture2Amount -= 0.0025f;
-
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-    	texture2Amount = 0.2f;
-}
 
 int main()
 {
@@ -115,6 +49,8 @@ int main()
     }
 
     MakeContextCurrent(window);
+    //SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //SetCursorPosCallback(window, mouse_callback);
 
 
     int gladInitialise = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -212,8 +148,6 @@ int main()
 	//// Transformations
 	glm::mat4 model(1.f);
 	glm::mat4 view(1.f);
-	//model = glm::rotate(model, glm::radians(45.f), glm::vec3(0.f,1.f,0.f));
-	view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
@@ -249,11 +183,19 @@ int main()
 		glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
+    // Frame time management variables
+    float currFrameTime;
+    float lastFrameTime = 0.f;
+    float deltaTime;
+
     // Game loop
     while (!WindowShouldClose(window))
     {
+    	currFrameTime = glfwGetTime();
+    	deltaTime = currFrameTime - lastFrameTime;
+    	lastFrameTime = currFrameTime;
         //// input
-        processInput(window);
+        processInput(window, deltaTime);
 
         if (depthTest)
 			glEnable(GL_DEPTH_TEST);
@@ -276,7 +218,10 @@ int main()
         {
         	model = glm::mat4(1.f);
         	model = glm::translate(model, cubePositions[i]);
-			model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
+			//model = glm::rotate(model, (float)glfwGetTime() * 0.1f * glm::radians(50.f), glm::vec3(0.5f,1.f,0.f));
+
+			view = glm::mat4(1.f);
+			view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
 			render_draw_cube(
 					shaderProgram_Cube,
