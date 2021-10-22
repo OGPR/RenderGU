@@ -174,8 +174,9 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 
     uniform struct Material
 	{
-    	vec3 reflectance;
-
+    	vec3 ambientReflectance;
+    	vec3 diffuseReflectance;
+    	vec3 specularReflectance;
 	} material;
 
 	uniform vec3 lightSource;
@@ -201,7 +202,10 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 
     void main()
     {
-    	FragColor = vec4((ambientStrength + diffuseReflectionFactor + specularReflectionFactor) * material.reflectance * lightSource, 1.0f);
+    	FragColor = vec4(
+    			(ambientStrength * material.ambientReflectance
+    					+ diffuseReflectionFactor * material.diffuseReflectance
+						+ specularReflectionFactor * material.specularReflectance) * lightSource, 1.0f);
     }
 );
 
