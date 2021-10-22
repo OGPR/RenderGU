@@ -172,7 +172,12 @@ const char* fragmentShaderSource_Cube_Raw_Target =
     in vec3 Normal;
     out vec4 FragColor;
 
-	uniform vec3 reflectance;
+    uniform struct Material
+	{
+    	vec3 reflectance;
+
+	} material;
+
 	uniform vec3 lightSource;
 	uniform vec3 lightPos;
 	uniform vec3 viewPos;
@@ -181,9 +186,14 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform bool diffuseLight;
 	uniform bool specularLight;
 
+	// Ambient
 	float ambientStrength = ambientLight ?  0.1f : 0.f;
+
+	// Diffuse
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
+
+	// Specular
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
@@ -191,7 +201,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 
     void main()
     {
-    	FragColor = vec4((ambientStrength + diffuseReflectionFactor + specularReflectionFactor) * reflectance * lightSource, 1.0f);
+    	FragColor = vec4((ambientStrength + diffuseReflectionFactor + specularReflectionFactor) * material.reflectance * lightSource, 1.0f);
     }
 );
 

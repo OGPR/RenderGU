@@ -345,7 +345,7 @@ void render_draw_cube_raw_target(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "reflectance"), 1, glm::value_ptr(reflectance));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "material.reflectance"), 1, glm::value_ptr(reflectance));
     glUniform3fv(glGetUniformLocation(shaderProgram, "lightSource"), 1, glm::value_ptr(lightSource));
     glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightPos));
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
