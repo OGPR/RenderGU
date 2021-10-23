@@ -253,6 +253,9 @@ int main()
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-0.5f, 0.0f,0.0f));
         glm::vec3 lightSource = glm::vec3(1.f, 1.f, 1.f);
+        glm::vec3 lightAmbient = glm::vec3(1.f, 1.f, 1.f);
+        glm::vec3 lightDiffuse = glm::vec3(1.f, 1.f, 1.f);
+        glm::vec3 lightSpecular = glm::vec3(1.f, 1.f, 1.f);
         glm::vec3 ambientReflectance = glm::vec3(1.f, 0.5f, 0.31f);
         glm::vec3 diffuseReflectance = glm::vec3(1.f, 0.5f, 0.31f);
         glm::vec3 specularReflectance = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -268,6 +271,9 @@ int main()
 				diffuseReflectance,
 				specularReflectance,
 				lightSource,
+				lightAmbient,
+				lightDiffuse,
+				lightSpecular,
 				lightPos,
 				cameraPos,
 				shine,

@@ -335,6 +335,9 @@ void render_draw_cube_raw_target(
 		glm::vec3 diffuseReflectance = glm::vec3(0.0f),
 		glm::vec3 specularReflectance = glm::vec3(0.0f),
 		glm::vec3 lightSource = glm::vec3(1.0f),
+		glm::vec3 lightAmbient = glm::vec3(1.0f),
+		glm::vec3 lightDiffuse = glm::vec3(1.0f),
+		glm::vec3 lightSpecular = glm::vec3(1.0f),
 		glm::vec3 lightPos = glm::vec3(0.f),
 		glm::vec3 viewPos = glm::vec3(0.f),
 		unsigned int shine = 32,
@@ -350,7 +353,10 @@ void render_draw_cube_raw_target(
     glUniform3fv(glGetUniformLocation(shaderProgram, "material.ambientReflectance"), 1, glm::value_ptr(ambientReflectance));
     glUniform3fv(glGetUniformLocation(shaderProgram, "material.diffuseReflectance"), 1, glm::value_ptr(diffuseReflectance));
     glUniform3fv(glGetUniformLocation(shaderProgram, "material.specularReflectance"), 1, glm::value_ptr(specularReflectance));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "lightSource"), 1, glm::value_ptr(lightSource));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "light.source"), 1, glm::value_ptr(lightSource));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "light.ambient"), 1, glm::value_ptr(lightAmbient));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "light.diffuse"), 1, glm::value_ptr(lightDiffuse));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "light.specular"), 1, glm::value_ptr(lightSpecular));
     glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightPos));
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
     glUniform1ui(glGetUniformLocation(shaderProgram, "material.shine"), shine);
