@@ -147,9 +147,11 @@ const char* vertexShaderSource_Cube_Raw_Target =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
 	layout(location = 1) in vec3 aNormal;
+	layout(location = 2) in vec2 aTexCoords;
 
 	out vec3 Normal;
 	out vec3 FragPos;
+	out vec2 TexCoords;
 
     uniform mat4 model;
     uniform mat4 view;
@@ -163,6 +165,7 @@ const char* vertexShaderSource_Cube_Raw_Target =
         vertexWS = model * vec4(aPos, 1.0f);
         FragPos = vec3(vertexWS);
         Normal = aNormal;
+        TexCoords = aTexCoords;
     }
 );
 
@@ -170,12 +173,13 @@ const char* fragmentShaderSource_Cube_Raw_Target =
     GLSL(330 core,
     in vec3 FragPos;
     in vec3 Normal;
+    in vec2 TexCoords;
     out vec4 FragColor;
 
     uniform struct Material
 	{
-    	vec3 ambientReflectance;
-    	vec3 diffuseReflectance;
+    	sampler2D ambientMap;
+    	sampler2D diffuseMap;
     	vec3 specularReflectance;
     	unsigned int shine;
 	} material;
@@ -200,12 +204,12 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 
 	// Ambient
 	float ambientStrength = ambientLight ?  1.f : 0.f;
-	vec3 ambientColor = light.source * light.ambient * ambientStrength * material.ambientReflectance;
+	vec3 ambientColor = light.source * light.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
 
 	// Diffuse
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
-	vec3 diffuseColor = light.source * light.diffuse * diffuseReflectionFactor * material.diffuseReflectance;
+	vec3 diffuseColor = light.source * light.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
 
 	// Specular
 	float specularStrength = 0.5f;

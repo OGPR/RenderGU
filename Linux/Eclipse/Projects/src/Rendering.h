@@ -211,12 +211,16 @@ unsigned int render_setup_cube_raw(float* vertex, unsigned int numberOfEntries)
     glBindVertexArray(VAO);
 
     // Position attribute
-    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 6*sizeof(float) , 0);
+    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 8*sizeof(float) , 0);
     glEnableVertexAttribArray(0);
 
     // Normal attribute
-    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 6*sizeof(float) , (void *)(3*sizeof(float)));
+    glVertexAttribPointer(1, 3 , GL_FLOAT, GL_FALSE, 8*sizeof(float) , (void *)(3*sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Texture coords attribute
+    glVertexAttribPointer(2, 2 , GL_FLOAT, GL_FALSE, 8*sizeof(float) , (void *)(6*sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     return VAO;
 }
@@ -249,7 +253,7 @@ unsigned int render_setup_cube_raw_lightsource(float* vertex, unsigned int numbe
     glBindVertexArray(VAO);
 
     // Position attribute
-    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 6*sizeof(float) , 0);
+    glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE, 8*sizeof(float) , 0);
     glEnableVertexAttribArray(0);
 
     return VAO;
@@ -331,8 +335,6 @@ void render_draw_cube_raw_target(
 		glm::mat4 model = glm::mat4(1.0f),
 		glm::mat4 view = glm::mat4(1.0f),
 		glm::mat4 projection = glm::mat4(1.0f),
-		glm::vec3 ambientReflectance = glm::vec3(0.0f),
-		glm::vec3 diffuseReflectance = glm::vec3(0.0f),
 		glm::vec3 specularReflectance = glm::vec3(0.0f),
 		glm::vec3 lightSource = glm::vec3(1.0f),
 		glm::vec3 lightAmbient = glm::vec3(1.0f),
@@ -350,8 +352,6 @@ void render_draw_cube_raw_target(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "material.ambientReflectance"), 1, glm::value_ptr(ambientReflectance));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "material.diffuseReflectance"), 1, glm::value_ptr(diffuseReflectance));
     glUniform3fv(glGetUniformLocation(shaderProgram, "material.specularReflectance"), 1, glm::value_ptr(specularReflectance));
     glUniform3fv(glGetUniformLocation(shaderProgram, "light.source"), 1, glm::value_ptr(lightSource));
     glUniform3fv(glGetUniformLocation(shaderProgram, "light.ambient"), 1, glm::value_ptr(lightAmbient));
@@ -363,6 +363,8 @@ void render_draw_cube_raw_target(
     glUniform1i(glGetUniformLocation(shaderProgram, "ambientLight"), ambientLight);
     glUniform1i(glGetUniformLocation(shaderProgram, "diffuseLight"), diffuseLight);
     glUniform1i(glGetUniformLocation(shaderProgram, "specularLight"), specularLight );
+    glUniform1i(glGetUniformLocation(shaderProgram, "material.ambientMap"), 3);
+    glUniform1i(glGetUniformLocation(shaderProgram, "material.diffuseMap"), 2);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
