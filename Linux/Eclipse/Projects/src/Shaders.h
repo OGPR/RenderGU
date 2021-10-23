@@ -180,7 +180,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	{
     	sampler2D ambientMap;
     	sampler2D diffuseMap;
-    	vec3 specularReflectance;
+    	sampler2D specularMap;
     	unsigned int shine;
 	} material;
 
@@ -216,7 +216,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
 	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
-	vec3 specularColor = light.source * light.specular * specularReflectionFactor * material.specularReflectance;
+	vec3 specularColor = light.source * light.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
 
     void main()
     {

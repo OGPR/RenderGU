@@ -207,7 +207,6 @@ int main()
         glm::vec3 lightAmbient = glm::vec3(0.2f, 0.2f, 0.2f);
         glm::vec3 lightDiffuse = glm::vec3(0.5f, 0.5f, 0.5f);
         glm::vec3 lightSpecular = glm::vec3(1.f, 1.f, 1.f);
-        glm::vec3 specularReflectance = glm::vec3(0.5f, 0.5f, 0.5f);
         unsigned int shine = PhongExp;
         glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.f);
         render_draw_cube_raw_target(
@@ -216,7 +215,6 @@ int main()
 				model,
 				view,
 				projection,
-				specularReflectance,
 				lightSource,
 				lightAmbient,
 				lightDiffuse,

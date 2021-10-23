@@ -101,4 +101,26 @@ void textureSetup()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(img_data);
+
+	// Specular Lighting map (our 5th texture here)
+	img_data = stbi_load("specularMap.png", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load texture 3...");
+
+	unsigned int texture5;
+	glGenTextures(1, &texture5);
+
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, texture5);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
 }
