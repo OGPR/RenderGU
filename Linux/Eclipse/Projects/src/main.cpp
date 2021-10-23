@@ -213,7 +213,8 @@ int main()
 			glDisable(GL_DEPTH_TEST);
 
         // clear results from previous frame (iteration of loop)
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
@@ -252,7 +253,13 @@ int main()
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-0.5f, 0.0f,0.0f));
         glm::vec3 lightSource = glm::vec3(1.f, 1.f, 1.f);
-        glm::vec3 reflectance = glm::vec3(1.f, 0.5f, 0.31f);
+        glm::vec3 lightAmbient = glm::vec3(0.2f, 0.2f, 0.2f);
+        glm::vec3 lightDiffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+        glm::vec3 lightSpecular = glm::vec3(1.f, 1.f, 1.f);
+        glm::vec3 ambientReflectance = glm::vec3(1.f, 0.5f, 0.31f);
+        glm::vec3 diffuseReflectance = glm::vec3(1.f, 0.5f, 0.31f);
+        glm::vec3 specularReflectance = glm::vec3(0.5f, 0.5f, 0.5f);
+        unsigned int shine = PhongExp;
         glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.f);
         render_draw_cube_raw_target(
         		shaderProgram_Cube_Raw_Target,
@@ -260,11 +267,16 @@ int main()
 				model,
 				view,
 				projection,
-				reflectance,
+				ambientReflectance,
+				diffuseReflectance,
+				specularReflectance,
 				lightSource,
+				lightAmbient,
+				lightDiffuse,
+				lightSpecular,
 				lightPos,
 				cameraPos,
-				PhongExp,
+				shine,
 				ambientLight,
 				diffuseLight,
 				specularLight

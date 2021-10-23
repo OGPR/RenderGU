@@ -172,7 +172,23 @@ const char* fragmentShaderSource_Cube_Raw_Target =
     in vec3 Normal;
     out vec4 FragColor;
 
-	uniform vec3 reflectance;
+    uniform struct Material
+	{
+    	vec3 ambientReflectance;
+    	vec3 diffuseReflectance;
+    	vec3 specularReflectance;
+    	unsigned int shine;
+	} material;
+
+	uniform struct Light
+	{
+		vec3 source;
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+	} light;
+
+
 	uniform vec3 lightSource;
 	uniform vec3 lightPos;
 	uniform vec3 viewPos;
@@ -181,17 +197,27 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform bool diffuseLight;
 	uniform bool specularLight;
 
-	float ambientStrength = ambientLight ?  0.1f : 0.f;
+
+	// Ambient
+	float ambientStrength = ambientLight ?  1.f : 0.f;
+	vec3 ambientColor = light.source * light.ambient * ambientStrength * material.ambientReflectance;
+
+	// Diffuse
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
+	vec3 diffuseColor = light.source * light.diffuse * diffuseReflectionFactor * material.diffuseReflectance;
+
+	// Specular
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
-	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), PhongExp) : 0.f;
+	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
+	vec3 specularColor = light.source * light.specular * specularReflectionFactor * material.specularReflectance;
 
     void main()
     {
-    	FragColor = vec4((ambientStrength + diffuseReflectionFactor + specularReflectionFactor) * reflectance * lightSource, 1.0f);
+		vec3 finalColor =  ambientColor + diffuseColor + specularColor;
+    	FragColor = vec4(finalColor, 1.f);
     }
 );
 
