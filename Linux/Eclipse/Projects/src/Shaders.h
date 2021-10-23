@@ -188,25 +188,27 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform bool diffuseLight;
 	uniform bool specularLight;
 
+
 	// Ambient
 	float ambientStrength = ambientLight ?  1.f : 0.f;
+	vec3 ambientColor = lightSource * ambientStrength * material.ambientReflectance;
 
 	// Diffuse
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
+	vec3 diffuseColor = lightSource * diffuseReflectionFactor * material.diffuseReflectance;
 
 	// Specular
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
 	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
+	vec3 specularColor = lightSource * specularReflectionFactor * material.specularReflectance;
 
     void main()
     {
-    	FragColor = vec4(
-    			(ambientStrength * material.ambientReflectance
-    					+ diffuseReflectionFactor * material.diffuseReflectance
-						+ specularReflectionFactor * material.specularReflectance) * lightSource, 1.0f);
+		vec3 finalColor =  ambientColor + diffuseColor + specularColor;
+    	FragColor = vec4(finalColor, 1.f);
     }
 );
 
