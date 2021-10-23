@@ -189,7 +189,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform bool specularLight;
 
 	// Ambient
-	float ambientStrength = ambientLight ?  0.1f : 0.f;
+	float ambientStrength = ambientLight ?  1.f : 0.f;
 
 	// Diffuse
 	vec3 lightDir = normalize(lightPos - FragPos);
