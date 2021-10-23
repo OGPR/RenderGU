@@ -177,6 +177,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
     	vec3 ambientReflectance;
     	vec3 diffuseReflectance;
     	vec3 specularReflectance;
+    	unsigned int shine;
 	} material;
 
 	uniform vec3 lightSource;
@@ -198,7 +199,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
-	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), PhongExp) : 0.f;
+	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
 
     void main()
     {

@@ -255,6 +255,7 @@ int main()
         glm::vec3 ambientReflectance = glm::vec3(1.f, 0.5f, 0.31f);
         glm::vec3 diffuseReflectance = glm::vec3(1.f, 0.5f, 0.31f);
         glm::vec3 specularReflectance = glm::vec3(1.f, 0.5f, 0.31f);
+        unsigned int shine = PhongExp;
         glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.f);
         render_draw_cube_raw_target(
         		shaderProgram_Cube_Raw_Target,
@@ -268,7 +269,7 @@ int main()
 				lightSource,
 				lightPos,
 				cameraPos,
-				PhongExp,
+				shine,
 				ambientLight,
 				diffuseLight,
 				specularLight
