@@ -345,7 +345,9 @@ void render_draw_cube_raw_target(
 		bool ambientLight = true,
 		bool diffuseLight = true,
 		bool specularLight = true,
-		glm::vec3 lightDirection = glm::vec3(0.f)
+		glm::vec3 lightDirection = glm::vec3(0.f),
+		bool isLightDirectional = true,
+		bool isLightPoint = false
 		)
 {
     glUseProgram(shaderProgram);
@@ -357,12 +359,18 @@ void render_draw_cube_raw_target(
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.diffuse"), 1, glm::value_ptr(lightDiffuse));
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.specular"), 1, glm::value_ptr(lightSpecular));
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.direction"), 1, glm::value_ptr(lightDirection));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightPos));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.source"), 1, glm::value_ptr(lightSource));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.Pos"), 1, glm::value_ptr(lightPos));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.ambient"), 1, glm::value_ptr(lightAmbient));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.diffuse"), 1, glm::value_ptr(lightDiffuse));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.specular"), 1, glm::value_ptr(lightSpecular));
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
     glUniform1ui(glGetUniformLocation(shaderProgram, "material.shine"), shine);
     glUniform1i(glGetUniformLocation(shaderProgram, "ambientLight"), ambientLight);
     glUniform1i(glGetUniformLocation(shaderProgram, "diffuseLight"), diffuseLight);
     glUniform1i(glGetUniformLocation(shaderProgram, "specularLight"), specularLight );
+    glUniform1i(glGetUniformLocation(shaderProgram, "isLightDirectional"), isLightDirectional);
+    glUniform1i(glGetUniformLocation(shaderProgram, "isLightPoint"), isLightPoint);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.ambientMap"), 3);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.diffuseMap"), 2);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.specularMap"), 4);

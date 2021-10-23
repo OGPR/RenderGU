@@ -194,36 +194,63 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 		vec3 specular;
 	} directionalLight;
 
+	uniform struct PointLight
+	{
+		vec3 pos;
+		vec3 source;
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+	} pointLight;
 
-	uniform vec3 lightSource;
-	uniform vec3 lightPos;
+
 	uniform vec3 viewPos;
 	uniform unsigned int PhongExp;
 	uniform bool ambientLight;
 	uniform bool diffuseLight;
 	uniform bool specularLight;
+	uniform bool isLightDirectional;
+	uniform bool isLightPoint;
 
 
-	// Ambient
-	float ambientStrength = ambientLight ?  1.f : 0.f;
-	vec3 ambientColor = directionalLight.source * directionalLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
-
-	// Diffuse
-	//vec3 lightDir = normalize(lightPos - FragPos);
-	// assume we are given the light direction as _from_ a source, so negate it here
-	vec3 lightDir = normalize(-directionalLight.direction);
-	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
-	vec3 diffuseColor = directionalLight.source * directionalLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
-
-	// Specular
-	float specularStrength = 0.5f;
-	vec3 viewDir = normalize(viewPos - FragPos);
-	vec3 reflectDir = reflect(-lightDir, Normal);
-	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
-	vec3 specularColor = directionalLight.source * directionalLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
 
     void main()
     {
+		// Ambient
+		float ambientStrength = ambientLight ?  1.f : 0.f;
+		vec3 ambientColor;
+		if (isLightDirectional)
+			ambientColor = directionalLight.source * directionalLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
+		else if (isLightPoint)
+			ambientColor = pointLight.source * pointLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
+
+		vec3 lightDir;
+		if (isLightDirectional)
+			lightDir = normalize(-directionalLight.direction);
+		else if (isLightPoint)
+			lightDir = normalize(pointLight.pos - FragPos);
+
+		float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
+
+		vec3 diffuseColor;
+		if (isLightDirectional)
+			diffuseColor = directionalLight.source * directionalLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+		else if (isLightPoint)
+			diffuseColor = pointLight.source * pointLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+
+		// Specular
+		float specularStrength = 0.5f;
+		vec3 viewDir = normalize(viewPos - FragPos);
+		vec3 reflectDir = reflect(-lightDir, Normal);
+		float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
+		vec3 specularColor;
+		if (isLightDirectional)
+			specularColor = directionalLight.source * directionalLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+		else if (isLightPoint)
+			specularColor = pointLight.source * pointLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+
+
+		//Final Color
 		vec3 finalColor =  ambientColor + diffuseColor + specularColor;
     	FragColor = vec4(finalColor, 1.f);
     }

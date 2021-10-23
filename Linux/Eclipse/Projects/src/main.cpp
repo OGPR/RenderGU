@@ -232,23 +232,26 @@ int main()
 					ambientLight,
 					diffuseLight,
 					specularLight,
-					lightDirection
+					lightDirection,
+					isLightDirectional,
+					isLightPoint
 					);
 
         }
 
-        /* Don't render a light source for directional light
-        model = glm::mat4(1.f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
-        render_draw_cube_raw_lightsource(
-        		shaderProgram_Cube_Raw_LightSource,
-				VAO_Cube_Raw_LightSource,
-				model,
-				view,
-				projection,
-				lightSource);
-		*/
+        if (isLightPoint && !isLightDirectional)
+        {
+			model = glm::mat4(1.f);
+			model = glm::translate(model, lightPos);
+			model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+			render_draw_cube_raw_lightsource(
+					shaderProgram_Cube_Raw_LightSource,
+					VAO_Cube_Raw_LightSource,
+					model,
+					view,
+					projection,
+					lightSource);
+        }
 
         //// check and call events, and swap buffers
         PollEvents();
