@@ -344,17 +344,19 @@ void render_draw_cube_raw_target(
 		unsigned int shine = 32,
 		bool ambientLight = true,
 		bool diffuseLight = true,
-		bool specularLight = true
+		bool specularLight = true,
+		glm::vec3 lightDirection = glm::vec3(0.f)
 		)
 {
     glUseProgram(shaderProgram);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "light.source"), 1, glm::value_ptr(lightSource));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "light.ambient"), 1, glm::value_ptr(lightAmbient));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "light.diffuse"), 1, glm::value_ptr(lightDiffuse));
-    glUniform3fv(glGetUniformLocation(shaderProgram, "light.specular"), 1, glm::value_ptr(lightSpecular));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.source"), 1, glm::value_ptr(lightSource));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.ambient"), 1, glm::value_ptr(lightAmbient));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.diffuse"), 1, glm::value_ptr(lightDiffuse));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.specular"), 1, glm::value_ptr(lightSpecular));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.direction"), 1, glm::value_ptr(lightDirection));
     glUniform3fv(glGetUniformLocation(shaderProgram, "lightPos"), 1, glm::value_ptr(lightPos));
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
     glUniform1ui(glGetUniformLocation(shaderProgram, "material.shine"), shine);

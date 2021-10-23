@@ -207,6 +207,7 @@ int main()
         glm::vec3 lightSpecular = glm::vec3(1.f, 1.f, 1.f);
         unsigned int shine = PhongExp;
         glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.f);
+        glm::vec3 lightDirection = glm::vec3(-1.f, 0.f, 0.f);
 
         for (char i = 0; i < numberOfCubePositions; ++i)
         {
@@ -230,11 +231,13 @@ int main()
 					shine,
 					ambientLight,
 					diffuseLight,
-					specularLight
+					specularLight,
+					lightDirection
 					);
 
         }
 
+        /* Don't render a light source for directional light
         model = glm::mat4(1.f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
@@ -245,6 +248,7 @@ int main()
 				view,
 				projection,
 				lightSource);
+		*/
 
         //// check and call events, and swap buffers
         PollEvents();

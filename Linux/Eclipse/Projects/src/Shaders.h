@@ -184,13 +184,15 @@ const char* fragmentShaderSource_Cube_Raw_Target =
     	unsigned int shine;
 	} material;
 
-	uniform struct Light
+
+	uniform struct DirectionalLight
 	{
+		vec3 direction;
 		vec3 source;
 		vec3 ambient;
 		vec3 diffuse;
 		vec3 specular;
-	} light;
+	} directionalLight;
 
 
 	uniform vec3 lightSource;
@@ -204,19 +206,21 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 
 	// Ambient
 	float ambientStrength = ambientLight ?  1.f : 0.f;
-	vec3 ambientColor = light.source * light.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
+	vec3 ambientColor = directionalLight.source * directionalLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
 
 	// Diffuse
-	vec3 lightDir = normalize(lightPos - FragPos);
+	//vec3 lightDir = normalize(lightPos - FragPos);
+	// assume we are given the light direction as _from_ a source, so negate it here
+	vec3 lightDir = normalize(-directionalLight.direction);
 	float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
-	vec3 diffuseColor = light.source * light.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+	vec3 diffuseColor = directionalLight.source * directionalLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
 
 	// Specular
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, Normal);
 	float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
-	vec3 specularColor = light.source * light.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+	vec3 specularColor = directionalLight.source * directionalLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
 
     void main()
     {
