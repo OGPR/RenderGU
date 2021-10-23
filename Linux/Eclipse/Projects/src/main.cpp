@@ -201,31 +201,39 @@ int main()
 		view = glm::mat4(1.f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(-0.5f, 0.0f,0.0f));
         glm::vec3 lightSource = glm::vec3(1.f, 1.f, 1.f);
         glm::vec3 lightAmbient = glm::vec3(0.2f, 0.2f, 0.2f);
         glm::vec3 lightDiffuse = glm::vec3(0.5f, 0.5f, 0.5f);
         glm::vec3 lightSpecular = glm::vec3(1.f, 1.f, 1.f);
         unsigned int shine = PhongExp;
         glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.f);
-        render_draw_cube_raw_target(
-        		shaderProgram_Cube_Raw_Target,
-				VAO_Cube_Raw_Target,
-				model,
-				view,
-				projection,
-				lightSource,
-				lightAmbient,
-				lightDiffuse,
-				lightSpecular,
-				lightPos,
-				cameraPos,
-				shine,
-				ambientLight,
-				diffuseLight,
-				specularLight
-				);
+
+        for (char i = 0; i < numberOfCubePositions; ++i)
+        {
+			model = glm::mat4(1.f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+			render_draw_cube_raw_target(
+					shaderProgram_Cube_Raw_Target,
+					VAO_Cube_Raw_Target,
+					model,
+					view,
+					projection,
+					lightSource,
+					lightAmbient,
+					lightDiffuse,
+					lightSpecular,
+					lightPos,
+					cameraPos,
+					shine,
+					ambientLight,
+					diffuseLight,
+					specularLight
+					);
+
+        }
 
         model = glm::mat4(1.f);
         model = glm::translate(model, lightPos);
