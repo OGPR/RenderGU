@@ -21,7 +21,7 @@ glm::vec3 cameraPos = cameraPosHome;
 glm::vec3 cameraLookDirection = glm::vec3(0.f, 0.f, -1.f);
 glm::vec3 cameraMoveStep = glm::vec3(1.f, 1.f, 1.f);
 float radius = cameraPosHome.z;
-glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
+glm::vec3 cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), -glm::half_pi<float>() , 0.f);
 const glm::vec3 cameraRotateStep = glm::vec3(1.f, 1.f, 1.f);
 glm::vec3 cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
@@ -130,29 +130,19 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-    	float thetaPrev = cameraCurrRotAngle.y;
     	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
-    	float theta = cameraCurrRotAngle.y -thetaPrev;
 
-		RotMat_zx = YawMatrix(theta);
-
-    	glm::vec3 cameraFrontNew = TransformVec(-cameraLookDirection, RotMat_zx);
-
-    	cameraLookDirection = -cameraFrontNew;
+    	cameraLookDirection.x = cos(cameraCurrRotAngle.y);
+    	cameraLookDirection.z = sin(cameraCurrRotAngle.y);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-    	float thetaPrev = cameraCurrRotAngle.y;
     	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
-    	float theta = cameraCurrRotAngle.y -thetaPrev;
 
-    	RotMat_zx = YawMatrix(theta);
-
-    	glm::vec3 cameraFrontNew = TransformVec(-cameraLookDirection, RotMat_zx);
-
-    	cameraLookDirection = -cameraFrontNew;
+    	cameraLookDirection.x = cos(cameraCurrRotAngle.y);
+    	cameraLookDirection.z = sin(cameraCurrRotAngle.y);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS
