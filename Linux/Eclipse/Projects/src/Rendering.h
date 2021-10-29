@@ -347,7 +347,11 @@ void render_draw_cube_raw_target(
 		bool specularLight = true,
 		glm::vec3 lightDirection = glm::vec3(0.f),
 		bool isLightDirectional = true,
-		bool isLightPoint = false
+		bool isLightPoint = false,
+		float K_c = 1.f,
+		float K_l = 0.f,
+		float K_q = 0.f,
+		bool attenuation = true
 		)
 {
     glUseProgram(shaderProgram);
@@ -364,6 +368,9 @@ void render_draw_cube_raw_target(
     glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.ambient"), 1, glm::value_ptr(lightAmbient));
     glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.diffuse"), 1, glm::value_ptr(lightDiffuse));
     glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.specular"), 1, glm::value_ptr(lightSpecular));
+    glUniform1f(glGetUniformLocation(shaderProgram, "pointLight.K_c"), K_c);
+    glUniform1f(glGetUniformLocation(shaderProgram, "pointLight.K_l"), K_l);
+    glUniform1f(glGetUniformLocation(shaderProgram, "pointLight.K_q"), K_q);
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
     glUniform1ui(glGetUniformLocation(shaderProgram, "material.shine"), shine);
     glUniform1i(glGetUniformLocation(shaderProgram, "ambientLight"), ambientLight);
@@ -374,6 +381,7 @@ void render_draw_cube_raw_target(
     glUniform1i(glGetUniformLocation(shaderProgram, "material.ambientMap"), 3);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.diffuseMap"), 2);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.specularMap"), 4);
+    glUniform1i(glGetUniformLocation(shaderProgram, "attenuation"), attenuation);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);

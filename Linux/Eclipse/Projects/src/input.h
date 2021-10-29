@@ -45,11 +45,13 @@ static bool _2_pressed = false;
 static bool _3_pressed = false;
 static bool _4_pressed = false;
 static bool _5_pressed = false;
+static bool _6_pressed = false;
 static bool ambientLight = true;
 static bool diffuseLight = true;
 static bool specularLight = true;
 static bool isLightDirectional = true;
 static bool isLightPoint = false;
+static bool attenuation = false;
 
 void processInput(GLFWwindow *window, float deltaTime)
 {
@@ -259,6 +261,9 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_5) == GLFW_RELEASE && _5_pressed)
     	_5_pressed = false;
 
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_RELEASE && _6_pressed)
+    	_6_pressed = false;
+
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !_1_pressed)
     {
     	_1_pressed = true;
@@ -289,6 +294,12 @@ void processInput(GLFWwindow *window, float deltaTime)
     	_5_pressed = true;
     	isLightPoint = !isLightPoint;
     	isLightDirectional = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && !_6_pressed)
+    {
+    	_6_pressed = true;
+    	attenuation = !attenuation;
     }
 }
 

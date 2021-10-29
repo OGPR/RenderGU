@@ -216,6 +216,14 @@ int main()
 			float angle = 20.f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
+			// Attenuation factors for
+			// F_att = 1/(K_c + K_l*d + K_q*d*d), where
+			// F_att is the attenuation value, K_c are constants, and
+			// d is the distance from the fragment to the light source
+			float K_c = 1.f;
+			float K_l = 0.09f;
+			float K_q = 0.032f;
+
 			render_draw_cube_raw_target(
 					shaderProgram_Cube_Raw_Target,
 					VAO_Cube_Raw_Target,
@@ -234,7 +242,11 @@ int main()
 					specularLight,
 					lightDirection,
 					isLightDirectional,
-					isLightPoint
+					isLightPoint,
+					K_c,
+					K_l,
+					K_q,
+					attenuation
 					);
 
         }

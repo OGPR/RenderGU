@@ -201,6 +201,15 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 		vec3 ambient;
 		vec3 diffuse;
 		vec3 specular;
+
+		// Attenuation factors for
+		// F_att = 1/(K_c + K_l*d + K_q*d*d), where
+		// F_att is the attenuation value, K_c are constants, and
+		// d is the distance from the fragment to the light source
+
+		float K_c;
+		float K_l;
+		float K_q;
 	} pointLight;
 
 
@@ -211,6 +220,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform bool specularLight;
 	uniform bool isLightDirectional;
 	uniform bool isLightPoint;
+	uniform bool attenuation;
 
 
 
@@ -224,6 +234,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 		else if (isLightPoint)
 			ambientColor = pointLight.source * pointLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
 
+		// Diffuse
 		vec3 lightDir;
 		if (isLightDirectional)
 			lightDir = normalize(-directionalLight.direction);
@@ -248,6 +259,17 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 			specularColor = directionalLight.source * directionalLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
 		else if (isLightPoint)
 			specularColor = pointLight.source * pointLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+
+		// Attenuation
+		// Apply to all components for now, so we don't get stacking with more than 1 light source
+		if (attenuation && isLightPoint)
+		{
+			float d = length(pointLight.pos - FragPos);
+			float F_att = 1.f/(pointLight.K_c + pointLight.K_l * d + pointLight.K_q * d * d);
+			ambientColor *= F_att;
+			diffuseColor *= F_att;
+			specularColor *= F_att;
+		}
 
 
 		//Final Color
