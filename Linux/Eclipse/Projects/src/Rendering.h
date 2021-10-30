@@ -341,6 +341,7 @@ void render_draw_cube_raw_target(
 		glm::vec3 lightSpecular = glm::vec3(1.0f),
 		glm::vec3 lightPos = glm::vec3(0.f),
 		glm::vec3 viewPos = glm::vec3(0.f),
+		glm::vec3 viewLookDirection = glm::vec3(0.f),
 		unsigned int shine = 32,
 		bool ambientLight = true,
 		bool diffuseLight = true,
@@ -348,6 +349,7 @@ void render_draw_cube_raw_target(
 		glm::vec3 lightDirection = glm::vec3(0.f),
 		bool isLightDirectional = true,
 		bool isLightPoint = false,
+		bool isLightSpot = false,
 		float K_c = 1.f,
 		float K_l = 0.f,
 		float K_q = 0.f,
@@ -358,11 +360,13 @@ void render_draw_cube_raw_target(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.source"), 1, glm::value_ptr(lightSource));
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.ambient"), 1, glm::value_ptr(lightAmbient));
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.diffuse"), 1, glm::value_ptr(lightDiffuse));
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.specular"), 1, glm::value_ptr(lightSpecular));
     glUniform3fv(glGetUniformLocation(shaderProgram, "directionalLight.direction"), 1, glm::value_ptr(lightDirection));
+
     glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.source"), 1, glm::value_ptr(lightSource));
     glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.Pos"), 1, glm::value_ptr(lightPos));
     glUniform3fv(glGetUniformLocation(shaderProgram, "pointLight.ambient"), 1, glm::value_ptr(lightAmbient));
@@ -371,6 +375,14 @@ void render_draw_cube_raw_target(
     glUniform1f(glGetUniformLocation(shaderProgram, "pointLight.K_c"), K_c);
     glUniform1f(glGetUniformLocation(shaderProgram, "pointLight.K_l"), K_l);
     glUniform1f(glGetUniformLocation(shaderProgram, "pointLight.K_q"), K_q);
+
+    glUniform3fv(glGetUniformLocation(shaderProgram, "spotLight.source"), 1, glm::value_ptr(lightSource));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "spotLight.ambient"), 1, glm::value_ptr(lightAmbient));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "spotLight.diffuse"), 1, glm::value_ptr(lightDiffuse));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "spotLight.specular"), 1, glm::value_ptr(lightSpecular));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "spotLight.pos"), 1, glm::value_ptr(viewPos));
+    glUniform3fv(glGetUniformLocation(shaderProgram, "spotLight.direction"), 1, glm::value_ptr(viewLookDirection));
+
     glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"), 1, glm::value_ptr(viewPos));
     glUniform1ui(glGetUniformLocation(shaderProgram, "material.shine"), shine);
     glUniform1i(glGetUniformLocation(shaderProgram, "ambientLight"), ambientLight);
@@ -378,6 +390,7 @@ void render_draw_cube_raw_target(
     glUniform1i(glGetUniformLocation(shaderProgram, "specularLight"), specularLight );
     glUniform1i(glGetUniformLocation(shaderProgram, "isLightDirectional"), isLightDirectional);
     glUniform1i(glGetUniformLocation(shaderProgram, "isLightPoint"), isLightPoint);
+    glUniform1i(glGetUniformLocation(shaderProgram, "isLightSpot"), isLightSpot);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.ambientMap"), 3);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.diffuseMap"), 2);
     glUniform1i(glGetUniformLocation(shaderProgram, "material.specularMap"), 4);

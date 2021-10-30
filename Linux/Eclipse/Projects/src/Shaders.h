@@ -212,6 +212,18 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 		float K_q;
 	} pointLight;
 
+	uniform struct SpotLight
+	{
+		vec3 pos;
+
+		vec3 direction;
+		vec3 source;
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+
+	} spotLight;
+
 
 	uniform vec3 viewPos;
 	uniform unsigned int PhongExp;
@@ -220,6 +232,7 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 	uniform bool specularLight;
 	uniform bool isLightDirectional;
 	uniform bool isLightPoint;
+	uniform bool isLightSpot;
 	uniform bool attenuation;
 
 
@@ -233,6 +246,8 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 			ambientColor = directionalLight.source * directionalLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
 		else if (isLightPoint)
 			ambientColor = pointLight.source * pointLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
+		else if (isLightSpot)
+			ambientColor = spotLight.source * spotLight.ambient * ambientStrength * vec3(texture(material.ambientMap, TexCoords));
 
 		// Diffuse
 		vec3 lightDir;
@@ -240,25 +255,51 @@ const char* fragmentShaderSource_Cube_Raw_Target =
 			lightDir = normalize(-directionalLight.direction);
 		else if (isLightPoint)
 			lightDir = normalize(pointLight.pos - FragPos);
+		else if (isLightSpot)
+			lightDir = normalize(spotLight.pos - FragPos);
 
-		float diffuseReflectionFactor = diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
-
+		float diffuseReflectionFactor;
 		vec3 diffuseColor;
-		if (isLightDirectional)
-			diffuseColor = directionalLight.source * directionalLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
-		else if (isLightPoint)
-			diffuseColor = pointLight.source * pointLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+		float cutoff = 3.14f * 12.5f/180.f;
+		if (isLightSpot && (acos(dot(spotLight.direction, -lightDir)) > cutoff))
+		{
+			diffuseReflectionFactor = 0.f;
+			diffuseColor = vec3(0.f);
+			ambientColor = vec3(0.f);
+		}
+		else
+		{
+			diffuseReflectionFactor= diffuseLight? max(dot(Normal, lightDir), 0.0f) : 0.f;
+			if (isLightDirectional)
+				diffuseColor = directionalLight.source * directionalLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+			else if (isLightPoint)
+				diffuseColor = pointLight.source * pointLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+			else if (isLightSpot)
+				diffuseColor = spotLight.source * spotLight.diffuse * diffuseReflectionFactor * vec3(texture(material.diffuseMap, TexCoords));
+		}
+
 
 		// Specular
-		float specularStrength = 0.5f;
-		vec3 viewDir = normalize(viewPos - FragPos);
-		vec3 reflectDir = reflect(-lightDir, Normal);
-		float specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
+		float specularReflectionFactor;
 		vec3 specularColor;
-		if (isLightDirectional)
-			specularColor = directionalLight.source * directionalLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
-		else if (isLightPoint)
-			specularColor = pointLight.source * pointLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+		if (isLightSpot && (acos(dot(spotLight.direction, -lightDir)) > cutoff))
+		{
+			specularReflectionFactor = 0.f;
+			specularColor = vec3(0.f);
+		}
+		else
+		{
+			float specularStrength = 0.5f;
+			vec3 viewDir = normalize(viewPos - FragPos);
+			vec3 reflectDir = reflect(-lightDir, Normal);
+			specularReflectionFactor = specularLight ? pow(max(dot(reflectDir, viewDir), 0.0f), material.shine) : 0.f;
+			if (isLightDirectional)
+				specularColor = directionalLight.source * directionalLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+			else if (isLightPoint)
+				specularColor = pointLight.source * pointLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+			else if (isLightSpot)
+				specularColor = spotLight.source * spotLight.specular * specularReflectionFactor * vec3(texture(material.specularMap, TexCoords));
+		}
 
 		// Attenuation
 		// Apply to all components for now, so we don't get stacking with more than 1 light source

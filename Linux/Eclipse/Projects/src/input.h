@@ -46,11 +46,13 @@ static bool _3_pressed = false;
 static bool _4_pressed = false;
 static bool _5_pressed = false;
 static bool _6_pressed = false;
+static bool _7_pressed = false;
 static bool ambientLight = true;
 static bool diffuseLight = true;
 static bool specularLight = true;
 static bool isLightDirectional = true;
 static bool isLightPoint = false;
+static bool isLightSpot = false;
 static bool attenuation = false;
 
 void processInput(GLFWwindow *window, float deltaTime)
@@ -136,6 +138,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
+
     	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
 
     	cameraLookDirection.x = sin(cameraCurrRotAngle.x)*sin(cameraCurrRotAngle.y);
@@ -264,6 +267,9 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_6) == GLFW_RELEASE && _6_pressed)
     	_6_pressed = false;
 
+    if (glfwGetKey(window, GLFW_KEY_7) == GLFW_RELEASE && _7_pressed)
+    	_7_pressed = false;
+
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !_1_pressed)
     {
     	_1_pressed = true;
@@ -287,6 +293,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	_4_pressed = true;
     	isLightDirectional = !isLightDirectional;
     	isLightPoint = false;
+    	isLightSpot = false;
     }
 
     if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && !_5_pressed)
@@ -294,11 +301,20 @@ void processInput(GLFWwindow *window, float deltaTime)
     	_5_pressed = true;
     	isLightPoint = !isLightPoint;
     	isLightDirectional = false;
+    	isLightSpot = false;
     }
 
     if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && !_6_pressed)
     {
     	_6_pressed = true;
+    	isLightSpot = !isLightSpot;
+    	isLightDirectional = false;
+    	isLightPoint = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && !_7_pressed)
+    {
+    	_7_pressed = true;
     	attenuation = !attenuation;
     }
 }

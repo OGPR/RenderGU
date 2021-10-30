@@ -236,6 +236,7 @@ int main()
 					lightSpecular,
 					lightPos,
 					cameraPos,
+					cameraLookDirection,
 					shine,
 					ambientLight,
 					diffuseLight,
@@ -243,6 +244,7 @@ int main()
 					lightDirection,
 					isLightDirectional,
 					isLightPoint,
+					isLightSpot,
 					K_c,
 					K_l,
 					K_q,
@@ -251,7 +253,7 @@ int main()
 
         }
 
-        if (isLightPoint && !isLightDirectional)
+        if (isLightPoint)
         {
 			model = glm::mat4(1.f);
 			model = glm::translate(model, lightPos);
