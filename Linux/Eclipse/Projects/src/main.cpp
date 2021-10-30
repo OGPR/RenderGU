@@ -201,42 +201,71 @@ int main()
 		view = glm::mat4(1.f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(-0.5f, 0.0f,0.0f));
         glm::vec3 lightSource = glm::vec3(1.f, 1.f, 1.f);
         glm::vec3 lightAmbient = glm::vec3(0.2f, 0.2f, 0.2f);
         glm::vec3 lightDiffuse = glm::vec3(0.5f, 0.5f, 0.5f);
         glm::vec3 lightSpecular = glm::vec3(1.f, 1.f, 1.f);
         unsigned int shine = PhongExp;
         glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.f);
-        render_draw_cube_raw_target(
-        		shaderProgram_Cube_Raw_Target,
-				VAO_Cube_Raw_Target,
-				model,
-				view,
-				projection,
-				lightSource,
-				lightAmbient,
-				lightDiffuse,
-				lightSpecular,
-				lightPos,
-				cameraPos,
-				shine,
-				ambientLight,
-				diffuseLight,
-				specularLight
-				);
+        glm::vec3 lightDirection = glm::vec3(-1.f, 0.f, 0.f);
 
-        model = glm::mat4(1.f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
-        render_draw_cube_raw_lightsource(
-        		shaderProgram_Cube_Raw_LightSource,
-				VAO_Cube_Raw_LightSource,
-				model,
-				view,
-				projection,
-				lightSource);
+        for (char i = 0; i < numberOfCubePositions; ++i)
+        {
+			model = glm::mat4(1.f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+			// Attenuation factors for
+			// F_att = 1/(K_c + K_l*d + K_q*d*d), where
+			// F_att is the attenuation value, K_c are constants, and
+			// d is the distance from the fragment to the light source
+			float K_c = 1.f;
+			float K_l = 0.09f;
+			float K_q = 0.032f;
+
+			render_draw_cube_raw_target(
+					shaderProgram_Cube_Raw_Target,
+					VAO_Cube_Raw_Target,
+					model,
+					view,
+					projection,
+					lightSource,
+					lightAmbient,
+					lightDiffuse,
+					lightSpecular,
+					lightPos,
+					cameraPos,
+					cameraLookDirection,
+					shine,
+					ambientLight,
+					diffuseLight,
+					specularLight,
+					lightDirection,
+					isLightDirectional,
+					isLightPoint,
+					isLightSpot,
+					K_c,
+					K_l,
+					K_q,
+					attenuation
+					);
+
+        }
+
+        if (isLightPoint)
+        {
+			model = glm::mat4(1.f);
+			model = glm::translate(model, lightPos);
+			model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+			render_draw_cube_raw_lightsource(
+					shaderProgram_Cube_Raw_LightSource,
+					VAO_Cube_Raw_LightSource,
+					model,
+					view,
+					projection,
+					lightSource);
+        }
 
         //// check and call events, and swap buffers
         PollEvents();
