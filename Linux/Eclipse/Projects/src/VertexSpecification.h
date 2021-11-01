@@ -13,6 +13,12 @@ void SetAttribute(GLuint index, GLint size, GLsizei stride, const void* offset);
 
 //** Begin Helper data structures declarations
 
+struct FloorData
+{
+	int numberOfEntries = 3*6;
+	float* data = our_floor;
+} _floorData;
+
 struct FloorAttributes
 {
 	struct Position
@@ -28,6 +34,13 @@ struct FloorAttributes
 //** End Helper data structures declarations
 unsigned int vs_floor(float* vertex, unsigned int numberOfEntries)
 {
+	if (_floorData.numberOfEntries != numberOfEntries)
+	{
+		printf("Rendering the floor:\n");
+		printf("Expected number of entries to be %d, but have received %d", _floorData.numberOfEntries, numberOfEntries);
+		printf("\n Rendering has continued, but if is not what you expect, this might be one of the reasons why.");
+	}
+
 	BindVBO(CreateVBO());
 	AllocateMemoryVBO(numberOfEntries, vertex);
 	unsigned int VAO = CreateVAO(); // Will be returned, and set prior to return, so need to store it here
