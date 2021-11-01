@@ -125,7 +125,7 @@ void textureSetup()
 	stbi_image_free(img_data);
 
 	// Floor texture  (our 6th texture here)
-	/*img_data = stbi_load("metal.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("metal.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load texture 3...");
@@ -141,8 +141,9 @@ void textureSetup()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data);
+	// No A in RGBA here (otherwise crash)...
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	stbi_image_free(img_data);*/
+	stbi_image_free(img_data);
 }

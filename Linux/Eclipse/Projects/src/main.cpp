@@ -105,7 +105,7 @@ int main()
     unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw_lightsource(cube_raw, 8*6*6);
 
     //** Begin Floor stuff
-    unsigned int VAO_Floor = vs_floor(our_floor, 18);
+    unsigned int VAO_Floor = vs_floor(our_floor, 18 + 12);
 
 
     unsigned int shaderProgramFloor = linkShaders(

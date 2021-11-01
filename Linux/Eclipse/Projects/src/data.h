@@ -195,17 +195,17 @@ float cube_raw[] =
 // Will get clash with C floor() at call site if you call it floor!
 float our_floor[] =
 {
-	// positions
+	// positions		// Tex coord
 	// Tri 1
 	//x     y      z
-	 1.0f, -0.5f,  1.0f,
-	-1.0f, -0.5f,  1.0f,
-	-1.0f, -0.5f, -1.0f,
+	 1.0f, -0.5f,  1.0f, 1.f, 0.f,
+	-1.0f, -0.5f,  1.0f, 0.f, 0.f,
+	-1.0f, -0.5f, -1.0f, 0.f, 1.f,
 
 	// Tri 2
 	//x     y      z
-	 1.0f, -0.5f,  1.0f,
-	-1.0f, -0.5f, -1.0f,
-	 1.0f, -0.5f, -1.0f,
+	 1.0f, -0.5f,  1.0f, 1.f, 0.f,
+	-1.0f, -0.5f, -1.0f, 1.f, 1.f,
+	 1.0f, -0.5f, -1.0f, 1.f, 1.f,
 };
 
