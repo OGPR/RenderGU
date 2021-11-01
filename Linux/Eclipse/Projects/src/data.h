@@ -191,3 +191,21 @@ float cube_raw[] =
 	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
+
+// Will get clash with C floor() at call site if you call it floor!
+float our_floor[] =
+{
+	// positions
+	// Tri 1
+	//x     y      z
+	 5.0f, -0.5f,  5.0f,
+	-5.0f, -0.5f,  5.0f,
+	-5.0f, -0.5f, -5.0f,
+
+	// Tri 2
+	//x     y      z
+	 5.0f, -0.5f,  5.0f,
+	-5.0f, -0.5f, -5.0f,
+	 5.0f, -0.5f, -5.0f,
+};
+
