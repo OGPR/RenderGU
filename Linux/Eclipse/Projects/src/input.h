@@ -218,7 +218,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     		|| glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
     {
     	cameraPos = cameraPosHome;
-    	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
+    	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), glm::pi<float>(), 0.f);
     	cameraLookDirection = cameraLookAtHome;
     	cameraUp = glm::vec3(0.f, 1.f, 0.f);
     }
