@@ -56,6 +56,7 @@ unsigned int vs_floor(float* vertex, unsigned int numberOfEntries)
 
 	FloorAttributes FA;
 	SetAttribute(FA.pos.index, FA.pos.size, FA.pos.stride, FA.pos.offset);
+	SetAttribute(FA.tex.index, FA.tex.size, FA.tex.stride, FA.tex.offset);
 
 	return VAO;
 }

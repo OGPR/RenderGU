@@ -128,7 +128,7 @@ void textureSetup()
 	img_data = stbi_load("metal.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
-		printf("Failed to load texture 3...");
+		printf("Failed to load texture 6...");
 
 	unsigned int texture6;
 	glGenTextures(1, &texture6);
