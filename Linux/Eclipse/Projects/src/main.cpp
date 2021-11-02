@@ -124,7 +124,7 @@ int main()
 	glm::mat4 view(1.f);
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
-
+	model = glm::scale(model, glm::vec3(5.f));
     GLfloat colorChannelValues[8][3] =
     {
         {0.f, 0.f, 0.f},
