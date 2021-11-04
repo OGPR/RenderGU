@@ -143,6 +143,18 @@ const char* fragmentShaderSource_Cube =
     }
 );
 
+const char* fragmentShaderSource_Cube_no_mix =
+    GLSL(330 core,
+    out vec4 FragColor;
+	in vec2 TexCoord;
+
+	uniform sampler2D Texture;
+
+    void main()
+    {
+        FragColor = texture(Texture, TexCoord);
+    }
+);
 const char* vertexShaderSource_Cube_Raw_Target =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
