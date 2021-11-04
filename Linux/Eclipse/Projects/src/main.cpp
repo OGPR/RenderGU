@@ -219,7 +219,7 @@ int main()
 
 		// Floor
 		model = glm::mat4(1.f);
-		model = glm::scale(model, glm::vec3(5.f));
+		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
         render_draw_floor(
         		shaderProgramFloor,
 				VAO_Floor,
