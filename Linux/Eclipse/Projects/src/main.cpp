@@ -218,6 +218,7 @@ int main()
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
 		// Floor
+		model = glm::mat4(1.f);
 		model = glm::scale(model, glm::vec3(5.f));
         render_draw_floor(
         		shaderProgramFloor,
