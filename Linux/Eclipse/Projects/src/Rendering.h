@@ -329,6 +329,24 @@ void render_draw_cube(
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
+void render_draw_cube(
+		unsigned int shaderProgram,
+		unsigned int VAO,
+		glm::mat4 model = glm::mat4(1.0f),
+		glm::mat4 view = glm::mat4(1.0f),
+		glm::mat4 projection = glm::mat4(1.0f)
+		)
+{
+    glUseProgram(shaderProgram);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 6);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
 void render_draw_cube_raw_target(
 		unsigned int shaderProgram,
 		unsigned int VAO,
@@ -417,4 +435,22 @@ void render_draw_cube_raw_lightsource(
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void render_draw_floor(
+		unsigned int shaderProgram,
+		unsigned int VAO,
+		glm::mat4 model = glm::mat4(1.0f),
+		glm::mat4 view = glm::mat4(1.0f),
+		glm::mat4 projection = glm::mat4(1.0f)
+		)
+{
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 5);
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }

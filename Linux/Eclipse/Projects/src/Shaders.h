@@ -143,6 +143,18 @@ const char* fragmentShaderSource_Cube =
     }
 );
 
+const char* fragmentShaderSource_Cube_no_mix =
+    GLSL(330 core,
+    out vec4 FragColor;
+	in vec2 TexCoord;
+
+	uniform sampler2D Texture;
+
+    void main()
+    {
+        FragColor = texture(Texture, TexCoord);
+    }
+);
 const char* vertexShaderSource_Cube_Raw_Target =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
@@ -342,5 +354,36 @@ const char* fragmentShaderSource_Cube_Raw_LightSource =
     void main()
     {
     	FragColor = vec4(lightSource, 1.0f);
+    }
+);
+
+const char* vertexShaderFloor =
+    GLSL(330 core,
+    layout(location = 0) in vec3 aPos;
+	layout(location = 1) in vec2 aTexCoords;
+
+	out vec2 TexCoords;
+
+	uniform mat4 model;
+	uniform mat4 view;
+	uniform mat4 projection;
+
+    void main()
+    {
+        gl_Position = projection * view * model * vec4(aPos, 1.0);
+        TexCoords = aTexCoords;
+    }
+);
+
+const char* fragmentShaderFloor =
+    GLSL(330 core,
+    in vec2 TexCoords;
+    out vec4 FragColor;
+
+    uniform sampler2D Texture;
+
+    void main()
+    {
+        FragColor = texture(Texture, TexCoords);
     }
 );

@@ -20,6 +20,7 @@
 #include <glm/gtc/constants.hpp>
 #include "input.h"
 #include "Textures.h"
+#include "VertexSpecification.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -85,6 +86,10 @@ int main()
         compileVertexShader(vertexShaderSource_Cube),
         compileFragmentShader(fragmentShaderSource_Cube));
 
+    unsigned int shaderProgram_Cube_no_mix = linkShaders(
+        compileVertexShader(vertexShaderSource_Cube),
+        compileFragmentShader(fragmentShaderSource_Cube_no_mix));
+
     unsigned int shaderProgram_Cube_Raw_Target = linkShaders(
         compileVertexShader(vertexShaderSource_Cube_Raw_Target),
         compileFragmentShader(fragmentShaderSource_Cube_Raw_Target));
@@ -103,6 +108,18 @@ int main()
     unsigned int VAO_Cube_Raw_Target = render_setup_cube_raw(cube_raw, 8*6*6 );
     unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw_lightsource(cube_raw, 8*6*6);
 
+    //** Begin Floor stuff
+    unsigned int VAO_Floor = vs_floor(our_floor, 18 + 12);
+
+
+    unsigned int shaderProgramFloor = linkShaders(
+        compileVertexShader(vertexShaderFloor),
+        compileFragmentShader(fragmentShaderFloor));
+
+    //** End Floor stuff
+
+
+
     textureSetup();
 
 
@@ -111,7 +128,6 @@ int main()
 	glm::mat4 view(1.f);
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
-
     GLfloat colorChannelValues[8][3] =
     {
         {0.f, 0.f, 0.f},
@@ -149,12 +165,19 @@ int main()
     float lastFrameTime = 0.f;
     float deltaTime;
 
+    // From print statements in loop below
+    // Set up camera for depth/stencil buffer work
+    cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
+    cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
+    cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+
     // Game loop
     while (!WindowShouldClose(window))
     {
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
     	lastFrameTime = currFrameTime;
+
         //// input
         processInput(window, deltaTime);
 
@@ -198,6 +221,52 @@ int main()
 
         }
         */
+
+		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+		// Floor
+		model = glm::mat4(1.f);
+		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+        render_draw_floor(
+        		shaderProgramFloor,
+				VAO_Floor,
+				model,
+				view,
+				projection);
+
+        // Cube 1
+        model = glm::mat4(1.f);
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		render_draw_cube(
+				shaderProgram_Cube_no_mix,
+				VAO_Cube,
+				model,
+				view,
+				projection);
+
+        // Cube 2
+        model = glm::mat4(1.f);
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		render_draw_cube(
+				shaderProgram_Cube_no_mix,
+				VAO_Cube,
+				model,
+				view,
+				projection);
+
+		// Position prints
+		// Printed in format to allow for direct copy and paste from console to code
+		/*
+		if (frameNumber % 40 == 0)
+		{
+			printf("cameraPos = glm::vec3(%f, %f, %f);\n", cameraPos.x, cameraPos.y, cameraPos.z);
+			printf("cameraLookDirection = glm::vec3(%f, %f, %f);\n", cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z);
+			printf("cameraCurrRotAngle = glm::vec3(%f, %f, %f);\n", cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z);
+		}
+		*/
+
+
+        /*
 		view = glm::mat4(1.f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
@@ -266,6 +335,8 @@ int main()
 					projection,
 					lightSource);
         }
+        */
+
 
         //// check and call events, and swap buffers
         PollEvents();
