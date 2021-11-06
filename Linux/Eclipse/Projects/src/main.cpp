@@ -165,12 +165,19 @@ int main()
     float lastFrameTime = 0.f;
     float deltaTime;
 
+    // From print statements in loop below
+    // Set up camera for depth/stencil buffer work
+    cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
+    cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
+    cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+
     // Game loop
     while (!WindowShouldClose(window))
     {
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
     	lastFrameTime = currFrameTime;
+
         //// input
         processInput(window, deltaTime);
 
@@ -246,6 +253,17 @@ int main()
 				model,
 				view,
 				projection);
+
+		// Position prints
+		// Printed in format to allow for direct copy and paste from console to code
+		/*
+		if (frameNumber % 40 == 0)
+		{
+			printf("cameraPos = glm::vec3(%f, %f, %f);\n", cameraPos.x, cameraPos.y, cameraPos.z);
+			printf("cameraLookDirection = glm::vec3(%f, %f, %f);\n", cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z);
+			printf("cameraCurrRotAngle = glm::vec3(%f, %f, %f);\n", cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z);
+		}
+		*/
 
 
         /*
