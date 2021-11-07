@@ -150,9 +150,20 @@ const char* fragmentShaderSource_Cube_no_mix =
 
 	uniform sampler2D Texture;
 
+	float near = 0.1f;
+	float far = 100.f;
+	float LineariseDepth(float depth)
+	{
+		float z = depth * 2.f - 1.f;
+		return (2.f * near * far)/(far + near - z * (far - near));
+	}
+
     void main()
     {
-        FragColor = texture(Texture, TexCoord);
+        //FragColor = texture(Texture, TexCoord);
+    	//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
+    	float depth = LineariseDepth(gl_FragCoord.z)/far*3;
+    	FragColor = vec4(vec3(depth), 1.f);
     }
 );
 const char* vertexShaderSource_Cube_Raw_Target =
@@ -382,8 +393,19 @@ const char* fragmentShaderFloor =
 
     uniform sampler2D Texture;
 
+	float near = 0.1f;
+	float far = 100.f;
+	float LineariseDepth(float depth)
+	{
+		float z = depth * 2.f - 1.f;
+		return (2.f * near * far)/(far + near - z * (far - near));
+	}
     void main()
     {
-        FragColor = texture(Texture, TexCoords);
+        //FragColor = texture(Texture, TexCoords);
+    	//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
+    	float depth = LineariseDepth(gl_FragCoord.z)/far*3;
+    	FragColor = vec4(vec3(depth), 1.f);
+
     }
 );
