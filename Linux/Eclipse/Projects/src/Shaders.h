@@ -423,3 +423,34 @@ const char* fragmentShaderFloor =
 
     }
 );
+
+
+const char* fragmentShaderSingleColor =
+    GLSL(330 core,
+    in vec2 TexCoords;
+    out vec4 FragColor;
+
+    uniform sampler2D Texture;
+    uniform bool visualiseDepthBuffer;
+
+	float near = 0.1f;
+	float far = 100.f;
+	float LineariseDepth(float depth)
+	{
+		float z = depth * 2.f - 1.f;
+		return (2.f * near * far)/(far + near - z * (far - near));
+	}
+    void main()
+    {
+    	if (!visualiseDepthBuffer)
+    	{
+			FragColor = vec4(0.04f, 0.28f, 0.26f, 1.f);
+    	}
+    	else
+    	{
+			//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
+			FragColor = vec4(0.04f, 0.28f, 0.26f, 1.f);
+    	}
+
+    }
+);
