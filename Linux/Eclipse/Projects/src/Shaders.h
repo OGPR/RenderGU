@@ -149,6 +149,7 @@ const char* fragmentShaderSource_Cube_no_mix =
 	in vec2 TexCoord;
 
 	uniform sampler2D Texture;
+	uniform bool visualiseDepthBuffer;
 
 	float near = 0.1f;
 	float far = 100.f;
@@ -160,10 +161,16 @@ const char* fragmentShaderSource_Cube_no_mix =
 
     void main()
     {
-        //FragColor = texture(Texture, TexCoord);
-    	//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
-    	float depth = LineariseDepth(gl_FragCoord.z)/far*3;
-    	FragColor = vec4(vec3(depth), 1.f);
+    	if (!visualiseDepthBuffer)
+    	{
+    		FragColor = texture(Texture, TexCoord);
+    	}
+    	else
+    	{
+			//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
+			float depth = LineariseDepth(gl_FragCoord.z)/far*3;
+			FragColor = vec4(vec3(depth), 1.f);
+    	}
     }
 );
 const char* vertexShaderSource_Cube_Raw_Target =
@@ -392,6 +399,7 @@ const char* fragmentShaderFloor =
     out vec4 FragColor;
 
     uniform sampler2D Texture;
+    uniform bool visualiseDepthBuffer;
 
 	float near = 0.1f;
 	float far = 100.f;
@@ -402,10 +410,16 @@ const char* fragmentShaderFloor =
 	}
     void main()
     {
-        //FragColor = texture(Texture, TexCoords);
-    	//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
-    	float depth = LineariseDepth(gl_FragCoord.z)/far*3;
-    	FragColor = vec4(vec3(depth), 1.f);
+    	if (!visualiseDepthBuffer)
+    	{
+			FragColor = texture(Texture, TexCoords);
+    	}
+    	else
+    	{
+			//FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
+			float depth = LineariseDepth(gl_FragCoord.z)/far*3;
+			FragColor = vec4(vec3(depth), 1.f);
+    	}
 
     }
 );

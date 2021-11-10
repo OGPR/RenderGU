@@ -235,6 +235,7 @@ int main()
 		render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
+				visualiseDepthBuffer,
 				model,
 				view,
 				projection);
@@ -245,6 +246,7 @@ int main()
 		render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
+				visualiseDepthBuffer,
 				model,
 				view,
 				projection);
@@ -255,6 +257,7 @@ int main()
         render_draw_floor(
         		shaderProgramFloor,
 				VAO_Floor,
+				visualiseDepthBuffer,
 				model,
 				view,
 				projection);
