@@ -295,8 +295,9 @@ int main()
         // Cube 2
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
 		render_draw_cube(
-				shaderProgram_Cube_no_mix,
+				shaderProgram_Cube_SingleColor,
 				VAO_Cube,
 				visualiseDepthBuffer,
 				model,
