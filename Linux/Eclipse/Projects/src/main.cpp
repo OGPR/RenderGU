@@ -277,8 +277,9 @@ int main()
         // 2nd render pass, borders/outlining
 		// Cube 1
 		glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
-		glStencilMask(0x00);
+		//glStencilMask(0xFF);
 		//glDisable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 		float scale = 1.1f;
 
         model = glm::mat4(1.f);
@@ -291,6 +292,7 @@ int main()
 				model,
 				view,
 				projection);
+		glDepthFunc(GL_LESS);
 
         // Cube 2
         model = glm::mat4(1.f);
