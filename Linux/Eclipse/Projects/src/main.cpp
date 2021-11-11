@@ -199,7 +199,8 @@ int main()
         // clear results from previous frame (iteration of loop)
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //| GL_STENCIL_BUFFER_BIT);
+		glStencilMask(0xFF); // make sure stencil  buffer is writable before clearing
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
         //render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx], false);
@@ -237,7 +238,7 @@ int main()
 
         // 1st render pass, write to stencil buffer where desired
 		// Cube 1
-		glStencilFunc(GL_ALWAYS, 0, 0xFF);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
@@ -275,9 +276,9 @@ int main()
 
         // 2nd render pass, borders/outlining
 		// Cube 1
-		glStencilFunc(GL_NOTEQUAL, 0 , 0xFF);
+		glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
 		glStencilMask(0x00);
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 		float scale = 1.1f;
 
         model = glm::mat4(1.f);
@@ -290,10 +291,6 @@ int main()
 				model,
 				view,
 				projection);
-		//glStencilMask(0xFF);
-		//        glStencilFunc(GL_ALWAYS, 0, 0xFF);
-		        glEnable(GL_DEPTH_TEST);
-
 
         // Cube 2
         model = glm::mat4(1.f);
@@ -305,6 +302,7 @@ int main()
 				model,
 				view,
 				projection);
+		//glEnable(GL_DEPTH_TEST);
 
 		// Floor
 		model = glm::mat4(1.f);
