@@ -39,6 +39,24 @@ struct FloorAttributes
 
 };
 
+struct QuadData
+{
+	int numberOfEntries = 3*3 + 3*3;
+	float* data = quad;
+} _quadData;
+
+struct QuadAttributes
+{
+	struct Position
+	{
+		unsigned int index = 0;
+		unsigned int size = 3;
+		GLsizei stride = 3 * sizeof(float);
+		const void* offset = 0;
+	}pos;
+
+};
+
 //** End Helper data structures declarations
 unsigned int vs_floor(float* vertex, unsigned int numberOfEntries)
 {
@@ -57,6 +75,26 @@ unsigned int vs_floor(float* vertex, unsigned int numberOfEntries)
 	FloorAttributes FA;
 	SetAttribute(FA.pos.index, FA.pos.size, FA.pos.stride, FA.pos.offset);
 	SetAttribute(FA.tex.index, FA.tex.size, FA.tex.stride, FA.tex.offset);
+
+	return VAO;
+}
+
+unsigned int vs_quad(float* vertex, unsigned int numberOfEntries)
+{
+	if (_quadData.numberOfEntries != numberOfEntries)
+	{
+		printf("Rendering the quad:\n");
+		printf("Expected number of entries to be %d, but have received %d", _floorData.numberOfEntries, numberOfEntries);
+		printf("\n Rendering has continued, but if is not what you expect, this might be one of the reasons why.");
+	}
+
+	BindVBO(CreateVBO());
+	AllocateMemoryVBO(numberOfEntries, vertex);
+	unsigned int VAO = CreateVAO(); // Will be returned, and set prior to return, so need to store it here
+	BindVAO(VAO);
+
+	QuadAttributes QA;
+	SetAttribute(QA.pos.index, QA.pos.size, QA.pos.stride, QA.pos.offset);
 
 	return VAO;
 }

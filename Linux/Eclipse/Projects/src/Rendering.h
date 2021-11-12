@@ -461,7 +461,7 @@ void render_draw_floor(
 
 void render_draw_rect_transparency(
 		unsigned int shaderProgram,
-		unsigned int EBO,
+		unsigned int VAO,
 		glm::mat4 model = glm::mat4(1.0f),
 		glm::mat4 view = glm::mat4(1.0f),
 		glm::mat4 projection = glm::mat4(1.0f)
@@ -474,6 +474,6 @@ void render_draw_rect_transparency(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }

@@ -122,10 +122,15 @@ int main()
 
     //** End Floor stuff
 
+    //** Begin Quad stuff
+    unsigned int VAO_Quad = vs_quad(quad, 3*3 + 3*3);
+
+
     unsigned int shaderProgram_Rect_Transparency = linkShaders(
             compileVertexShader(vertexShaderSource_Rect_Transparency),
             compileFragmentShader(fragmentShaderSource_Rect_Transparency));
 
+    //** End Quad stuff
 
 
     textureSetup();
@@ -247,8 +252,6 @@ int main()
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-		if(0)
-		{
         render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
@@ -282,7 +285,6 @@ int main()
 				model,
 				view,
 				projection);
-        }
 
 
         if (stencilTest)
@@ -334,19 +336,14 @@ int main()
 
         // Transparency
         model = glm::mat4(1.0f);
-        //model = glm::rotate(model, glm::radians(50.f), glm::vec3(5.f, 0.0f, -1.0f));
-        //model = glm::translate(model, glm::vec3(-0.5f, 0.0f, -1.0f));
+        model = glm::translate(model, glm::vec3(-0.5f, 0.0f, -1.0f));
         render_draw_rect_transparency(
         		shaderProgram_Rect_Transparency,
-        		EBO,
+        		VAO_Quad,
         		model,
         		view,
         		projection
         		);
-
-
-        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr,1);
-
 
 
 		// Position prints
