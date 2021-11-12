@@ -128,6 +128,7 @@ int main()
 	glm::mat4 view(1.f);
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
+
     GLfloat colorChannelValues[8][3] =
     {
         {0.f, 0.f, 0.f},
@@ -182,7 +183,10 @@ int main()
         processInput(window, deltaTime);
 
         if (depthTest)
+        {
 			glEnable(GL_DEPTH_TEST);
+
+        }
         else
 			glDisable(GL_DEPTH_TEST);
 
@@ -224,15 +228,6 @@ int main()
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
-		// Floor
-		model = glm::mat4(1.f);
-		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-        render_draw_floor(
-        		shaderProgramFloor,
-				VAO_Floor,
-				model,
-				view,
-				projection);
 
         // Cube 1
         model = glm::mat4(1.f);
@@ -240,6 +235,7 @@ int main()
 		render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
+				visualiseDepthBuffer,
 				model,
 				view,
 				projection);
@@ -250,6 +246,18 @@ int main()
 		render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
+				visualiseDepthBuffer,
+				model,
+				view,
+				projection);
+
+		// Floor
+		model = glm::mat4(1.f);
+		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+        render_draw_floor(
+        		shaderProgramFloor,
+				VAO_Floor,
+				visualiseDepthBuffer,
 				model,
 				view,
 				projection);

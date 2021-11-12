@@ -332,6 +332,7 @@ void render_draw_cube(
 void render_draw_cube(
 		unsigned int shaderProgram,
 		unsigned int VAO,
+		bool visualiseDepthBuffer,
 		glm::mat4 model = glm::mat4(1.0f),
 		glm::mat4 view = glm::mat4(1.0f),
 		glm::mat4 projection = glm::mat4(1.0f)
@@ -339,6 +340,7 @@ void render_draw_cube(
 {
     glUseProgram(shaderProgram);
     glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 6);
+    glUniform1i(glGetUniformLocation(shaderProgram, "visualiseDepthBuffer"), visualiseDepthBuffer);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -440,12 +442,14 @@ void render_draw_cube_raw_lightsource(
 void render_draw_floor(
 		unsigned int shaderProgram,
 		unsigned int VAO,
+		bool visualiseDepthBuffer,
 		glm::mat4 model = glm::mat4(1.0f),
 		glm::mat4 view = glm::mat4(1.0f),
 		glm::mat4 projection = glm::mat4(1.0f)
 		)
 {
     glUseProgram(shaderProgram);
+    glUniform1i(glGetUniformLocation(shaderProgram, "visualiseDepthBuffer"), visualiseDepthBuffer);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));

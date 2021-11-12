@@ -32,6 +32,7 @@ std::vector < std::vector<float> > RotMat_xy;
 static bool vertFlip = false;
 static float texture2Amount = 0.2f;
 static bool depthTest = true;
+static bool visualiseDepthBuffer = false;
 static bool wireframeMode = false;
 static bool l_pressed = false;
 static bool f_pressed = false;
@@ -47,6 +48,7 @@ static bool _4_pressed = false;
 static bool _5_pressed = false;
 static bool _6_pressed = false;
 static bool _7_pressed = false;
+static bool f1_pressed = false;
 static bool ambientLight = true;
 static bool diffuseLight = true;
 static bool specularLight = true;
@@ -270,6 +272,9 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_7) == GLFW_RELEASE && _7_pressed)
     	_7_pressed = false;
 
+    if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_RELEASE && f1_pressed)
+    	f1_pressed = false;
+
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !_1_pressed)
     {
     	_1_pressed = true;
@@ -316,6 +321,13 @@ void processInput(GLFWwindow *window, float deltaTime)
     {
     	_7_pressed = true;
     	attenuation = !attenuation;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS && !f1_pressed)
+    {
+    	f1_pressed = true;
+    	visualiseDepthBuffer = !visualiseDepthBuffer;
+
     }
 }
 
