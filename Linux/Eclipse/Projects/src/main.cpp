@@ -90,6 +90,10 @@ int main()
         compileVertexShader(vertexShaderSource_Cube),
         compileFragmentShader(fragmentShaderSource_Cube_no_mix));
 
+    unsigned int shaderProgram_Cube_SingleColor = linkShaders(
+        compileVertexShader(vertexShaderSource_Cube),
+        compileFragmentShader(fragmentShaderSingleColor));
+
     unsigned int shaderProgram_Cube_Raw_Target = linkShaders(
         compileVertexShader(vertexShaderSource_Cube_Raw_Target),
         compileFragmentShader(fragmentShaderSource_Cube_Raw_Target));
@@ -172,6 +176,8 @@ int main()
     cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
     cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
 
+    glEnable(GL_STENCIL_TEST);
+
     // Game loop
     while (!WindowShouldClose(window))
     {
@@ -193,7 +199,8 @@ int main()
         // clear results from previous frame (iteration of loop)
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glStencilMask(0xFF); // make sure stencil  buffer is writable before clearing
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         //// rendering (note this has to be after clear!)
         //render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx], false);
@@ -229,7 +236,11 @@ int main()
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
 
-        // Cube 1
+        // 1st render pass, write to stencil buffer where desired
+		// Cube 1
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
 		render_draw_cube(
@@ -250,6 +261,51 @@ int main()
 				model,
 				view,
 				projection);
+
+		// Floor
+		glStencilMask(0x00); // only cubes for now
+		model = glm::mat4(1.f);
+		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+        render_draw_floor(
+        		shaderProgramFloor,
+				VAO_Floor,
+				visualiseDepthBuffer,
+				model,
+				view,
+				projection);
+
+        // 2nd render pass, borders/outlining
+		// Cube 1
+		glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
+		//glStencilMask(0xFF);
+		//glDisable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		float scale = 1.1f;
+
+        model = glm::mat4(1.f);
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
+		render_draw_cube(
+				shaderProgram_Cube_SingleColor,
+				VAO_Cube,
+				visualiseDepthBuffer,
+				model,
+				view,
+				projection);
+		glDepthFunc(GL_LESS);
+
+        // Cube 2
+        model = glm::mat4(1.f);
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
+		render_draw_cube(
+				shaderProgram_Cube_SingleColor,
+				VAO_Cube,
+				visualiseDepthBuffer,
+				model,
+				view,
+				projection);
+		//glEnable(GL_DEPTH_TEST);
 
 		// Floor
 		model = glm::mat4(1.f);
