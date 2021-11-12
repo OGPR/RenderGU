@@ -274,49 +274,54 @@ int main()
 				view,
 				projection);
 
-        // 2nd render pass, borders/outlining
-		// Cube 1
-		glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
-		//glStencilMask(0xFF);
-		//glDisable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-		float scale = 1.1f;
 
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-		render_draw_cube(
-				shaderProgram_Cube_SingleColor,
-				VAO_Cube,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
-		glDepthFunc(GL_LESS);
+        if (stencilTest)
+        {
+			// 2nd render pass, borders/outlining
+			// Cube 1
+			glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
+			//glStencilMask(0xFF);
+			//glDisable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+			float scale = 1.1f;
 
-        // Cube 2
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-		render_draw_cube(
-				shaderProgram_Cube_SingleColor,
-				VAO_Cube,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
-		//glEnable(GL_DEPTH_TEST);
+			model = glm::mat4(1.f);
+			model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+			model = glm::scale(model, glm::vec3(scale, scale, scale));
+			render_draw_cube(
+					shaderProgram_Cube_SingleColor,
+					VAO_Cube,
+					visualiseDepthBuffer,
+					model,
+					view,
+					projection);
+			glDepthFunc(GL_LESS);
 
-		// Floor
-		model = glm::mat4(1.f);
-		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-        render_draw_floor(
-        		shaderProgramFloor,
-				VAO_Floor,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
+			// Cube 2
+			model = glm::mat4(1.f);
+			model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(scale, scale, scale));
+			render_draw_cube(
+					shaderProgram_Cube_SingleColor,
+					VAO_Cube,
+					visualiseDepthBuffer,
+					model,
+					view,
+					projection);
+			//glEnable(GL_DEPTH_TEST);
+
+			// Floor
+			model = glm::mat4(1.f);
+			model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+			render_draw_floor(
+					shaderProgramFloor,
+					VAO_Floor,
+					visualiseDepthBuffer,
+					model,
+					view,
+					projection);
+        }
+
 
 		// Position prints
 		// Printed in format to allow for direct copy and paste from console to code
