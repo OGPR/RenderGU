@@ -122,6 +122,10 @@ int main()
 
     //** End Floor stuff
 
+    unsigned int shaderProgram_Rect_Transparency = linkShaders(
+            compileVertexShader(vertexShaderSource_Rect_Transparency),
+            compileFragmentShader(fragmentShaderSource_Rect_Transparency));
+
 
 
     textureSetup();
@@ -321,6 +325,18 @@ int main()
 					view,
 					projection);
         }
+
+        // Transparency
+        //model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        model = glm::mat4(1.0f);
+        render_draw_rect_transparency(
+        		shaderProgram_Rect_Transparency,
+        		EBO,
+        		model,
+        		view,
+        		projection
+        		);
+
 
 
 		// Position prints
