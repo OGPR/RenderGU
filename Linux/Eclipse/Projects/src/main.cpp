@@ -247,7 +247,8 @@ int main()
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-		render_draw_cube(
+		/*
+        render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
 				visualiseDepthBuffer,
@@ -270,7 +271,7 @@ int main()
 		glStencilMask(0x00); // only cubes for now
 		model = glm::mat4(1.f);
 		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-        render_draw_floor(
+        //render_draw_floor(
         		shaderProgramFloor,
 				VAO_Floor,
 				visualiseDepthBuffer,
@@ -326,9 +327,10 @@ int main()
 					projection);
         }
 
+        */
         // Transparency
-        //model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-0.5f, 0.0f, -1.0f));
+        //model = glm::mat4(1.0f);
         render_draw_rect_transparency(
         		shaderProgram_Rect_Transparency,
         		EBO,
