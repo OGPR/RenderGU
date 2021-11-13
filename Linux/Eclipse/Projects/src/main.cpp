@@ -284,6 +284,7 @@ int main()
 				projection);
 
         // Cube 2
+        glEnable(GL_CULL_FACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
 		render_draw_cube(
@@ -293,6 +294,8 @@ int main()
 				model,
 				view,
 				projection);
+
+        glDisable(GL_CULL_FACE);
 
 		// Floor
 		glStencilMask(0x00); // only cubes for now
