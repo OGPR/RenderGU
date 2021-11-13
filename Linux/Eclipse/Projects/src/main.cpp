@@ -132,6 +132,16 @@ int main()
 
     //** End Quad stuff
 
+    //** Begin window stuff
+    // Re-using quad VSpec
+    unsigned int VAO_Window = vs_quad(quad, 3*5 + 3*5);
+
+    // Re-using quad VShader
+    unsigned int shaderProgram_Rect_Window = linkShaders(
+            compileVertexShader(vertexShaderSource_Rect_Transparency),
+            compileFragmentShader(fragmentShaderSource_Rect_window));
+
+    //** End window stuff
 
     textureSetup();
 
@@ -149,6 +159,10 @@ int main()
 	// modelcoords have been rotated, so keep that in mind on translation
 	// Apply offset in z to prevent z-figting
 	modelQuad = glm::translate(modelQuad, glm::vec3(0.5f, 0.f,-1.51f));
+
+	glm::mat4 modelWindow(1.f);
+	modelWindow = glm::rotate(modelWindow, glm::half_pi<float>(), glm::vec3(0.f, 1.f, 0.f));
+	modelWindow = glm::translate(modelWindow, glm::vec3(0.5f, 0.f,-1.8f));
 
 	GLfloat colorChannelValues[8][3] =
     {
@@ -351,6 +365,18 @@ int main()
         		view,
         		projection
         		);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        render_draw_rect_window(
+        		shaderProgram_Rect_Window,
+        		VAO_Window,
+        		modelWindow,
+        		view,
+        		projection
+        		);
+        glDisable(GL_BLEND);
+
 
 
 		// Position prints

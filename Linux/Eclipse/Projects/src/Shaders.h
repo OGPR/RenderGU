@@ -492,3 +492,21 @@ const char* fragmentShaderSource_Rect_Transparency =
     }
 );
 
+// Window
+// re-using VShader from rect_transp
+const char* fragmentShaderSource_Rect_window =
+    GLSL(330 core,
+	in vec2 TexCoord;
+	in vec3 Color;
+    out vec4 FragColor;
+
+    uniform sampler2D Texture;
+
+
+    void main()
+    {
+    	FragColor = texture(Texture, TexCoord);
+    }
+);
+
+
