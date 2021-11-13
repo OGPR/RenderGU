@@ -122,6 +122,15 @@ int main()
 
     //** End Floor stuff
 
+    //** Begin Quad stuff
+    unsigned int VAO_Quad = vs_quad(quad, 3*5 + 3*5);
+
+
+    unsigned int shaderProgram_Rect_Transparency = linkShaders(
+            compileVertexShader(vertexShaderSource_Rect_Transparency),
+            compileFragmentShader(fragmentShaderSource_Rect_Transparency));
+
+    //** End Quad stuff
 
 
     textureSetup();
@@ -133,7 +142,15 @@ int main()
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
-    GLfloat colorChannelValues[8][3] =
+	/// Model specific transformations
+	// Those we don't expect to change between frames, so set them one here
+	glm::mat4 modelQuad(1.f);
+	modelQuad = glm::rotate(modelQuad, glm::half_pi<float>(), glm::vec3(0.f, 1.f, 0.f));
+	// modelcoords have been rotated, so keep that in mind on translation
+	// Apply offset in z to prevent z-figting
+	modelQuad = glm::translate(modelQuad, glm::vec3(0.5f, 0.f,-1.51f));
+
+	GLfloat colorChannelValues[8][3] =
     {
         {0.f, 0.f, 0.f},
         {1.f, 0.f, 0.f},
@@ -172,9 +189,10 @@ int main()
 
     // From print statements in loop below
     // Set up camera for depth/stencil buffer work
-    cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
-    cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
-    cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+	cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
+	cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
+	cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+
 
     glEnable(GL_STENCIL_TEST);
 
@@ -243,7 +261,7 @@ int main()
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-		render_draw_cube(
+        render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
 				visualiseDepthBuffer,
@@ -266,6 +284,9 @@ int main()
 		glStencilMask(0x00); // only cubes for now
 		model = glm::mat4(1.f);
 		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+
+
+
         render_draw_floor(
         		shaderProgramFloor,
 				VAO_Floor,
@@ -321,6 +342,15 @@ int main()
 					view,
 					projection);
         }
+
+        // Transparency
+        render_draw_rect_transparency(
+        		shaderProgram_Rect_Transparency,
+        		VAO_Quad,
+        		modelQuad,
+        		view,
+        		projection
+        		);
 
 
 		// Position prints
