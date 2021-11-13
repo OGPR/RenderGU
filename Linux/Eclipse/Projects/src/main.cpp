@@ -366,6 +366,8 @@ int main()
         		projection
         		);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         render_draw_rect_window(
         		shaderProgram_Rect_Window,
         		VAO_Window,
@@ -373,6 +375,8 @@ int main()
         		view,
         		projection
         		);
+        glDisable(GL_BLEND);
+
 
 
 		// Position prints
