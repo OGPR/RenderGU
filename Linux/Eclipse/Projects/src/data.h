@@ -39,48 +39,87 @@ unsigned int indexArray[3*2] =
     0, 2, 3, // second triangle
 };
 
+// CCW winding
 float cube[] = {
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	/* The vertex annotations are given wrt to the face orientation.
+	 * For example the bottom face will have the notion of back and front vertices
+	 *
+	 * However, left and right faces do not follow this convention as they initially were annotated
+	 * with top/bottom notions (made sense visually I think).
+	 */
 
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	/// Back Face
 
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	// Tri 1
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom left
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // Bottom right
 
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	// Tri 2
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom right
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Top Left
 
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    /// Front face
+
+	// Tri 1
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Bottom right
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // Top right
+
+	// Tri 2
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // Top right
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // Top left
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
+
+    /// Left face
+
+	// Tri 1
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top right
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top left
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom left
+
+	// Tri 2
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom left
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom right
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top right
+
+     /// Right face
+
+	// Tri 1
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top left
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom right
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
+
+	 // Tri 2
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom right
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top left
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
+
+    // Bottom face
+
+	 // Tri 1
+	 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back left
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // Back right
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Front right
+
+	 // Tri 2
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Front right
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Front left
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back left
+
+    /// Top face
+
+	// Tri 1
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Back left
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Front right
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Back right
+
+	// Tri 2
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Front right
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f // Back left
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, // Front left
 };
 
 float cube_forIndexedDraw[] =
