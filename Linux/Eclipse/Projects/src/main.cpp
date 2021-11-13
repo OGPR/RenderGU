@@ -123,7 +123,7 @@ int main()
     //** End Floor stuff
 
     //** Begin Quad stuff
-    unsigned int VAO_Quad = vs_quad(quad, 3*3 + 3*3);
+    unsigned int VAO_Quad = vs_quad(quad, 3*5 + 3*5);
 
 
     unsigned int shaderProgram_Rect_Transparency = linkShaders(

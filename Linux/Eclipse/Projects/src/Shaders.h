@@ -459,6 +459,9 @@ const char* fragmentShaderSingleColor =
 const char* vertexShaderSource_Rect_Transparency =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+
+    out vec2 TexCoord;
 
     uniform mat4 model;
     uniform mat4 view;
@@ -467,6 +470,7 @@ const char* vertexShaderSource_Rect_Transparency =
     void main()
     {
         gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+        TexCoord = aTexCoord;
     }
 );
 
@@ -476,10 +480,12 @@ const char* fragmentShaderSource_Rect_Transparency =
 	in vec3 Color;
     out vec4 FragColor;
 
+    uniform sampler2D Texture;
+
 
     void main()
     {
-    	FragColor = vec4(0.5f,0.5f,0.5f, 1.0f);
+    	FragColor = texture(Texture, TexCoord);
     }
 );
 

@@ -170,7 +170,9 @@ void textureSetup()
 	stbi_image_free(img_data);
 
 	// Grass  (our 8th texture here)
+	stbi_set_flip_vertically_on_load(true);
 	img_data = stbi_load("grass.png", &img_width, &img_height, &img_nChannels, 0);
+	stbi_set_flip_vertically_on_load(false);
 
 	if (!img_data)
 		printf("Failed to load texture 8...");

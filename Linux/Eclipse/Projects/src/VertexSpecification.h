@@ -41,7 +41,7 @@ struct FloorAttributes
 
 struct QuadData
 {
-	int numberOfEntries = 3*3 + 3*3;
+	int numberOfEntries = 3*5 + 3*5;
 	float* data = quad;
 } _quadData;
 
@@ -51,9 +51,17 @@ struct QuadAttributes
 	{
 		unsigned int index = 0;
 		unsigned int size = 3;
-		GLsizei stride = 3 * sizeof(float);
+		GLsizei stride = 5 * sizeof(float);
 		const void* offset = 0;
 	}pos;
+
+	struct Texture
+	{
+		unsigned int index = 1;
+		unsigned int size = 2;
+		GLsizei stride = 5 * sizeof(float) ;
+		const void* offset = (void * )(3 * sizeof(float));
+	}tex;
 
 };
 
@@ -95,6 +103,7 @@ unsigned int vs_quad(float* vertex, unsigned int numberOfEntries)
 
 	QuadAttributes QA;
 	SetAttribute(QA.pos.index, QA.pos.size, QA.pos.stride, QA.pos.offset);
+	SetAttribute(QA.tex.index, QA.tex.size, QA.tex.stride, QA.tex.offset);
 
 	return VAO;
 }
