@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 /**
 * This is so I just don't have to write glfwInit() etc, because:
 * - I find it a little hard to read
@@ -64,4 +65,22 @@ GLFWcursorposfun SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callb
 	glfwSetCursorPosCallback(window, callback);
 
 }
+
+void CheckFrameBufferStatus()
+{
+	switch (glCheckFramebufferStatus(GL_FRAMEBUFFER))
+	{
+		case GL_FRAMEBUFFER_COMPLETE:
+			printf("Specified framebuffer is complete\n");
+			break;
+		case GL_FRAMEBUFFER_UNDEFINED:
+			printf("Specified framebuffer is undefined \n");
+			break;
+		case 0:
+		default:
+			printf("blah\n");
+	}
+}
+
+
 

@@ -220,10 +220,12 @@ int main()
     	{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+			CheckFrameBufferStatus();
     	}
     	else
     	{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			CheckFrameBufferStatus();
     	}
 
     	currFrameTime = glfwGetTime();
