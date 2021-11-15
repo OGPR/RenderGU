@@ -345,7 +345,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	stencilTest = !stencilTest;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && !f4_pressed)
+    if (glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS && !f4_pressed)
     {
     	f4_pressed = true;
     	offScreenRender = !offScreenRender;

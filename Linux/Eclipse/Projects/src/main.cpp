@@ -216,16 +216,15 @@ int main()
     // Game loop
     while (!WindowShouldClose(window))
     {
-		if (++frameNumber % 200 != 0)
-		{
+    	if (offScreenRender)
+    	{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-			printf("FBO\n");
-		}
-		else
-		{
+    	}
+    	else
+    	{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			printf("000000000000\n");
-		}
+    	}
 
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
