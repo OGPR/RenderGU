@@ -210,9 +210,23 @@ int main()
 
     glEnable(GL_STENCIL_TEST);
 
+	GLuint fbo;
+	glGenFramebuffers(1,&fbo);
+
     // Game loop
     while (!WindowShouldClose(window))
     {
+		if (++frameNumber % 200 != 0)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+			printf("FBO\n");
+		}
+		else
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			printf("000000000000\n");
+		}
+
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
     	lastFrameTime = currFrameTime;
@@ -236,10 +250,10 @@ int main()
 
         //// rendering (note this has to be after clear!)
         //render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx], false);
-        if (++frameNumber % 20 == 0)
+        /*if (++frameNumber % 20 == 0)
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
-        }
+        }*/
 
         // Place many cubes
         /*
