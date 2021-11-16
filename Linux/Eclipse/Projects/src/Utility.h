@@ -86,6 +86,3 @@ void CheckFrameBufferStatus()
 			printf("Something else has gone wrong\n");
 	}
 }
-
-
-
