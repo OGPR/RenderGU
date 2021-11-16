@@ -214,16 +214,33 @@ int main()
 	GLuint fbo;
 	glGenFramebuffers(1,&fbo);
 
+	// Render buffer attachment
+	GLuint fbo_1; // New framebuffer to attach to
+	glGenFramebuffers(1,&fbo_1);
+	GLuint rbo;
+	glGenRenderbuffers(1,&rbo);
+
     // Game loop
     while (!WindowShouldClose(window))
     {
     	if (offScreenRender)
     	{
+    		printf("tex target\n");
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
 			CheckFrameBufferStatus();
     	}
+    	else if (offScreenRender_Renderbuffer)
+    	{
+    		printf("render buffer \n");
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			glBindFramebuffer(GL_FRAMEBUFFER, fbo_1);
+			//glBindRenderbuffer(GL_FRAMEBUFFER, rbo);
+			//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+			CheckFrameBufferStatus();
+    	}
+
     	else
     	{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
