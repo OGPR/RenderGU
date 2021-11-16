@@ -143,7 +143,8 @@ int main()
 
     //** End window stuff
 
-    textureSetup();
+    unsigned int textureTarget = 0;
+    textureSetup(&textureTarget);
 
 
 	//// Transformations
@@ -220,6 +221,7 @@ int main()
     	{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
 			CheckFrameBufferStatus();
     	}
     	else
