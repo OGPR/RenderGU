@@ -76,9 +76,14 @@ void CheckFrameBufferStatus()
 		case GL_FRAMEBUFFER_UNDEFINED:
 			printf("Specified framebuffer is undefined \n");
 			break;
-		case 0:
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			printf("Some (or all) of the framebuffer attachment points are framebuffer incomplete\n");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			printf("The framebuffer does not have at least one image attached to it\n");
+			break;
 		default:
-			printf("blah\n");
+			printf("Something else has gone wrong\n");
 	}
 }
 
