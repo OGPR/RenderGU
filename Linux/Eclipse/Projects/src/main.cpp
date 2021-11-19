@@ -143,6 +143,17 @@ int main()
 
     //** End window stuff
 
+    //** Begin offscreen render stuff
+    unsigned int VAO_Offscreen = vs_simpleQuad(simpleQuad, 3*5 + 3*5);
+
+
+    unsigned int shaderProgram_offscreen = linkShaders(
+		compileVertexShader(vertexShaderSource_offscreen),
+		compileFragmentShader(fragmentShaderSource_offscreen));
+
+
+    //** End offscreen render stuff
+
     unsigned int textureTarget = 0;
     textureSetup(&textureTarget);
 
@@ -220,18 +231,20 @@ int main()
 	GLuint rbo;
 	glGenRenderbuffers(1,&rbo);
 
+	char pass = 1;
     // Game loop
     while (!WindowShouldClose(window))
     {
-    	if (offScreenRender)
+    	if (pass == 1)
     	{
     		printf("tex target\n");
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
-			CheckFramebufferStatus();
+			//CheckFramebufferStatus();
     	}
-    	else if (offScreenRender_Renderbuffer)
+    	/*
+    	 else if (offScreenRender_Renderbuffer)
     	{
     		printf("render buffer \n");
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -241,11 +254,28 @@ int main()
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 			CheckFramebufferStatus();
     	}
+    	*/
 
-    	else
+    	else if (pass == 2)
     	{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			CheckFramebufferStatus();
+			//CheckFramebufferStatus();
+
+			glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // non-black, to see wireframe
+			glDisable(GL_DEPTH_TEST); //TODO: needed?
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			render_draw_offscreen(
+					shaderProgram_offscreen,
+					VAO_Offscreen);
+
+
+			//// check and call events, and swap buffers
+			PollEvents(); // do we need to poll events? I think so
+			SwapBuffers(window); // We need to do this here, as we end the frame
+
+			pass = 1;
+			continue;
     	}
 
     	currFrameTime = glfwGetTime();
@@ -302,90 +332,44 @@ int main()
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
-
-        // 1st render pass, write to stencil buffer where desired
-		// Cube 1
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glStencilMask(0xFF);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        render_draw_cube(
-				shaderProgram_Cube_no_mix,
-				VAO_Cube,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
-
-        // Cube 2
-        glEnable(GL_CULL_FACE);
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-		render_draw_cube(
-				shaderProgram_Cube_no_mix,
-				VAO_Cube,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
-
-        glDisable(GL_CULL_FACE);
-
-		// Floor
-		glStencilMask(0x00); // only cubes for now
-		model = glm::mat4(1.f);
-		model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-
-
-
-        render_draw_floor(
-        		shaderProgramFloor,
-				VAO_Floor,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
-
-
-        if (stencilTest)
-        {
-			// 2nd render pass, borders/outlining
+		if(pass++ == 1)
+		{
+			// 1st render pass, write to stencil buffer where desired
 			// Cube 1
-			glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
-			//glStencilMask(0xFF);
-			//glDisable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LESS);
-			float scale = 1.1f;
-
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0xFF);
+			glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 			model = glm::mat4(1.f);
 			model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-			model = glm::scale(model, glm::vec3(scale, scale, scale));
 			render_draw_cube(
-					shaderProgram_Cube_SingleColor,
+					shaderProgram_Cube_no_mix,
 					VAO_Cube,
 					visualiseDepthBuffer,
 					model,
 					view,
 					projection);
-			glDepthFunc(GL_LESS);
 
 			// Cube 2
+			glEnable(GL_CULL_FACE);
 			model = glm::mat4(1.f);
 			model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(scale, scale, scale));
 			render_draw_cube(
-					shaderProgram_Cube_SingleColor,
+					shaderProgram_Cube_no_mix,
 					VAO_Cube,
 					visualiseDepthBuffer,
 					model,
 					view,
 					projection);
-			//glEnable(GL_DEPTH_TEST);
+
+			glDisable(GL_CULL_FACE);
 
 			// Floor
+			glStencilMask(0x00); // only cubes for now
 			model = glm::mat4(1.f);
 			model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+
+
+
 			render_draw_floor(
 					shaderProgramFloor,
 					VAO_Floor,
@@ -393,6 +377,53 @@ int main()
 					model,
 					view,
 					projection);
+
+
+			if (stencilTest)
+			{
+				// 2nd render pass, borders/outlining
+				// Cube 1
+				glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
+				//glStencilMask(0xFF);
+				//glDisable(GL_DEPTH_TEST);
+				glDepthFunc(GL_LESS);
+				float scale = 1.1f;
+
+				model = glm::mat4(1.f);
+				model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+				model = glm::scale(model, glm::vec3(scale, scale, scale));
+				render_draw_cube(
+						shaderProgram_Cube_SingleColor,
+						VAO_Cube,
+						visualiseDepthBuffer,
+						model,
+						view,
+						projection);
+				glDepthFunc(GL_LESS);
+
+				// Cube 2
+				model = glm::mat4(1.f);
+				model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+				model = glm::scale(model, glm::vec3(scale, scale, scale));
+				render_draw_cube(
+						shaderProgram_Cube_SingleColor,
+						VAO_Cube,
+						visualiseDepthBuffer,
+						model,
+						view,
+						projection);
+				//glEnable(GL_DEPTH_TEST);
+
+				// Floor
+				model = glm::mat4(1.f);
+				model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+				render_draw_floor(
+						shaderProgramFloor,
+						VAO_Floor,
+						visualiseDepthBuffer,
+						model,
+						view,
+						projection);
         }
 
         // Transparency
@@ -414,6 +445,8 @@ int main()
         		projection
         		);
         glDisable(GL_BLEND);
+		}
+
 
 
 
@@ -503,7 +536,7 @@ int main()
 
         //// check and call events, and swap buffers
         PollEvents();
-        SwapBuffers(window);
+        //SwapBuffers(window); // No buffer swapping here as we are off screen rendering
     }
 
 

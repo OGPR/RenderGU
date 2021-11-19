@@ -510,3 +510,35 @@ const char* fragmentShaderSource_Rect_window =
 );
 
 
+//// Off screen render shaders
+const char* vertexShaderSource_offscreen =
+    GLSL(330 core,
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+
+    out vec2 TexCoord;
+
+    // NDC assumed, no need for matrices
+
+    void main()
+    {
+    	gl_Position = vec4(aPos , 1.0);
+        TexCoord = aTexCoord;
+    }
+);
+
+const char* fragmentShaderSource_offscreen =
+    GLSL(330 core,
+	in vec2 TexCoord;
+    out vec4 FragColor;
+
+    uniform sampler2D Texture;
+
+
+    void main()
+    {
+    	FragColor = texture(Texture, TexCoord);
+    }
+);
+
+
