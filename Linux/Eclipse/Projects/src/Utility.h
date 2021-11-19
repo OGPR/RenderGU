@@ -66,7 +66,7 @@ GLFWcursorposfun SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callb
 
 }
 
-void CheckFrameBufferStatus()
+void CheckFramebufferStatus()
 {
 	switch (glCheckFramebufferStatus(GL_FRAMEBUFFER))
 	{
