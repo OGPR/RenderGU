@@ -21,6 +21,7 @@
 #include "input.h"
 #include "Textures.h"
 #include "VertexSpecification.h"
+#include <assert.h>
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -238,7 +239,13 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
-		//CheckFramebufferStatus();
+
+		// Create renderbuffer for attaching depth to currently bound framebuffer
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 800, 600);
+		assert(glGetError() == 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
+		CheckFramebufferStatus();
 
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
