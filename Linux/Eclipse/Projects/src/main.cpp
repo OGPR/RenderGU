@@ -231,6 +231,8 @@ int main()
 	glGenFramebuffers(1,&fbo_1);
 	GLuint rbo;
 	glGenRenderbuffers(1,&rbo);
+	GLuint rbo1;
+	glGenRenderbuffers(1,&rbo1);
 
     // Game loop
     while (!WindowShouldClose(window))
@@ -243,9 +245,18 @@ int main()
 		// Create renderbuffer for attaching depth to currently bound framebuffer
 		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 800, 600);
-		assert(glGetError() == 0);
+		//assert(glGetError() == 0);
+		CheckError();
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
 		CheckFramebufferStatus();
+
+		// Create renderbuffer for attaching stencil buffer to currently bound framebuffer
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo1);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL, 800, 600);
+		//assert(glGetError() == 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo1);
+		CheckFramebufferStatus();
+		//CheckError();
 
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
