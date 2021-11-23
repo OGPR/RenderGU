@@ -21,6 +21,7 @@
 #include "input.h"
 #include "Textures.h"
 #include "VertexSpecification.h"
+#include <assert.h>
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -143,7 +144,19 @@ int main()
 
     //** End window stuff
 
-    textureSetup();
+    //** Begin offscreen render stuff
+    unsigned int VAO_Offscreen = vs_simpleQuad(simpleQuad, 3*5 + 3*5);
+
+
+    unsigned int shaderProgram_offscreen = linkShaders(
+		compileVertexShader(vertexShaderSource_offscreen),
+		compileFragmentShader(fragmentShaderSource_offscreen));
+
+
+    //** End offscreen render stuff
+
+    unsigned int textureTarget = 0;
+    textureSetup(&textureTarget);
 
 
 	//// Transformations
@@ -210,9 +223,30 @@ int main()
 
     glEnable(GL_STENCIL_TEST);
 
+	GLuint fbo;
+	glGenFramebuffers(1,&fbo);
+
+	// Render buffer attachment
+	GLuint fbo_1; // New framebuffer to attach to
+	glGenFramebuffers(1,&fbo_1);
+	GLuint rbo;
+	glGenRenderbuffers(1,&rbo);
+
     // Game loop
     while (!WindowShouldClose(window))
     {
+		printf("tex target\n");
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
+
+		// Create renderbuffer for attaching depth to currently bound framebuffer
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+		assert(glGetError() == 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+		CheckFramebufferStatus();
+
     	currFrameTime = glfwGetTime();
     	deltaTime = currFrameTime - lastFrameTime;
     	lastFrameTime = currFrameTime;
@@ -236,10 +270,10 @@ int main()
 
         //// rendering (note this has to be after clear!)
         //render_draw(shaderProgram, VAO, colorChannelValues[colorChannelValuesIdx], false);
-        if (++frameNumber % 20 == 0)
+        /*if (++frameNumber % 20 == 0)
         {
             colorChannelValuesIdx = ++colorChannelValuesIdx % 8;
-        }
+        }*/
 
         // Place many cubes
         /*
@@ -267,26 +301,13 @@ int main()
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
-
-        // 1st render pass, write to stencil buffer where desired
+		// 1st render pass, write to stencil buffer where desired
 		// Cube 1
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        render_draw_cube(
-				shaderProgram_Cube_no_mix,
-				VAO_Cube,
-				visualiseDepthBuffer,
-				model,
-				view,
-				projection);
-
-        // Cube 2
-        glEnable(GL_CULL_FACE);
-        model = glm::mat4(1.f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::mat4(1.f);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
 		render_draw_cube(
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
@@ -295,7 +316,19 @@ int main()
 				view,
 				projection);
 
-        glDisable(GL_CULL_FACE);
+		// Cube 2
+		glEnable(GL_CULL_FACE);
+		model = glm::mat4(1.f);
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		render_draw_cube(
+				shaderProgram_Cube_no_mix,
+				VAO_Cube,
+				visualiseDepthBuffer,
+				model,
+				view,
+				projection);
+
+		glDisable(GL_CULL_FACE);
 
 		// Floor
 		glStencilMask(0x00); // only cubes for now
@@ -304,8 +337,8 @@ int main()
 
 
 
-        render_draw_floor(
-        		shaderProgramFloor,
+		render_draw_floor(
+				shaderProgramFloor,
 				VAO_Floor,
 				visualiseDepthBuffer,
 				model,
@@ -313,8 +346,8 @@ int main()
 				projection);
 
 
-        if (stencilTest)
-        {
+		if (stencilTest)
+		{
 			// 2nd render pass, borders/outlining
 			// Cube 1
 			glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
@@ -358,27 +391,39 @@ int main()
 					model,
 					view,
 					projection);
-        }
+			}
 
-        // Transparency
-        render_draw_rect_transparency(
-        		shaderProgram_Rect_Transparency,
-        		VAO_Quad,
-        		modelQuad,
-        		view,
-        		projection
-        		);
+		// Transparency
+		render_draw_rect_transparency(
+				shaderProgram_Rect_Transparency,
+				VAO_Quad,
+				modelQuad,
+				view,
+				projection
+				);
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        render_draw_rect_window(
-        		shaderProgram_Rect_Window,
-        		VAO_Window,
-        		modelWindow,
-        		view,
-        		projection
-        		);
-        glDisable(GL_BLEND);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		render_draw_rect_window(
+				shaderProgram_Rect_Window,
+				VAO_Window,
+				modelWindow,
+				view,
+				projection
+				);
+		glDisable(GL_BLEND);
+
+    	// 2nd (or 3rd) render pass - render simple quad with scene texture
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//CheckFramebufferStatus();
+
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // non-black, to see wireframe
+		glDisable(GL_DEPTH_TEST); //TODO: needed?
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		render_draw_offscreen(
+				shaderProgram_offscreen,
+				VAO_Offscreen);
 
 
 

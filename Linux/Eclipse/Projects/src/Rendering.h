@@ -496,3 +496,15 @@ void render_draw_rect_window(
     glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
+
+void render_draw_offscreen(
+		unsigned int shaderProgram,
+		unsigned int VAO
+		)
+{
+    glUseProgram(shaderProgram);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9);
+
+    glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+}

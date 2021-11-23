@@ -339,6 +339,7 @@ void processInput(GLFWwindow *window, float deltaTime)
     	f2_pressed = true;
     	stencilTest = !stencilTest;
     }
+
 }
 
 static float lastxpos = 0.f;
