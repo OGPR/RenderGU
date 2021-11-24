@@ -260,7 +260,7 @@ float quad[] =
 	1.0f,  0.5f,  0.0f, 1.f, 1.f,    // top right
 };
 
-// Simple quad in NDC - for example for use in off-screen rendering
+// Simple quad in NDC
 float simpleQuad[] =
 {
 	// positions       // Tex coords

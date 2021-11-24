@@ -497,7 +497,7 @@ void render_draw_rect_window(
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void render_draw_offscreen(
+void render_draw_SimpleQuad(
 		unsigned int shaderProgram,
 		unsigned int VAO
 		)

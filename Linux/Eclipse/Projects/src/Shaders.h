@@ -510,8 +510,8 @@ const char* fragmentShaderSource_Rect_window =
 );
 
 
-//// Off screen render shaders
-const char* vertexShaderSource_offscreen =
+//// Simple quad render shaders
+const char* vertexShaderSource_SimpleQuad =
     GLSL(330 core,
     layout(location = 0) in vec3 aPos;
     layout(location = 1) in vec2 aTexCoord;
@@ -527,7 +527,7 @@ const char* vertexShaderSource_offscreen =
     }
 );
 
-const char* fragmentShaderSource_offscreen =
+const char* fragmentShaderSource_SimpleQuad =
     GLSL(330 core,
 	in vec2 TexCoord;
     out vec4 FragColor;

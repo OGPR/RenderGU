@@ -144,16 +144,16 @@ int main()
 
     //** End window stuff
 
-    //** Begin offscreen render stuff
-    unsigned int VAO_Offscreen = vs_simpleQuad(simpleQuad, 3*5 + 3*5);
+    //** Begin simple quad render stuff
+    unsigned int VAO_SimpleQuad = vs_simpleQuad(simpleQuad, 3*5 + 3*5);
 
 
-    unsigned int shaderProgram_offscreen = linkShaders(
-		compileVertexShader(vertexShaderSource_offscreen),
-		compileFragmentShader(fragmentShaderSource_offscreen));
+    unsigned int shaderProgram_SimpleQuad = linkShaders(
+		compileVertexShader(vertexShaderSource_SimpleQuad),
+		compileFragmentShader(fragmentShaderSource_SimpleQuad));
 
 
-    //** End offscreen render stuff
+    //** End simple quad render stuff
 
     unsigned int textureTarget = 0;
     textureSetup(&textureTarget);
@@ -235,7 +235,9 @@ int main()
     // Game loop
     while (!WindowShouldClose(window))
     {
-		printf("tex target\n");
+		////---- 1st pass - off-screen render------
+
+    	printf("tex target\n");
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
@@ -301,7 +303,7 @@ int main()
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
-		// 1st render pass, write to stencil buffer where desired
+		// Write to stencil buffer where desired
 		// Cube 1
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
@@ -348,7 +350,7 @@ int main()
 
 		if (stencilTest)
 		{
-			// 2nd render pass, borders/outlining
+			// Another render pass, borders/outlining
 			// Cube 1
 			glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
 			//glStencilMask(0xFF);
@@ -413,7 +415,7 @@ int main()
 				);
 		glDisable(GL_BLEND);
 
-    	// 2nd (or 3rd) render pass - render simple quad with scene texture
+    	////---- On Screen render pass - render simple quad with scene texture
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		//CheckFramebufferStatus();
 
@@ -421,9 +423,9 @@ int main()
 		glDisable(GL_DEPTH_TEST); //TODO: needed?
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		render_draw_offscreen(
-				shaderProgram_offscreen,
-				VAO_Offscreen);
+		render_draw_SimpleQuad(
+				shaderProgram_SimpleQuad,
+				VAO_SimpleQuad);
 
 
 
