@@ -537,7 +537,11 @@ const char* fragmentShaderSource_SimpleQuad =
 
     void main()
     {
-    	FragColor = texture(Texture, TexCoord);
+    	// Original
+    	//FragColor = vec4(texture(Texture, TexCoord));
+
+    	//Inversion
+    	FragColor = vec4(vec3(1.0f - texture(Texture, TexCoord)),1.0f);
     }
 );
 
