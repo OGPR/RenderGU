@@ -18,6 +18,22 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\CompileShaders.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\CustomMatrices.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\data.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\input.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\LinkShaders.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\Rendering.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\Shaders.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\stb_image.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\Textures.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\Utility.h" />
+    <ClInclude Include="..\..\Linux\Eclipse\Projects\src\VertexSpecification.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Linux\Eclipse\Projects\src\main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -146,17 +162,6 @@
       <AdditionalDependencies>glfw3.lib;GLAD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CompileShaders.h" />
-    <ClInclude Include="data.h" />
-    <ClInclude Include="LinkShaders.h" />
-    <ClInclude Include="Rendering.h" />
-    <ClInclude Include="Shaders.h" />
-    <ClInclude Include="Utility.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
