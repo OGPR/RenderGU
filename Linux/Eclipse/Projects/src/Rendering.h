@@ -339,7 +339,7 @@ void render_draw_cube(
 		)
 {
     glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 6);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 10);
     glUniform1i(glGetUniformLocation(shaderProgram, "visualiseDepthBuffer"), visualiseDepthBuffer);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -453,7 +453,7 @@ void render_draw_floor(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 5);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 11);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -503,7 +503,7 @@ void render_draw_SimpleQuad(
 		)
 {
     glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9 );
 
     glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
