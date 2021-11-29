@@ -272,4 +272,69 @@ void textureSetup(unsigned int* textureTarget)
 
 	stbi_image_free(img_data);
 
+	// Blue
+	img_data = stbi_load("Blue.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load blue...");
+
+	unsigned int texture12;
+	glGenTextures(1, &texture12);
+
+	glActiveTexture(GL_TEXTURE12);
+	glBindTexture(GL_TEXTURE_2D, texture12);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Red
+	img_data = stbi_load("Red.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load Red...");
+
+	unsigned int texture13;
+	glGenTextures(1, &texture13);
+
+	glActiveTexture(GL_TEXTURE13);
+	glBindTexture(GL_TEXTURE_2D, texture13);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Green
+	img_data = stbi_load("Green.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load Green...");
+
+	unsigned int texture14;
+	glGenTextures(1, &texture14);
+
+	glActiveTexture(GL_TEXTURE14);
+	glBindTexture(GL_TEXTURE_2D, texture14);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
 }

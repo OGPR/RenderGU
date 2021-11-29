@@ -314,6 +314,7 @@ int main()
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
 				visualiseDepthBuffer,
+				12,
 				model,
 				view,
 				projection);
@@ -326,6 +327,7 @@ int main()
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
 				visualiseDepthBuffer,
+				13,
 				model,
 				view,
 				projection);
@@ -343,6 +345,7 @@ int main()
 				shaderProgramFloor,
 				VAO_Floor,
 				visualiseDepthBuffer,
+				14,
 				model,
 				view,
 				projection);
@@ -365,6 +368,7 @@ int main()
 					shaderProgram_Cube_SingleColor,
 					VAO_Cube,
 					visualiseDepthBuffer,
+					12,
 					model,
 					view,
 					projection);
@@ -378,6 +382,7 @@ int main()
 					shaderProgram_Cube_SingleColor,
 					VAO_Cube,
 					visualiseDepthBuffer,
+					12,
 					model,
 					view,
 					projection);
@@ -390,6 +395,7 @@ int main()
 					shaderProgramFloor,
 					VAO_Floor,
 					visualiseDepthBuffer,
+					14,
 					model,
 					view,
 					projection);

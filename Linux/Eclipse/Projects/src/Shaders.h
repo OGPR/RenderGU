@@ -544,8 +544,8 @@ const char* fragmentShaderSource_SimpleQuad =
     	//FragColor = vec4(vec3(1.0f - texture(Texture, TexCoord)),1.0f);
 
     	//Greyscale
-    	float average = (FragColor.r + FragColor.g + FragColor.b)/3.0f;
-    	FragColor = vec4(vec3(average),1.0f);
+    	//float average = (FragColor.r + FragColor.g + FragColor.b)/3.0f;
+    	//FragColor = vec4(vec3(average),1.0f);
     }
 );
 
