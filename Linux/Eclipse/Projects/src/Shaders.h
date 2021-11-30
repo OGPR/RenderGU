@@ -533,16 +533,16 @@ const char* fragmentShaderSource_SimpleQuad =
     out vec4 FragColor;
 
     uniform sampler2D Texture;
+    uniform float scrollDistance;
 
 
     void main()
     {
-    	// Original
-		if (TexCoord.t < 0.5f && TexCoord.s < 0.01f)
+    	//// Scrolling Effect
+
+		if (TexCoord.t >= 0 && TexCoord.t > 1 - scrollDistance)
 			FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
 
-		else if (TexCoord.t < 0.5f && TexCoord.s > 0.05f && TexCoord.s < 0.06f)
-			FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
 		else
 			FragColor = vec4(texture(Texture, TexCoord));
 
