@@ -509,12 +509,13 @@ void render_draw_SimpleQuad(
     glUseProgram(shaderProgram);
     glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9 );
 
+	/*
 	GLint LocScrollDistance = glGetUniformLocation(shaderProgram, "scrollDistance");
 	if (LocScrollDistance !=-1)
 		glUniform1f(LocScrollDistance, scrollDistance);
 	else
 		glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 15);
-
+	*/
 
     glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

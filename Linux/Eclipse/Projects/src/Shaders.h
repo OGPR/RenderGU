@@ -535,16 +535,50 @@ const char* fragmentShaderSource_SimpleQuad =
     uniform sampler2D Texture;
     uniform float scrollDistance;
 
+    // For sharpening
+    const float offset = 1.f/300.f;
 
     void main()
     {
-    	//// Scrolling Effect
+    	// Original
+		//FragColor = vec4(texture(Texture, TexCoord));
 
+		//// Sharpen
+		vec2 offsets[9] = vec2[]
+		(
+		    vec2(-offset, offset), vec2(0.0f, offset), vec2(offset,  offset),
+		    vec2(-offset,   0.0f), vec2(0.0f, 0.0f),   vec2(offset,    0.0f),
+		    vec2(-offset, -offset),vec2(0.0f, -offset),  vec2(offset, -offset)
+		);
+
+		vec3 texSample[9];
+		for(int i = 0; i < 9; ++i)
+			texSample[i] = vec3(texture(Texture, TexCoord + offsets[i]));
+
+		float sharpenKernel[9] = float[]
+		(
+            -1, -1, -1,
+            -1,  9, -1,
+            -1, -1, -1
+        );
+
+
+		vec3 color = vec3(0.0f);
+		for (int i = 0; i < 9; ++i)
+			color += texSample[i] * sharpenKernel[i];
+
+		FragColor = vec4(color, 1.0f);
+
+
+
+		//// Scrolling Effect
+    	/*
 		if (TexCoord.t >= 0 && TexCoord.t > 1 - scrollDistance)
 			FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
 
 		else
 			FragColor = vec4(texture(Texture, TexCoord));
+		*/
 
     	//Inversion
     	//FragColor = vec4(vec3(1.0f - texture(Texture, TexCoord)),1.0f);
