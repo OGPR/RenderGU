@@ -564,6 +564,7 @@ const char* fragmentShaderSource_SimpleQuad =
         );
         */
 
+		/*
 		// Divide by 16 when setting color vec below
 		float blurKernel[9] = float[]
 		(
@@ -571,12 +572,20 @@ const char* fragmentShaderSource_SimpleQuad =
             2,  4, 2,
             1, 2, 1
         );
+        */
 
+		float edgeDetKernel[9] = float[]
+		(
+            1, 1, 1,
+            1,  -8, 1,
+            1, 1, 1
+        );
 
 		vec3 color = vec3(0.0f);
 		for (int i = 0; i < 9; ++i)
 			//color += texSample[i] * sharpenKernel[i];
-			color += texSample[i] * blurKernel[i]/16.f;
+			//color += texSample[i] * blurKernel[i]/16.f;
+			color += texSample[i] * edgeDetKernel[i];
 
 		FragColor = vec4(color, 1.0f);
 
