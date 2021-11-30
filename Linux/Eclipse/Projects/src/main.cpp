@@ -41,7 +41,7 @@ int main()
     WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-    Window* window = CreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    Window* window = CreateWindow(800, 600, "RenderGU", NULL, NULL);
     if (!window)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
