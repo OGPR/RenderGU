@@ -555,17 +555,28 @@ const char* fragmentShaderSource_SimpleQuad =
 		for(int i = 0; i < 9; ++i)
 			texSample[i] = vec3(texture(Texture, TexCoord + offsets[i]));
 
+		/*
 		float sharpenKernel[9] = float[]
 		(
             -1, -1, -1,
             -1,  9, -1,
             -1, -1, -1
         );
+        */
+
+		// Divide by 16 when setting color vec below
+		float blurKernel[9] = float[]
+		(
+            1, 2, 1,
+            2,  4, 2,
+            1, 2, 1
+        );
 
 
 		vec3 color = vec3(0.0f);
 		for (int i = 0; i < 9; ++i)
-			color += texSample[i] * sharpenKernel[i];
+			//color += texSample[i] * sharpenKernel[i];
+			color += texSample[i] * blurKernel[i]/16.f;
 
 		FragColor = vec4(color, 1.0f);
 
