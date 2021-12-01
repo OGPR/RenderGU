@@ -585,9 +585,9 @@ const char* fragmentShaderSource_SimpleQuad =
 		for (int i = 0; i < 9; ++i)
 			//color += texSample[i] * sharpenKernel[i];
 			//color += texSample[i] * blurKernel[i]/16.f;
-			color += texSample[i] * edgeDetKernel[i] + scrollDistance;
+			color += texSample[i] * edgeDetKernel[i];
 
-		FragColor = vec4(color, 1.0f);
+		FragColor = vec4(color + scrollDistance, 1.0f);
 
 
 
