@@ -535,7 +535,7 @@ const char* fragmentShaderSource_SimpleQuad =
     uniform sampler2D Texture;
     uniform float scrollDistance;
 
-    // For sharpening
+    // For kernel effects
     const float offset = 1.f/300.f;
 
     void main()
@@ -543,7 +543,7 @@ const char* fragmentShaderSource_SimpleQuad =
     	// Original
 		//FragColor = vec4(texture(Texture, TexCoord));
 
-		//// Sharpen
+		//// kernel effects
 		vec2 offsets[9] = vec2[]
 		(
 		    vec2(-offset, offset), vec2(0.0f, offset), vec2(offset,  offset),
