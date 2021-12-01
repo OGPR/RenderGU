@@ -509,13 +509,19 @@ void render_draw_SimpleQuad(
     glUseProgram(shaderProgram);
     glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9 );
 
-	/*
 	GLint LocScrollDistance = glGetUniformLocation(shaderProgram, "scrollDistance");
 	if (LocScrollDistance !=-1)
+	{
 		glUniform1f(LocScrollDistance, scrollDistance);
+
+	}
 	else
-		glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 15);
-	*/
+	{
+		printf("\"scrollDistance\": \n"
+				"does not correspond to an active uniform variable \n"
+				"starts with the reserved prefix \"gl_\" \n "
+				"or is associated with an atomic counter or named uniform block \n");
+	}
 
     glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
