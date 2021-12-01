@@ -232,7 +232,9 @@ int main()
 	GLuint rbo;
 	glGenRenderbuffers(1,&rbo);
 
-    // Game loop
+	float scrollDistance = 0.f;
+
+	// Game loop
     while (!WindowShouldClose(window))
     {
 		////---- 1st pass - off-screen render------
@@ -314,6 +316,7 @@ int main()
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
 				visualiseDepthBuffer,
+				0,
 				model,
 				view,
 				projection);
@@ -326,6 +329,7 @@ int main()
 				shaderProgram_Cube_no_mix,
 				VAO_Cube,
 				visualiseDepthBuffer,
+				0,
 				model,
 				view,
 				projection);
@@ -343,6 +347,7 @@ int main()
 				shaderProgramFloor,
 				VAO_Floor,
 				visualiseDepthBuffer,
+				5,
 				model,
 				view,
 				projection);
@@ -365,6 +370,7 @@ int main()
 					shaderProgram_Cube_SingleColor,
 					VAO_Cube,
 					visualiseDepthBuffer,
+					0,
 					model,
 					view,
 					projection);
@@ -378,6 +384,7 @@ int main()
 					shaderProgram_Cube_SingleColor,
 					VAO_Cube,
 					visualiseDepthBuffer,
+					0,
 					model,
 					view,
 					projection);
@@ -390,6 +397,7 @@ int main()
 					shaderProgramFloor,
 					VAO_Floor,
 					visualiseDepthBuffer,
+					5,
 					model,
 					view,
 					projection);
@@ -423,9 +431,12 @@ int main()
 		glDisable(GL_DEPTH_TEST); //TODO: needed?
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		scrollDistance += 0.1f * deltaTime;
 		render_draw_SimpleQuad(
 				shaderProgram_SimpleQuad,
-				VAO_SimpleQuad);
+				VAO_SimpleQuad,
+				scrollDistance);
 
 
 

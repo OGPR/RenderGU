@@ -307,6 +307,7 @@ void render_draw_indexArray(
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
+/*
 void render_draw_cube(
 		unsigned int shaderProgram,
 		unsigned int VAO,
@@ -328,18 +329,20 @@ void render_draw_cube(
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
+*/
 
 void render_draw_cube(
 		unsigned int shaderProgram,
 		unsigned int VAO,
 		bool visualiseDepthBuffer,
+		GLubyte activeTexture,
 		glm::mat4 model = glm::mat4(1.0f),
 		glm::mat4 view = glm::mat4(1.0f),
 		glm::mat4 projection = glm::mat4(1.0f)
 		)
 {
     glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 6);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), activeTexture);
     glUniform1i(glGetUniformLocation(shaderProgram, "visualiseDepthBuffer"), visualiseDepthBuffer);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -443,6 +446,7 @@ void render_draw_floor(
 		unsigned int shaderProgram,
 		unsigned int VAO,
 		bool visualiseDepthBuffer,
+		GLubyte activeTexture,
 		glm::mat4 model = glm::mat4(1.0f),
 		glm::mat4 view = glm::mat4(1.0f),
 		glm::mat4 projection = glm::mat4(1.0f)
@@ -453,7 +457,7 @@ void render_draw_floor(
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 5);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), activeTexture);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -499,11 +503,25 @@ void render_draw_rect_window(
 
 void render_draw_SimpleQuad(
 		unsigned int shaderProgram,
-		unsigned int VAO
-		)
+		unsigned int VAO,
+		float scrollDistance)
 {
     glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9 );
+
+	GLint LocScrollDistance = glGetUniformLocation(shaderProgram, "scrollDistance");
+	if (LocScrollDistance !=-1)
+	{
+		glUniform1f(LocScrollDistance, scrollDistance);
+
+	}
+	else
+	{
+		printf("\"scrollDistance\": \n"
+				"does not correspond to an active uniform variable \n"
+				"starts with the reserved prefix \"gl_\" \n "
+				"or is associated with an atomic counter or named uniform block \n");
+	}
 
     glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

@@ -227,4 +227,138 @@ void textureSetup(unsigned int* textureTarget)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
+	// Marble2
+	img_data = stbi_load("marble2.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load marble2...");
+
+	unsigned int texture10;
+	glGenTextures(1, &texture10);
+
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, texture10);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Metal2
+	img_data = stbi_load("metal2.png", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load metal2...");
+
+	unsigned int texture11;
+	glGenTextures(1, &texture11);
+
+	glActiveTexture(GL_TEXTURE11);
+	glBindTexture(GL_TEXTURE_2D, texture11);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Crash if second GL_RGB has A (I think this has happened before with a png above)
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Blue
+	img_data = stbi_load("Blue.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load blue...");
+
+	unsigned int texture12;
+	glGenTextures(1, &texture12);
+
+	glActiveTexture(GL_TEXTURE12);
+	glBindTexture(GL_TEXTURE_2D, texture12);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Red
+	img_data = stbi_load("Red.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load Red...");
+
+	unsigned int texture13;
+	glGenTextures(1, &texture13);
+
+	glActiveTexture(GL_TEXTURE13);
+	glBindTexture(GL_TEXTURE_2D, texture13);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// Green
+	img_data = stbi_load("Green.jpg", &img_width, &img_height, &img_nChannels, 0);
+
+	if (!img_data)
+		printf("Failed to load Green...");
+
+	unsigned int texture14;
+	glGenTextures(1, &texture14);
+
+	glActiveTexture(GL_TEXTURE14);
+	glBindTexture(GL_TEXTURE_2D, texture14);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
+
+	// ErrorShaderVar
+	stbi_set_flip_vertically_on_load(true);
+	img_data = stbi_load("ErrorShaderVar.jpg", &img_width, &img_height, &img_nChannels, 0);
+	stbi_set_flip_vertically_on_load(false);
+
+	if (!img_data)
+		printf("Failed to load ErrorShaderVar...");
+
+	unsigned int texture15;
+	glGenTextures(1, &texture15);
+
+	glActiveTexture(GL_TEXTURE15);
+	glBindTexture(GL_TEXTURE_2D, texture15);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(img_data);
 }
