@@ -587,6 +587,7 @@ int main()
 
 		scrollDistance = 0.0f;
 
+		model = glm::translate(model, glm::vec3(0.f, 0.7f, 0));
 		model = glm::scale(model, glm::vec3(0.1f, 0.2f, 0));
 		render_draw_SimpleQuad(
 				shaderProgram_SimpleQuad,
