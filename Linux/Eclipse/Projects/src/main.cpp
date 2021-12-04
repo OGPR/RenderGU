@@ -304,28 +304,20 @@ int main()
         }
         */
 
-		glm::vec4 cameraPos4Vec = glm::vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
 		glm::vec4 cameraLookDirection4Vec = glm::vec4(cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z, 1.0f);
 		glm::vec4 cameraCurrRotAngle4Vec = glm::vec4(cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z, 1.0f);
 
 		glm::mat4 cameraRotMatrix = glm::mat4(1.0f);
 		cameraRotMatrix = glm::rotate(cameraRotMatrix, glm::pi<float>(), glm::vec3(0.f,1.f,0.f));
 
-		//glm::mat4 cameraTransMatrix = glm::mat4(1.0f);
-		//cameraTransMatrix = glm::translate(cameraRotMatrix, glm::vec3(0.f,0.f,0.f));
-
-		cameraPos4Vec = cameraRotMatrix * cameraPos4Vec;
 		cameraLookDirection4Vec = cameraRotMatrix * cameraLookDirection4Vec;
 		cameraCurrRotAngle4Vec = cameraRotMatrix * cameraCurrRotAngle4Vec;
 
-
-
-		glm::vec3 cameraPos_reverse = cameraPos;
 		glm::vec3 cameraLookDirection_reverse = glm::vec3(cameraLookDirection4Vec);
 		glm::vec3 cameraCurrRotAngle_reverse = glm::vec3(cameraCurrRotAngle4Vec);
 
-
-		view = glm::lookAt(cameraPos_reverse, cameraPos_reverse + cameraLookDirection_reverse, cameraUp);
+        // To look behind, we have the rear-view at same pos, but looking the opposite way
+		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection_reverse, cameraUp);
 
 		// Write to stencil buffer where desired
 		// Cube 1
