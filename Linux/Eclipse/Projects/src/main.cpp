@@ -40,8 +40,8 @@ int main()
     WindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
     Window* window = CreateWindow(800, 600, "RenderGU", NULL, NULL);
+    glfwSetWindowPos(window, 2000, 250);
     if (!window)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
