@@ -155,8 +155,7 @@ int main()
     //** End simple quad render stuff
 
     unsigned int textureTarget = 0;
-    unsigned int textureTarget2 = 0;
-    textureSetup(&textureTarget, &textureTarget2);
+    textureSetup(&textureTarget);
 
 
 	//// Transformations
@@ -593,7 +592,7 @@ int main()
 				shaderProgram_SimpleQuad,
 				VAO_SimpleQuad,
 				scrollDistance,
-				9, model);
+				model);
 
 
 

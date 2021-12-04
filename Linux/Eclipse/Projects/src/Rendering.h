@@ -505,11 +505,10 @@ void render_draw_SimpleQuad(
 		unsigned int shaderProgram,
 		unsigned int VAO,
 		float scrollDistance,
-		GLubyte activeTexture = 9,
 		glm::mat4 model = glm::mat4(1.0f))
 {
     glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), activeTexture);
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9);
 
 	GLint LocScrollDistance = glGetUniformLocation(shaderProgram, "scrollDistance");
 	if (LocScrollDistance !=-1)

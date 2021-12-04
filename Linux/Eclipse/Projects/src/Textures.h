@@ -6,7 +6,7 @@
 #include "stb_image.h"
 
 // OpenGL Texture Set up
-void textureSetup(unsigned int* textureTarget, unsigned int* textureTarget2)
+void textureSetup(unsigned int* textureTarget)
 {
 	int img_width, img_height, img_nChannels;
 	unsigned char* img_data = stbi_load("container.jpg", &img_width, &img_height, &img_nChannels,0);
@@ -361,16 +361,4 @@ void textureSetup(unsigned int* textureTarget, unsigned int* textureTarget2)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(img_data);
-
-	// Texture target2 (texture framebuffer attachment)
-
-	glGenTextures(1, textureTarget2);
-
-	glActiveTexture(GL_TEXTURE16); // Need this or this will overwrite the current active texture (GL_TEXTURE8) in this case
-	glBindTexture(GL_TEXTURE_2D, *textureTarget2);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 }
