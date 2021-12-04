@@ -245,8 +245,6 @@ int main()
 	glGenFramebuffers(1,&fbo_1);
 	GLuint rbo;
 	glGenRenderbuffers(1,&rbo);
-	GLuint rbo_1;
-	glGenRenderbuffers(1,&rbo_1);
 
 	float scrollDistance = 0.f;
 
@@ -319,8 +317,22 @@ int main()
         }
         */
 
+		glm::mat4 cameraRotMatrix = glm::mat4(1.0f);
+		//cameraPos = glm::vec3(0.0f, 0.0f, 3.f);
+		//cameraLookDirection = glm::vec3(0.0f, 0.0f, -1.f);
+		cameraRotMatrix = glm::rotate(cameraRotMatrix, glm::pi<float>(), glm::vec3(0.f,1.f,0.f));
+		glm::vec4 cameraPos4Vec = glm::vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+		glm::vec4 cameraLookDirection4Vec = glm::vec4(cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z, 1.0f);
+		glm::vec4 cameraCurrRotAngle4Vec = glm::vec4(cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z, 1.0f);
+		cameraPos4Vec = cameraRotMatrix * cameraPos4Vec;
+		cameraLookDirection4Vec = cameraRotMatrix * cameraLookDirection4Vec;
+		cameraCurrRotAngle4Vec = cameraRotMatrix * cameraCurrRotAngle4Vec;
+		glm::vec3 cameraPos_reverse = glm::vec3(cameraPos4Vec);
+		glm::vec3 cameraLookDirection_reverse = glm::vec3(cameraLookDirection4Vec);
+		glm::vec3 cameraCurrRotAngle_reverse = glm::vec3(cameraCurrRotAngle4Vec);
 
-		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+		view = glm::lookAt(cameraPos_reverse, cameraPos_reverse + cameraLookDirection_reverse, cameraUp);
 
 		// Write to stencil buffer where desired
 		// Cube 1
@@ -442,26 +454,9 @@ int main()
 
 
 		/// Rear-view mirror rendering
-		// TODO - extract into function. Also consider threading
-		// We do everything as above, but with the reversed cameraPos and LookDirection
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    	printf("tex target2\n");
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo_1);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget2, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		// Create renderbuffer for attaching depth to currently bound framebuffer
-		glBindRenderbuffer(GL_RENDERBUFFER, rbo_1);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
-		assert(glGetError() == 0);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo_1);
-		CheckFramebufferStatus();
-
-        if(++frameNumber == 1)
-		{
-        	cameraPos = cameraPos_reverse;
-			cameraLookDirection = cameraLookDirection_reverse;
-			cameraCurrRotAngle = cameraCurrRotAngle_reverse;
-		}
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
@@ -592,26 +587,19 @@ int main()
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // non-black, to see wireframe
 		glDisable(GL_DEPTH_TEST); //TODO: needed?
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		//scrollDistance += 0.1f * deltaTime;
 
 		scrollDistance = 0.0f;
-		render_draw_SimpleQuad(
-				shaderProgram_SimpleQuad,
-				VAO_SimpleQuad,
-				scrollDistance);
 
-		/*
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0));
+		model = glm::scale(model, glm::vec3(0.1f, 0.2f, 0));
 		render_draw_SimpleQuad(
 				shaderProgram_SimpleQuad,
 				VAO_SimpleQuad,
 				scrollDistance,
-				16, model
-				);
+				9, model);
 
-    */
 
 
 		// Position prints
