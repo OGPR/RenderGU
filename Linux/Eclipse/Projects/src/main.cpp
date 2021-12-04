@@ -218,6 +218,8 @@ int main()
 	cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
 	cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
 	cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+    CameraYaw = cameraCurrRotAngle.y;
+    CameraPitch = cameraCurrRotAngle.x;
 
 
 
@@ -304,20 +306,19 @@ int main()
         }
         */
 
-		glm::vec4 cameraLookDirection4Vec = glm::vec4(cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z, 1.0f);
-		glm::vec4 cameraCurrRotAngle4Vec = glm::vec4(cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z, 1.0f);
-
-		glm::mat4 cameraRotMatrix = glm::mat4(1.0f);
-		cameraRotMatrix = glm::rotate(cameraRotMatrix, glm::pi<float>(), glm::vec3(0.f,1.f,0.f));
-
-		cameraLookDirection4Vec = cameraRotMatrix * cameraLookDirection4Vec;
-		cameraCurrRotAngle4Vec = cameraRotMatrix * cameraCurrRotAngle4Vec;
-
-		glm::vec3 cameraLookDirection_reverse = glm::vec3(cameraLookDirection4Vec);
-		glm::vec3 cameraCurrRotAngle_reverse = glm::vec3(cameraCurrRotAngle4Vec);
 
         // To look behind, we have the rear-view at same pos, but looking the opposite way
-		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection_reverse, cameraUp);
+        CameraYaw += glm::pi<float>();
+
+        // Left/Down to update values, Right/Up to reset to where we were
+        YawLeft(&cameraLookDirection, deltaTime);
+        YawRight(&cameraLookDirection, deltaTime);
+        view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+        // Camera Yaw back to original
+        CameraYaw -= glm::pi<float>();
+        YawLeft(&cameraLookDirection, deltaTime);
+        YawRight(&cameraLookDirection, deltaTime);
 
 		// Write to stencil buffer where desired
 		// Cube 1
