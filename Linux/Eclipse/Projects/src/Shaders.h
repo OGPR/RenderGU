@@ -518,11 +518,12 @@ const char* vertexShaderSource_SimpleQuad =
 
     out vec2 TexCoord;
 
-    // NDC assumed, no need for matrices
+    uniform mat4 model;
+
 
     void main()
     {
-    	gl_Position = vec4(aPos , 1.0);
+    	gl_Position =  model * vec4(aPos , 1.0);
         TexCoord = aTexCoord;
     }
 );
