@@ -542,7 +542,8 @@ const char* fragmentShaderSource_SimpleQuad =
     void main()
     {
     	// Original
-		//FragColor = vec4(texture(Texture, TexCoord));
+		FragColor = vec4(texture(Texture, vec2(1.0f - TexCoord.s, TexCoord.t)));
+		return;
 
 		//// kernel effects
 		vec2 offsets[9] = vec2[]

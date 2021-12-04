@@ -221,19 +221,7 @@ int main()
 	cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
 
 
-	glm::mat4 cameraRotMatrix = glm::mat4(1.0f);
-	//cameraPos = glm::vec3(0.0f, 0.0f, 3.f);
-	//cameraLookDirection = glm::vec3(0.0f, 0.0f, -1.f);
-	cameraRotMatrix = glm::rotate(cameraRotMatrix, glm::pi<float>(), glm::vec3(0.f,1.f,0.f));
-	glm::vec4 cameraPos4Vec = glm::vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-	glm::vec4 cameraLookDirection4Vec = glm::vec4(cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z, 1.0f);
-	glm::vec4 cameraCurrRotAngle4Vec = glm::vec4(cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z, 1.0f);
-	cameraPos4Vec = cameraRotMatrix * cameraPos4Vec;
-	cameraLookDirection4Vec = cameraRotMatrix * cameraLookDirection4Vec;
-	cameraCurrRotAngle4Vec = cameraRotMatrix * cameraCurrRotAngle4Vec;
-	glm::vec3 cameraPos_reverse = glm::vec3(cameraPos4Vec);
-	glm::vec3 cameraLookDirection_reverse = glm::vec3(cameraLookDirection4Vec);
-	glm::vec3 cameraCurrRotAngle_reverse = glm::vec3(cameraCurrRotAngle4Vec);
+
 
     glEnable(GL_STENCIL_TEST);
 
@@ -317,17 +305,23 @@ int main()
         }
         */
 
-		glm::mat4 cameraRotMatrix = glm::mat4(1.0f);
-		//cameraPos = glm::vec3(0.0f, 0.0f, 3.f);
-		//cameraLookDirection = glm::vec3(0.0f, 0.0f, -1.f);
-		cameraRotMatrix = glm::rotate(cameraRotMatrix, glm::pi<float>(), glm::vec3(0.f,1.f,0.f));
 		glm::vec4 cameraPos4Vec = glm::vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
 		glm::vec4 cameraLookDirection4Vec = glm::vec4(cameraLookDirection.x, cameraLookDirection.y, cameraLookDirection.z, 1.0f);
 		glm::vec4 cameraCurrRotAngle4Vec = glm::vec4(cameraCurrRotAngle.x, cameraCurrRotAngle.y, cameraCurrRotAngle.z, 1.0f);
+
+		glm::mat4 cameraRotMatrix = glm::mat4(1.0f);
+		cameraRotMatrix = glm::rotate(cameraRotMatrix, glm::pi<float>(), glm::vec3(0.f,1.f,0.f));
+
+		//glm::mat4 cameraTransMatrix = glm::mat4(1.0f);
+		//cameraTransMatrix = glm::translate(cameraRotMatrix, glm::vec3(0.f,0.f,0.f));
+
 		cameraPos4Vec = cameraRotMatrix * cameraPos4Vec;
 		cameraLookDirection4Vec = cameraRotMatrix * cameraLookDirection4Vec;
 		cameraCurrRotAngle4Vec = cameraRotMatrix * cameraCurrRotAngle4Vec;
-		glm::vec3 cameraPos_reverse = glm::vec3(cameraPos4Vec);
+
+
+
+		glm::vec3 cameraPos_reverse = cameraPos;
 		glm::vec3 cameraLookDirection_reverse = glm::vec3(cameraLookDirection4Vec);
 		glm::vec3 cameraCurrRotAngle_reverse = glm::vec3(cameraCurrRotAngle4Vec);
 
