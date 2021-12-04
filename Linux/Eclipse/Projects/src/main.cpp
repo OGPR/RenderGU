@@ -311,15 +311,25 @@ int main()
         CameraYaw += glm::pi<float>();
 
         // Left/Down to update values, Right/Up to reset to where we were
+        // TODO create an update function
         YawLeft(&cameraLookDirection, deltaTime);
         YawRight(&cameraLookDirection, deltaTime);
-        view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
         // Camera Yaw back to original
         CameraYaw -= glm::pi<float>();
         YawLeft(&cameraLookDirection, deltaTime);
         YawRight(&cameraLookDirection, deltaTime);
 
+        CameraPitch += glm::pi<float>();
+        PitchDown(&cameraLookDirection, deltaTime);
+        PitchUp(&cameraLookDirection, deltaTime);
+
+        view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+
+        CameraPitch -= glm::pi<float>();
+        PitchDown(&cameraLookDirection, deltaTime);
+        PitchUp(&cameraLookDirection, deltaTime);
 		// Write to stencil buffer where desired
 		// Cube 1
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
