@@ -260,8 +260,10 @@ int main()
     	lastFrameTime = currFrameTime;
 
         //// input
-        processInput(window,
+        processInputCamera(window,
                      &cameraVariables,
+                     deltaTime);
+        processInput(window,
                      deltaTime);
 
         if (depthTest)

@@ -43,11 +43,10 @@ static bool isLightPoint = false;
 static bool isLightSpot = false;
 static bool attenuation = false;
 
-void processInput(GLFWwindow *window,
+void processInputCamera(GLFWwindow *window,
                   CameraVariables* cameraVariables,
                   float deltaTime)
 {
-    // TODO still process other input if no camera
     if (!cameraVariables)
         return;
 
@@ -220,7 +219,6 @@ void processInput(GLFWwindow *window,
     if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
     {
-    	// TODO come back to this;
         cameraVariables->cameraPos = cameraVariables->cameraPosHome;
         cameraVariables->cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), glm::pi<float>(), 0.f);
         cameraVariables->cameraYaw = cameraVariables->cameraCurrRotAngle.y;
@@ -340,6 +338,182 @@ void processInput(GLFWwindow *window,
     {
     	f2_pressed = true;
     	stencilTest = !stencilTest;
+    }
+
+}
+
+void processInput(GLFWwindow *window,
+                  float deltaTime)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_RELEASE && l_pressed)
+        l_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && f_pressed)
+        l_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && z_pressed)
+        z_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !l_pressed && !wireframeMode)
+    {
+        l_pressed = true;
+        wireframeMode = true;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !l_pressed && wireframeMode)
+    {
+        l_pressed = true;
+        wireframeMode = false;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && !vertFlip)
+    {
+        f_pressed = true;
+        vertFlip = true;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !f_pressed && vertFlip)
+    {
+        f_pressed = true;
+        vertFlip = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !z_pressed && !depthTest)
+    {
+        z_pressed = true;
+        depthTest = true;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !z_pressed && depthTest)
+    {
+        z_pressed = true;
+        depthTest = false;
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        texture2Amount += 0.0025f;
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        texture2Amount -= 0.0025f;
+
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+        texture2Amount = 0.2f;
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && p_pressed)
+        p_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_RELEASE && o_pressed)
+        o_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && !p_pressed)
+    {
+
+        p_pressed = true;
+        if (PhongExp != uintMax/2 + 1)
+            PhongExp <<= 1;
+        std::cout << PhongExp << std::endl;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS && !o_pressed)
+    {
+        o_pressed = true;
+        PhongExp >>= 1;
+        PhongExp = PhongExp >= 1 ? PhongExp : 1;
+        std::cout << PhongExp << std::endl;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+        PhongExp = 32;
+
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_RELEASE && _1_pressed)
+        _1_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE && _2_pressed)
+        _2_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_RELEASE && _3_pressed)
+        _3_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_RELEASE && _4_pressed)
+        _4_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_RELEASE && _5_pressed)
+        _5_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_RELEASE && _6_pressed)
+        _6_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_7) == GLFW_RELEASE && _7_pressed)
+        _7_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_RELEASE && f1_pressed)
+        f1_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_RELEASE && f2_pressed)
+        f2_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !_1_pressed)
+    {
+        _1_pressed = true;
+        ambientLight = !ambientLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !_2_pressed)
+    {
+        _2_pressed = true;
+        diffuseLight = !diffuseLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && !_3_pressed)
+    {
+        _3_pressed = true;
+        specularLight = !specularLight;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && !_4_pressed)
+    {
+        _4_pressed = true;
+        isLightDirectional = !isLightDirectional;
+        isLightPoint = false;
+        isLightSpot = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && !_5_pressed)
+    {
+        _5_pressed = true;
+        isLightPoint = !isLightPoint;
+        isLightDirectional = false;
+        isLightSpot = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && !_6_pressed)
+    {
+        _6_pressed = true;
+        isLightSpot = !isLightSpot;
+        isLightDirectional = false;
+        isLightPoint = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && !_7_pressed)
+    {
+        _7_pressed = true;
+        attenuation = !attenuation;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS && !f1_pressed)
+    {
+        f1_pressed = true;
+        visualiseDepthBuffer = !visualiseDepthBuffer;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS && !f2_pressed)
+    {
+        f2_pressed = true;
+        stencilTest = !stencilTest;
     }
 
 }
