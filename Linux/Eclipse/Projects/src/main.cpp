@@ -215,11 +215,12 @@ int main()
 
     // From print statements in loop below
     // Set up camera for depth/stencil buffer work
-	cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
-	cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
-	cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
-    CameraYaw = cameraCurrRotAngle.y;
-    CameraPitch = cameraCurrRotAngle.x;
+    CameraVariables cameraVariables;
+	cameraVariables.cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
+    cameraVariables.cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
+    cameraVariables.cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+    cameraVariables.cameraYaw = cameraVariables.cameraCurrRotAngle.y;
+    cameraVariables.cameraPitch = cameraVariables.cameraCurrRotAngle.x;
 
 
 
@@ -259,7 +260,9 @@ int main()
     	lastFrameTime = currFrameTime;
 
         //// input
-        processInput(window, deltaTime);
+        processInput(window,
+                     &cameraVariables,
+                     deltaTime);
 
         if (depthTest)
         {
@@ -309,15 +312,21 @@ int main()
 
         // To look behind, we have the rear-view at same pos, but looking the opposite way
         // Changing the camera look direction via pitch will give the desired result.
-        UpdateCameraLookDirection(&cameraLookDirection,
-                                  &CameraPitch,
+        UpdateCameraLookDirection(&cameraVariables.cameraLookDirection,
+                                  &cameraVariables.cameraYaw,
+                                  &cameraVariables.cameraPitch,
+                                  &cameraVariables.cameraPitch,
                                   glm::pi<float>());
 
-        view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+        view = glm::lookAt(cameraVariables.cameraPos,
+                           cameraVariables.cameraPos + cameraVariables.cameraLookDirection,
+                           cameraVariables.cameraUp);
 
         // Reset look direction to original
-        UpdateCameraLookDirection(&cameraLookDirection,
-                                  &CameraPitch,
+        UpdateCameraLookDirection(&cameraVariables.cameraLookDirection,
+                                  &cameraVariables.cameraYaw,
+                                  &cameraVariables.cameraPitch,
+                                  &cameraVariables.cameraPitch,
                                   -glm::pi<float>());
 
 
@@ -441,11 +450,14 @@ int main()
 
 
 		/// Rendering scene as normal
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 
-		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+        view = glm::lookAt(cameraVariables.cameraPos,
+                           cameraVariables.cameraPos + cameraVariables.cameraLookDirection,
+                           cameraVariables.cameraUp);
 
 				// Write to stencil buffer where desired
 				// Cube 1
