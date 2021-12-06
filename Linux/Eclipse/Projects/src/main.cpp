@@ -23,6 +23,7 @@
 #include "VertexSpecification.h"
 #include <assert.h>
 #include "Camera.h"
+#include "Window.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -35,41 +36,7 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 int main()
 {
-    Init();
-    WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    WindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    Window* window = CreateWindow(800, 600, "RenderGU", NULL, NULL);
-    glfwSetWindowPos(window, 2000, 250);
-    if (!window)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        Terminate();
-        return -1;
-    }
-
-    MakeContextCurrent(window);
-    //SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    //SetCursorPosCallback(window, mouse_callback);
-
-
-    int gladInitialise = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    if (!gladInitialise)
-    {
-        std::cout << "Failed to initialise GLAD" << std::endl;
-        std::cout << "Perhaps you have not called a \"MakeContextCurrent(window) \" function prior?" << std::endl;
-        return -1;
-    }
-
-    Viewport viewport;
-    viewport.LowerLeftX = 0;
-    viewport.LowerLeftY = 0;
-    viewport.Width = /*0.9 */ 800;
-    viewport.Height = /*0.9 */ 600;
-
-    glViewport(viewport.LowerLeftX, viewport.LowerLeftY, viewport.Width, viewport.Height);
-
+    GLFWwindow* window = Window();
 
     unsigned int shaderProgram = linkShaders(
         compileVertexShader(vertexShaderSource),

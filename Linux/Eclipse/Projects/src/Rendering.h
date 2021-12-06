@@ -6,16 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-/**
-* The rendering window
-*/
-struct Viewport
-{
-    GLint LowerLeftX = 0;
-    GLint LowerLeftY = 0;
-    GLsizei Width = 0;
-    GLsizei Height = 0;
-};
 
 unsigned int render_setup(float* vertex, unsigned int numberOfEntries)
 {

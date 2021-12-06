@@ -9,8 +9,6 @@
 #include<glad/glad.h> // Need glad before glew as it includes OpenGL headers
 #include<GLFW/glfw3.h>
 
-using Window = GLFWwindow;
-
 int Init()
 {
     return glfwInit();
