@@ -504,10 +504,11 @@ void render_draw_rect_window(
 void render_draw_SimpleQuad(
 		unsigned int shaderProgram,
 		unsigned int VAO,
-		float scrollDistance)
+		float scrollDistance,
+		glm::mat4 model = glm::mat4(1.0f))
 {
     glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9 );
+    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), 9);
 
 	GLint LocScrollDistance = glGetUniformLocation(shaderProgram, "scrollDistance");
 	if (LocScrollDistance !=-1)
@@ -522,6 +523,8 @@ void render_draw_SimpleQuad(
 				"starts with the reserved prefix \"gl_\" \n "
 				"or is associated with an atomic counter or named uniform block \n");
 	}
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
     glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

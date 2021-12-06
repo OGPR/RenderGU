@@ -32,7 +32,6 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 
 
-
 int main()
 {
     Init();
@@ -219,6 +218,10 @@ int main()
 	cameraPos = glm::vec3(-3.255120, 0.596114, -0.690018);
 	cameraLookDirection = glm::vec3(0.972760, -0.231807, -0.001899);
 	cameraCurrRotAngle = glm::vec3(1.804731, 1.572749, 0.000000);
+    CameraYaw = cameraCurrRotAngle.y;
+    CameraPitch = cameraCurrRotAngle.x;
+
+
 
 
     glEnable(GL_STENCIL_TEST);
@@ -239,7 +242,7 @@ int main()
     {
 		////---- 1st pass - off-screen render------
 
-    	printf("tex target\n");
+    	printf("tex target1\n");
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
@@ -303,7 +306,20 @@ int main()
         }
         */
 
-		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+        // To look behind, we have the rear-view at same pos, but looking the opposite way
+        // Changing the camera look direction via pitch will give the desired result.
+        UpdateCameraLookDirection(&cameraLookDirection,
+                                  &CameraPitch,
+                                  glm::pi<float>());
+
+        view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+        // Reset look direction to original
+        UpdateCameraLookDirection(&cameraLookDirection,
+                                  &CameraPitch,
+                                  -glm::pi<float>());
+
 
 		// Write to stencil buffer where desired
 		// Cube 1
@@ -423,6 +439,134 @@ int main()
 				);
 		glDisable(GL_BLEND);
 
+
+		/// Rendering scene as normal
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+
+		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
+
+				// Write to stencil buffer where desired
+				// Cube 1
+				glStencilFunc(GL_ALWAYS, 1, 0xFF);
+				glStencilMask(0xFF);
+				glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+				model = glm::mat4(1.f);
+				model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+				render_draw_cube(
+						shaderProgram_Cube_no_mix,
+						VAO_Cube,
+						visualiseDepthBuffer,
+						0,
+						model,
+						view,
+						projection);
+
+				// Cube 2
+				glEnable(GL_CULL_FACE);
+				model = glm::mat4(1.f);
+				model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+				render_draw_cube(
+						shaderProgram_Cube_no_mix,
+						VAO_Cube,
+						visualiseDepthBuffer,
+						0,
+						model,
+						view,
+						projection);
+
+				glDisable(GL_CULL_FACE);
+
+				// Floor
+				glStencilMask(0x00); // only cubes for now
+				model = glm::mat4(1.f);
+				model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+
+
+
+				render_draw_floor(
+						shaderProgramFloor,
+						VAO_Floor,
+						visualiseDepthBuffer,
+						5,
+						model,
+						view,
+						projection);
+
+
+				if (stencilTest)
+				{
+					// Another render pass, borders/outlining
+					// Cube 1
+					glStencilFunc(GL_NOTEQUAL, 1 , 0xFF);
+					//glStencilMask(0xFF);
+					//glDisable(GL_DEPTH_TEST);
+					glDepthFunc(GL_LESS);
+					float scale = 1.1f;
+
+					model = glm::mat4(1.f);
+					model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+					model = glm::scale(model, glm::vec3(scale, scale, scale));
+					render_draw_cube(
+							shaderProgram_Cube_SingleColor,
+							VAO_Cube,
+							visualiseDepthBuffer,
+							0,
+							model,
+							view,
+							projection);
+					glDepthFunc(GL_LESS);
+
+					// Cube 2
+					model = glm::mat4(1.f);
+					model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+					model = glm::scale(model, glm::vec3(scale, scale, scale));
+					render_draw_cube(
+							shaderProgram_Cube_SingleColor,
+							VAO_Cube,
+							visualiseDepthBuffer,
+							0,
+							model,
+							view,
+							projection);
+					//glEnable(GL_DEPTH_TEST);
+
+					// Floor
+					model = glm::mat4(1.f);
+					model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
+					render_draw_floor(
+							shaderProgramFloor,
+							VAO_Floor,
+							visualiseDepthBuffer,
+							5,
+							model,
+							view,
+							projection);
+					}
+
+				// Transparency
+				render_draw_rect_transparency(
+						shaderProgram_Rect_Transparency,
+						VAO_Quad,
+						modelQuad,
+						view,
+						projection
+						);
+
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				render_draw_rect_window(
+						shaderProgram_Rect_Window,
+						VAO_Window,
+						modelWindow,
+						view,
+						projection
+						);
+				glDisable(GL_BLEND);
+
+
+
     	////---- On Screen render pass - render simple quad with scene texture
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		//CheckFramebufferStatus();
@@ -430,13 +574,19 @@ int main()
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // non-black, to see wireframe
 		glDisable(GL_DEPTH_TEST); //TODO: needed?
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		scrollDistance += 0.1f * deltaTime;
+		//scrollDistance += 0.1f * deltaTime;
+
+		scrollDistance = 0.0f;
+
+		model = glm::translate(model, glm::vec3(0.f, 0.7f, 0));
+		model = glm::scale(model, glm::vec3(0.1f, 0.2f, 0));
 		render_draw_SimpleQuad(
 				shaderProgram_SimpleQuad,
 				VAO_SimpleQuad,
-				scrollDistance);
+				scrollDistance,
+				model);
 
 
 

@@ -518,11 +518,12 @@ const char* vertexShaderSource_SimpleQuad =
 
     out vec2 TexCoord;
 
-    // NDC assumed, no need for matrices
+    uniform mat4 model;
+
 
     void main()
     {
-    	gl_Position = vec4(aPos , 1.0);
+    	gl_Position =  model * vec4(aPos , 1.0);
         TexCoord = aTexCoord;
     }
 );
@@ -541,7 +542,8 @@ const char* fragmentShaderSource_SimpleQuad =
     void main()
     {
     	// Original
-		//FragColor = vec4(texture(Texture, TexCoord));
+		FragColor = vec4(texture(Texture, vec2(1.0f - TexCoord.s, TexCoord.t)));
+		return;
 
 		//// kernel effects
 		vec2 offsets[9] = vec2[]

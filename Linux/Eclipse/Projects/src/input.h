@@ -59,6 +59,58 @@ static bool isLightPoint = false;
 static bool isLightSpot = false;
 static bool attenuation = false;
 
+//// Camera Functions
+//TODO put into separate camera code
+float CameraYaw = cameraCurrRotAngle.y;
+float CameraPitch = cameraCurrRotAngle.x;
+
+void UpdateCameraLookDirection(glm::vec3* CameraLookDirection,
+                               float *AngleToUpdate,
+                               float Change)
+{
+    *AngleToUpdate += Change;
+
+    CameraLookDirection->x = sin(CameraPitch)*sin(CameraYaw);
+    CameraLookDirection->z = sin(CameraPitch)*cos(CameraYaw);
+    CameraLookDirection->y = cos(CameraPitch);
+}
+void YawLeft(glm::vec3* CameraLookDirection, float deltaTime)
+{
+    CameraYaw += cameraRotateStep.y * deltaTime;
+
+    CameraLookDirection->x = sin(CameraPitch)*sin(CameraYaw);
+    CameraLookDirection->z = sin(CameraPitch)*cos(CameraYaw);
+}
+
+void YawRight(glm::vec3* CameraLookDirection, float deltaTime)
+{
+    CameraYaw -= cameraRotateStep.y *deltaTime;
+
+    CameraLookDirection->x = sin(CameraPitch) * sin(CameraYaw);
+    CameraLookDirection->z = sin(CameraPitch) * cos(CameraYaw);
+}
+
+void PitchUp(glm::vec3* CameraLookDirection, float deltaTime)
+{
+    CameraPitch -= cameraRotateStep.x * deltaTime;
+
+    CameraLookDirection->x = sin(CameraPitch)*sin(CameraYaw);
+    CameraLookDirection->z = sin(CameraPitch)*cos(CameraYaw);
+    CameraLookDirection->y = cos(CameraPitch);
+
+}
+
+void PitchDown(glm::vec3* CameraLookDirection, float deltaTime)
+{
+    CameraPitch += cameraRotateStep.x * deltaTime;
+
+    CameraLookDirection->x = sin(CameraPitch)*sin(CameraYaw);
+    CameraLookDirection->z = sin(CameraPitch)*cos(CameraYaw);
+    CameraLookDirection->y = cos(CameraPitch);
+
+}
+////
+
 void processInput(GLFWwindow *window, float deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -142,40 +194,25 @@ void processInput(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-
-    	cameraCurrRotAngle.y += cameraRotateStep.y * deltaTime;
-
-    	cameraLookDirection.x = sin(cameraCurrRotAngle.x)*sin(cameraCurrRotAngle.y);
-    	cameraLookDirection.z = sin(cameraCurrRotAngle.x)*cos(cameraCurrRotAngle.y);
+        YawLeft(&cameraLookDirection, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.y -= cameraRotateStep.y * deltaTime;
-
-    	cameraLookDirection.x = sin(cameraCurrRotAngle.x)*sin(cameraCurrRotAngle.y);
-    	cameraLookDirection.z = sin(cameraCurrRotAngle.x)*cos(cameraCurrRotAngle.y);
+        YawRight(&cameraLookDirection, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x -= cameraRotateStep.x * deltaTime;
-
-    	cameraLookDirection.x = sin(cameraCurrRotAngle.x)*sin(cameraCurrRotAngle.y);
-    	cameraLookDirection.z = sin(cameraCurrRotAngle.x)*cos(cameraCurrRotAngle.y);
-    	cameraLookDirection.y = cos(cameraCurrRotAngle.x);
+        PitchUp(&cameraLookDirection, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS
     		|| glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-    	cameraCurrRotAngle.x += cameraRotateStep.x * deltaTime;
-
-    	cameraLookDirection.x = sin(cameraCurrRotAngle.x)*sin(cameraCurrRotAngle.y);
-    	cameraLookDirection.z = sin(cameraCurrRotAngle.x)*cos(cameraCurrRotAngle.y);
-    	cameraLookDirection.y = cos(cameraCurrRotAngle.x);
+        PitchDown(&cameraLookDirection, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
@@ -223,6 +260,8 @@ void processInput(GLFWwindow *window, float deltaTime)
     {
     	cameraPos = cameraPosHome;
     	cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), glm::pi<float>(), 0.f);
+        CameraYaw = cameraCurrRotAngle.y;
+        CameraPitch = cameraCurrRotAngle.x;
     	cameraLookDirection = cameraLookAtHome;
     	cameraUp = glm::vec3(0.f, 1.f, 0.f);
     }
