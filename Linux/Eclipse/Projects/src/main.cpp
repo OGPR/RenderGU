@@ -22,6 +22,7 @@
 #include "Textures.h"
 #include "VertexSpecification.h"
 #include <assert.h>
+#include "Camera.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
