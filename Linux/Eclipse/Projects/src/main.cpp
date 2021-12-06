@@ -308,18 +308,7 @@ int main()
 
 
         // To look behind, we have the rear-view at same pos, but looking the opposite way
-        CameraYaw += glm::pi<float>();
-
-        // Left/Down to update values, Right/Up to reset to where we were
-        // TODO create an update function
-        YawLeft(&cameraLookDirection, deltaTime);
-        YawRight(&cameraLookDirection, deltaTime);
-
-        // Camera Yaw back to original
-        CameraYaw -= glm::pi<float>();
-        YawLeft(&cameraLookDirection, deltaTime);
-        YawRight(&cameraLookDirection, deltaTime);
-
+        // Changing the camera look direction via pitch will give the desired result.
         CameraPitch += glm::pi<float>();
         PitchDown(&cameraLookDirection, deltaTime);
         PitchUp(&cameraLookDirection, deltaTime);
