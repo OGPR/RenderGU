@@ -63,6 +63,17 @@ static bool attenuation = false;
 //TODO put into separate camera code
 float CameraYaw = cameraCurrRotAngle.y;
 float CameraPitch = cameraCurrRotAngle.x;
+
+void UpdateCameraLookDirection(glm::vec3* CameraLookDirection,
+                               float *AngleToUpdate,
+                               float Change)
+{
+    *AngleToUpdate += Change;
+
+    CameraLookDirection->x = sin(CameraPitch)*sin(CameraYaw);
+    CameraLookDirection->z = sin(CameraPitch)*cos(CameraYaw);
+    CameraLookDirection->y = cos(CameraPitch);
+}
 void YawLeft(glm::vec3* CameraLookDirection, float deltaTime)
 {
     CameraYaw += cameraRotateStep.y * deltaTime;

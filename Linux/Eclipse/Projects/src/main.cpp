@@ -309,16 +309,18 @@ int main()
 
         // To look behind, we have the rear-view at same pos, but looking the opposite way
         // Changing the camera look direction via pitch will give the desired result.
-        CameraPitch += glm::pi<float>();
-        PitchDown(&cameraLookDirection, deltaTime);
-        PitchUp(&cameraLookDirection, deltaTime);
+        UpdateCameraLookDirection(&cameraLookDirection,
+                                  &CameraPitch,
+                                  glm::pi<float>());
 
         view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
 
+        // Reset look direction to original
+        UpdateCameraLookDirection(&cameraLookDirection,
+                                  &CameraPitch,
+                                  -glm::pi<float>());
 
-        CameraPitch -= glm::pi<float>();
-        PitchDown(&cameraLookDirection, deltaTime);
-        PitchUp(&cameraLookDirection, deltaTime);
+
 		// Write to stencil buffer where desired
 		// Cube 1
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
