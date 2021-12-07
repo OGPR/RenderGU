@@ -27,6 +27,7 @@
 #include "models/floor/model.h"
 #include "models/floor/vertex_specification.h"
 #include "models/floor/shaders.h"
+#include "Rendering_Common.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -179,10 +180,6 @@ int main()
 		glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
-    // Frame time management variables
-    float currFrameTime;
-    float lastFrameTime = 0.f;
-    float deltaTime;
 
     // From print statements in loop below
     // Set up camera for depth/stencil buffer work
@@ -209,9 +206,16 @@ int main()
 
 	float scrollDistance = 0.f;
 
-	// Game loop
+	//// Game loop
     while (!WindowShouldClose(window))
     {
+        //// input
+        processInputCamera(window,
+                           &cameraVariables,
+                           DeltaTime());
+        processInput(window,
+                     DeltaTime());
+
 		////---- 1st pass - off-screen render------
 
     	printf("tex target1\n");
@@ -226,16 +230,7 @@ int main()
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 		CheckFramebufferStatus();
 
-    	currFrameTime = glfwGetTime();
-    	deltaTime = currFrameTime - lastFrameTime;
-    	lastFrameTime = currFrameTime;
 
-        //// input
-        processInputCamera(window,
-                     &cameraVariables,
-                     deltaTime);
-        processInput(window,
-                     deltaTime);
 
         if (depthTest)
         {

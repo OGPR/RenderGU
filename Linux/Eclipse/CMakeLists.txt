@@ -28,7 +28,9 @@ add_executable(Eclipse
         Projects/src/Window.h
         Projects/src/models/floor/model.h
         Projects/src/models/floor/vertex_specification.h
-        Projects/src/models/floor/data.h Projects/src/models/floor/shaders.h)
+        Projects/src/models/floor/data.h
+        Projects/src/models/floor/shaders.h
+        Projects/src/Rendering_Common.h)
 
 
 target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)
