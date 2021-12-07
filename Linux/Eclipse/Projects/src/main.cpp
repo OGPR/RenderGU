@@ -28,6 +28,9 @@
 #include "models/floor/vertex_specification.h"
 #include "models/floor/shaders.h"
 #include "Rendering_Common.h"
+#include "models/model_render_data.h"
+#include "models/floor/render.h"
+
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -36,11 +39,29 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+//TODO move to separate file
+void RenderSetup(std::vector<ModelRenderData*> * modelRenderDataList)
+{
+    if (modelRenderDataList)
+    {
+        for (ModelRenderData* modelRenderData : *modelRenderDataList)
+        {
+            modelRenderData->ShaderProgram = linkShaders(
+                    compileVertexShader(modelRenderData->VertexShader),
+                    compileFragmentShader(modelRenderData->FragmentShader)
+                    );
 
+            modelRenderData->VAO = vertex_specification_floor(floor_model, 18 + 12);
+        }
+    }
+}
 
 int main()
 {
     GLFWwindow* window = Window();
+
+    RenderSetup(&modelRenderDataList);
+
 
     unsigned int shaderProgram = linkShaders(
         compileVertexShader(vertexShaderSource),
@@ -84,15 +105,6 @@ int main()
     unsigned int VAO_Cube_Raw_Target = render_setup_cube_raw(cube_raw, 8*6*6 );
     unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw_lightsource(cube_raw, 8*6*6);
 
-    //** Begin Floor stuff
-    unsigned int VAO_Floor = vertex_specification_floor(floor_model, 18 + 12);
-
-
-    unsigned int shaderProgramFloor = linkShaders(
-        compileVertexShader(vertexShaderFloor),
-        compileFragmentShader(fragmentShaderFloor));
-
-    //** End Floor stuff
 
     //** Begin Quad stuff
     unsigned int VAO_Quad = vs_quad(quad, 3*5 + 3*5);
@@ -336,9 +348,8 @@ int main()
 
 
 
-		render_draw_floor(
-				shaderProgramFloor,
-				VAO_Floor,
+		Render(floorRenderData.ShaderProgram,
+				floorRenderData.VAO,
 				visualiseDepthBuffer,
 				5,
 				model,
@@ -386,9 +397,8 @@ int main()
 			// Floor
 			model = glm::mat4(1.f);
 			model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-			render_draw_floor(
-					shaderProgramFloor,
-					VAO_Floor,
+			Render(floorRenderData.ShaderProgram,
+					floorRenderData.VAO,
 					visualiseDepthBuffer,
 					5,
 					model,
@@ -465,9 +475,8 @@ int main()
 
 
 
-				render_draw_floor(
-						shaderProgramFloor,
-						VAO_Floor,
+				Render(	floorRenderData.ShaderProgram,
+						floorRenderData.VAO,
 						visualiseDepthBuffer,
 						5,
 						model,
@@ -515,9 +524,8 @@ int main()
 					// Floor
 					model = glm::mat4(1.f);
 					model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-					render_draw_floor(
-							shaderProgramFloor,
-							VAO_Floor,
+					Render(floorRenderData.ShaderProgram,
+							floorRenderData.VAO,
 							visualiseDepthBuffer,
 							5,
 							model,
