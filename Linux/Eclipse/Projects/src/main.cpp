@@ -20,10 +20,13 @@
 #include <glm/gtc/constants.hpp>
 #include "input.h"
 #include "Textures.h"
-#include "VertexSpecification.h"
+#include "VertexSpecification_Common.h"
 #include <assert.h>
 #include "Camera.h"
 #include "Window.h"
+#include "models/floor/model.h"
+#include "models/floor/vertex_specification.h"
+#include "models/floor/shaders.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -81,7 +84,7 @@ int main()
     unsigned int VAO_Cube_Raw_LightSource = render_setup_cube_raw_lightsource(cube_raw, 8*6*6);
 
     //** Begin Floor stuff
-    unsigned int VAO_Floor = vs_floor(our_floor, 18 + 12);
+    unsigned int VAO_Floor = vertex_specification_floor(floor_model, 18 + 12);
 
 
     unsigned int shaderProgramFloor = linkShaders(
