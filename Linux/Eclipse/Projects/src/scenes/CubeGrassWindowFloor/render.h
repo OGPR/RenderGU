@@ -1,7 +1,6 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "models/model_render_data.h"
 
 #include "Utility.h"
 #include "Rendering.h"
@@ -21,17 +20,25 @@
 #include "Camera.h"
 #include "Window.h"
 #include "models/floor/model.h"
-#include "models/floor/vertex_specification.h"
 #include "models/floor/shaders.h"
 #include "Rendering_Common.h"
-#include "models/model_render_data.h"
-#include "models/floor/render.h"
+#include "models/simple_quad/model.h"
 
 #define SCENERENDERFUNC(Name) \
 void SceneRender_##Name (GLFWwindow* window)
 
 SCENERENDERFUNC(CubeGrassWindowFloor)
 {
+    //Register models
+    FloorModel floorModel;
+    floorModel.RenderSetup();
+
+    SimpleQuadModel simpleQuadModel;
+    simpleQuadModel.RenderSetup();
+
+
+
+
     unsigned int shaderProgram_Cube_no_mix = linkShaders(
             compileVertexShader(vertexShaderSource_Cube),
             compileFragmentShader(fragmentShaderSource_Cube_no_mix));
@@ -67,17 +74,6 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             compileFragmentShader(fragmentShaderSource_Rect_window));
 
     //** End window stuff
-
-    //** Begin simple quad render stuff
-    unsigned int VAO_SimpleQuad = vs_simpleQuad(simpleQuad, 3*5 + 3*5);
-
-
-    unsigned int shaderProgram_SimpleQuad = linkShaders(
-            compileVertexShader(vertexShaderSource_SimpleQuad),
-            compileFragmentShader(fragmentShaderSource_SimpleQuad));
-
-
-    //** End simple quad render stuff
 
     unsigned int textureTarget = 0;
     textureSetup(&textureTarget);
@@ -231,13 +227,11 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
 
 
 
-        Render(floorRenderData.ShaderProgram,
-               floorRenderData.VAO,
-               visualiseDepthBuffer,
+        floorModel.Render(visualiseDepthBuffer,
                5,
-               model,
-               view,
-               projection);
+                           model,
+                           view,
+                           projection);
 
 
         if (stencilTest)
@@ -280,13 +274,11 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             // Floor
             model = glm::mat4(1.f);
             model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-            Render(floorRenderData.ShaderProgram,
-                   floorRenderData.VAO,
-                   visualiseDepthBuffer,
+            floorModel.Render(visualiseDepthBuffer,
                    5,
-                   model,
-                   view,
-                   projection);
+                               model,
+                               view,
+                               projection);
         }
 
         // Transparency
@@ -358,13 +350,11 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
 
 
 
-        Render(	floorRenderData.ShaderProgram,
-                   floorRenderData.VAO,
-                   visualiseDepthBuffer,
-                   5,
-                   model,
-                   view,
-                   projection);
+        floorModel.Render(visualiseDepthBuffer,
+                          5,
+                          model,
+                          view,
+                          projection);
 
 
         if (stencilTest)
@@ -407,13 +397,13 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             // Floor
             model = glm::mat4(1.f);
             model = glm::scale(model, glm::vec3(5.f, 1.f, 5.f));
-            Render(floorRenderData.ShaderProgram,
-                   floorRenderData.VAO,
-                   visualiseDepthBuffer,
-                   5,
-                   model,
-                   view,
-                   projection);
+
+            floorModel.Render(visualiseDepthBuffer,
+                              5,
+                              model,
+                              view,
+                              projection);
+
         }
 
         // Transparency
@@ -453,11 +443,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
 
         model = glm::translate(model, glm::vec3(0.f, 0.7f, 0));
         model = glm::scale(model, glm::vec3(0.1f, 0.2f, 0));
-        render_draw_SimpleQuad(
-                shaderProgram_SimpleQuad,
-                VAO_SimpleQuad,
-                scrollDistance,
-                model);
+
+        simpleQuadModel.Render(scrollDistance,
+                               model);
 
 
 
