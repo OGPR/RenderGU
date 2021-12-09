@@ -23,7 +23,15 @@ add_executable(Eclipse
         Projects/src/stb_image.h
         Projects/src/Textures.h
         Projects/src/Utility.h
-        Projects/src/VertexSpecification.h)
+        Projects/src/VertexSpecification_Common.h
+        Projects/src/Camera.h
+        Projects/src/Window.h
+        Projects/src/models/floor/model.h
+        Projects/src/models/floor/shaders.h
+        Projects/src/models/simple_quad/model.h
+        Projects/src/models/simple_quad/shaders.h
+        Projects/src/Rendering_Common.h
+        Projects/src/scenes/CubeGrassWindowFloor/render.h)
 
 
 target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)
