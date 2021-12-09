@@ -30,7 +30,7 @@ add_executable(Eclipse
         Projects/src/models/floor/vertex_specification.h
         Projects/src/models/floor/data.h
         Projects/src/models/floor/shaders.h
-        Projects/src/Rendering_Common.h Projects/src/models/model_render_data.h Projects/src/models/floor/render.h)
+        Projects/src/Rendering_Common.h Projects/src/models/model_render_data.h Projects/src/models/floor/render.h Projects/src/scenes/CubeGrassWindowFloor/render.h)
 
 
 target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)

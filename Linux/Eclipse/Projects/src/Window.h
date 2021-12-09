@@ -1,6 +1,7 @@
 #pragma once
 #include <glad/glad.h> // to get OpenGL includes
 #include <GLFW/glfw3.h>
+#include "Utility.h"
 
 /**
 * The rendering window
