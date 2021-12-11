@@ -2,8 +2,10 @@
 
 #include<glad/glad.h> // Need glad before glew as it includes OpenGL headers
 #include <GLFW/glfw3.h>
+#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#endif
 #include <glm/detail/type_mat.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
@@ -77,9 +79,14 @@ SCENERENDERFUNC(Skybox)
 
     CameraVariables cameraVariables;
 
-    //// Game loop
-    while (!WindowShouldClose(window)) {
+    //Start inside the skybox
+    cameraVariables.cameraPos = glm::vec3(0.f);
 
+
+
+    //// Game loop
+    while (!WindowShouldClose(window))
+    {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         //// input
@@ -89,15 +96,17 @@ SCENERENDERFUNC(Skybox)
         processInput(window,
                      DeltaTime());
 
-
         view = glm::lookAt(cameraVariables.cameraPos,
                            cameraVariables.cameraPos + cameraVariables.cameraLookDirection,
                            cameraVariables.cameraUp);
-        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+
+        // Remove translation, keep rotation
+        view = glm::mat4(glm::mat3(view));
+        model = glm::mat4(1.0f);
+        model = glm::scale(model, glm::vec3(1.0f));
         simpleCubeModel.Render(model,
                                view,
                                projection);
-
 
         //// check and call events, and swap buffers
         PollEvents();

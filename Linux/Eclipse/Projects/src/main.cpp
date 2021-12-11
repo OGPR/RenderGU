@@ -9,7 +9,7 @@
 
 #include "Window.h"
 #include "Rendering_Common.h"
-//#include "scenes/CubeGrassWindowFloor/render.h"
+#include "scenes/CubeGrassWindowFloor/render.h"
 #include "scenes/Skybox/render.h"
 
 
