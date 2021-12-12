@@ -13,7 +13,7 @@
 #include "Utility.h"
 #include "Rendering_Common.h"
 #include "input.h"
-#include "models/simple_cube/model.h"
+#include "models/skybox/model.h"
 
 
 #define SCENERENDERFUNC(Name) \
