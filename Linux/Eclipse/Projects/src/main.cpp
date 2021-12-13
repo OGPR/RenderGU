@@ -9,8 +9,8 @@
 
 #include "Window.h"
 #include "Rendering_Common.h"
-#include "scenes/CubeGrassWindowFloor/render.h"
-#include "scenes/Skybox/render.h"
+#include "scenes/CubeGrassWindowFloor/scene_render.h"
+#include "scenes/Skybox/scene_render.h"
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
