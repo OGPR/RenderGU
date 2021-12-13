@@ -40,6 +40,8 @@ const char* fragmentShaderFloor =
     }
     void main()
     {
+        FragColor = vec4(0.4f, 0.4f,0.7f, 1.0f);
+        return;
         if (!visualiseDepthBuffer)
         {
             FragColor = texture(Texture, TexCoords);
