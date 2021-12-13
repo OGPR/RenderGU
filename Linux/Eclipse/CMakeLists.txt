@@ -31,7 +31,7 @@ add_executable(Eclipse
         Projects/src/models/simple_quad/model.h
         Projects/src/models/simple_quad/shaders.h
         Projects/src/Rendering_Common.h
-        Projects/src/scenes/CubeGrassWindowFloor/scene_render.h Projects/src/scenes/Skybox/scene_render.h Projects/src/models/skybox/model.h Projects/src/models/skybox/shaders.h)
+        Projects/src/scenes/CubeGrassWindowFloor/scene_render.h Projects/src/scenes/Skybox/scene_render.h Projects/src/models/skybox/model.h Projects/src/models/skybox/shaders.h Projects/src/scenes/Skybox/setup_cubemap.h)
 
 
 target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)
