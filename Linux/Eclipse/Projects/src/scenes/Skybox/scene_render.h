@@ -11,6 +11,7 @@
 #include "input.h"
 #include "models/skybox/model.h"
 #include "setup_cubemap.h"
+#include "models/cube/model.h"
 
 
 #define SCENERENDERFUNC(Name) \
@@ -26,6 +27,9 @@ SCENERENDERFUNC(Skybox)
 
     FloorModel floorModel;
     floorModel.RenderSetup();
+
+    CubeModel cubeModel;
+    cubeModel.RenderSetup();
 
     //// Transformations
     glm::mat4 model(1.f);
@@ -69,6 +73,12 @@ SCENERENDERFUNC(Skybox)
                           model,
                           view,
                           projection);
+
+        cubeModel.Render(5,
+                         visualiseDepthBuffer,
+                         model,
+                         view,
+                         projection);
 
         //// check and call events, and swap buffers
         PollEvents();

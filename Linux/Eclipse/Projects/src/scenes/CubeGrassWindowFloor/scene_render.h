@@ -23,6 +23,7 @@
 #include "models/floor/shaders.h"
 #include "Rendering_Common.h"
 #include "models/simple_quad/model.h"
+#include "models/cube/model.h"
 
 #define SCENERENDERFUNC(Name) \
 void SceneRender_##Name (GLFWwindow* window)
@@ -36,21 +37,10 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
     SimpleQuadModel simpleQuadModel;
     simpleQuadModel.RenderSetup();
 
-
-
-
-    unsigned int shaderProgram_Cube_no_mix = linkShaders(
-            compileVertexShader(vertexShaderSource_Cube),
-            compileFragmentShader(fragmentShaderSource_Cube_no_mix));
-
-    unsigned int shaderProgram_Cube_SingleColor = linkShaders(
-            compileVertexShader(vertexShaderSource_Cube),
-            compileFragmentShader(fragmentShaderSingleColor));
-
-
-
-    unsigned int VAO_Cube = render_setup_cube(cube, 5*6*6);
-
+    CubeModel cubeModel, cubeModelSingleColor;
+    cubeModel.RenderSetup();
+    cubeModelSingleColor.fragmentShader = fragmentShaderCubeSingleColor;
+    cubeModelSingleColor.RenderSetup();
 
 
 
@@ -196,11 +186,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        render_draw_cube(
-                shaderProgram_Cube_no_mix,
-                VAO_Cube,
-                visualiseDepthBuffer,
+        cubeModel.Render(
                 0,
+                visualiseDepthBuffer,
                 model,
                 view,
                 projection);
@@ -209,11 +197,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
         glEnable(GL_CULL_FACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        render_draw_cube(
-                shaderProgram_Cube_no_mix,
-                VAO_Cube,
-                visualiseDepthBuffer,
+        cubeModel.Render(
                 0,
+                visualiseDepthBuffer,
                 model,
                 view,
                 projection);
@@ -247,11 +233,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             model = glm::mat4(1.f);
             model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
             model = glm::scale(model, glm::vec3(scale, scale, scale));
-            render_draw_cube(
-                    shaderProgram_Cube_SingleColor,
-                    VAO_Cube,
-                    visualiseDepthBuffer,
+            cubeModelSingleColor.Render(
                     0,
+                    visualiseDepthBuffer,
                     model,
                     view,
                     projection);
@@ -261,11 +245,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             model = glm::mat4(1.f);
             model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
             model = glm::scale(model, glm::vec3(scale, scale, scale));
-            render_draw_cube(
-                    shaderProgram_Cube_SingleColor,
-                    VAO_Cube,
-                    visualiseDepthBuffer,
+            cubeModelSingleColor.Render(
                     0,
+                    visualiseDepthBuffer,
                     model,
                     view,
                     projection);
@@ -319,11 +301,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        render_draw_cube(
-                shaderProgram_Cube_no_mix,
-                VAO_Cube,
-                visualiseDepthBuffer,
+        cubeModel.Render(
                 0,
+                visualiseDepthBuffer,
                 model,
                 view,
                 projection);
@@ -332,11 +312,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
         glEnable(GL_CULL_FACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        render_draw_cube(
-                shaderProgram_Cube_no_mix,
-                VAO_Cube,
-                visualiseDepthBuffer,
+        cubeModel.Render(
                 0,
+                visualiseDepthBuffer,
                 model,
                 view,
                 projection);
@@ -370,11 +348,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             model = glm::mat4(1.f);
             model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
             model = glm::scale(model, glm::vec3(scale, scale, scale));
-            render_draw_cube(
-                    shaderProgram_Cube_SingleColor,
-                    VAO_Cube,
-                    visualiseDepthBuffer,
+            cubeModelSingleColor.Render(
                     0,
+                    visualiseDepthBuffer,
                     model,
                     view,
                     projection);
@@ -384,11 +360,9 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
             model = glm::mat4(1.f);
             model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
             model = glm::scale(model, glm::vec3(scale, scale, scale));
-            render_draw_cube(
-                    shaderProgram_Cube_SingleColor,
-                    VAO_Cube,
-                    visualiseDepthBuffer,
+            cubeModelSingleColor.Render(
                     0,
+                    visualiseDepthBuffer,
                     model,
                     view,
                     projection);
