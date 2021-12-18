@@ -23,13 +23,14 @@ GLFWwindow* Window()
     WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = CreateWindow(800, 600, "RenderGU", NULL, NULL);
-    glfwSetWindowPos(window, 2000, 250);
     if (!window)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         Terminate();
         return nullptr;
     }
+
+    glfwSetWindowPos(window, 2000, 250);
 
     MakeContextCurrent(window);
     //SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
