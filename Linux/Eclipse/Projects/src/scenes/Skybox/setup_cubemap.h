@@ -4,7 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #endif
-#include <GL/gl.h>
+#include <glad/glad.h>
 
 GLuint setupCubemap()
 {

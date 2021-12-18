@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.13)
 project(Eclipse)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -8,10 +8,8 @@ include_directories(../../Libs/Libs/glm)
 include_directories(../../Libs/Libs/glad/include)
 include_directories(../../Libs/Libs/glfw-3.3.4-x86/include)
 
-link_directories(../../Libs/Libs/glad/lib/Debug/linux/)
-link_directories(/home/philippe/Downloads/glfw-3.1.2/cmake-build-debug/src)
-
 add_executable(Eclipse
+	Projects/src/glad.c
         Projects/src/CompileShaders.h
         Projects/src/CustomMatrices.h
         Projects/src/data.h
@@ -40,8 +38,7 @@ add_executable(Eclipse
         Projects/src/models/cube/shaders.h)
 
 
-target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)
-target_link_libraries(Eclipse LINK_PUBLIC glfw3)
+target_link_libraries(Eclipse LINK_PUBLIC glfw)
 target_link_libraries(Eclipse LINK_PUBLIC GL)
 target_link_libraries(Eclipse LINK_PUBLIC X11)
 target_link_libraries(Eclipse LINK_PUBLIC pthread)
