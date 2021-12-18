@@ -37,7 +37,7 @@ add_executable(Eclipse
         Projects/src/models/skybox/shaders.h
         Projects/src/scenes/Skybox/setup_cubemap.h
         Projects/src/models/cube/model.h
-        Projects/src/models/cube/shaders.h)
+        Projects/src/models/cube/shaders.h Projects/src/models/line/model.h Projects/src/models/line/shaders.h Projects/src/OnScreenUtilities/AxesLines/utility_render.h)
 
 
 target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)
