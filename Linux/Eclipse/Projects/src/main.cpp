@@ -9,8 +9,7 @@
 
 #include "Window.h"
 #include "Rendering_Common.h"
-#include "scenes/CubeGrassWindowFloor/scene_render.h"
-#include "scenes/Skybox/scene_render.h"
+#include "scenes/TransformationMatricesInDepth/scene_render.h"
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -25,7 +24,8 @@ int main()
     GLFWwindow* window = Window();
 
     //SceneRender_CubeGrassWindowFloor(window);
-    SceneRender_Skybox(window);
+    //SceneRender_Skybox(window);
+    SceneRender_TransformationMatricesInDepth(window);
 
     Terminate();
     return 0;
