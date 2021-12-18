@@ -48,6 +48,39 @@ Matrix RollMatrix (float theta)
 	};
 }
 
+// Note not doing the zero-index thing for the transformation matrices below
+Matrix TranslationMatrix (float dx,
+                          float dy)
+{
+    return std::vector< std::vector<float>>
+    {
+        {1, 0, dx},
+        {0, 1, dy},
+        {0, 0, 1}
+    };
+}
+
+Matrix ScaleMatrix (float sx,
+                    float sy)
+{
+    return std::vector< std::vector<float>>
+    {
+            {sx, 0, 0 },
+            {sy, 0, 0 },
+            {0, 0, 1}
+    };
+}
+
+Matrix RotationMatrix (float theta)
+{
+    return std::vector< std::vector<float>>
+    {
+            {cosf(theta), -sinf(theta), 0 },
+            {sinf(theta), cosf(theta), 0 },
+            {0, 0, 1}
+    };
+}
+
 glm::vec3 TransformVec(glm::vec3 vec, Matrix transform)
 {
 	glm::vec3 result;
