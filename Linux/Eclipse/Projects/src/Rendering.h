@@ -46,29 +46,6 @@ unsigned int render_setup_cube(float* vertex, unsigned int numberOfEntries)
 
 
 
-void render_draw_cube(
-		unsigned int shaderProgram,
-		unsigned int VAO,
-		bool visualiseDepthBuffer,
-		GLubyte activeTexture,
-		glm::mat4 model = glm::mat4(1.0f),
-		glm::mat4 view = glm::mat4(1.0f),
-		glm::mat4 projection = glm::mat4(1.0f)
-		)
-{
-    glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "Texture"), activeTexture);
-    glUniform1i(glGetUniformLocation(shaderProgram, "visualiseDepthBuffer"), visualiseDepthBuffer);
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-}
-
-
-
 void render_draw_rect_transparency(
 		unsigned int shaderProgram,
 		unsigned int VAO,
