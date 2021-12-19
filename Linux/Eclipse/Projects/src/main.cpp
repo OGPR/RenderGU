@@ -33,12 +33,8 @@ int main()
     glm::mat4 modelMat_x(1.0f);
     glm::mat4 modelMat_z(1.0f);
     glm::mat4 modelMat_y(1.0f);
-    modelMat_y = glm::translate(modelMat_y, glm::vec3(0.f, 0.f, -1.f));
-    modelMat_x = glm::translate(modelMat_x, glm::vec3(0.f, 0.f, -1.f));
     modelMat_x = glm::rotate(modelMat_x, glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
-    modelMat_z = glm::translate(modelMat_z, glm::vec3(0.f, 0.f, -1.f));
-    // Offsets to see the axis when axis lines fixed
-    modelMat_z = glm::rotate(modelMat_z, glm::half_pi<float>() +0.01f  , glm::vec3(1.f, 0.0001f, 0.f));
+    modelMat_z = glm::rotate(modelMat_z, glm::half_pi<float>() , glm::vec3(1.f, 0.0f, 0.f));
 
     glm::vec3 color_x(1.f, 0.f, 0.f);
     glm::vec3 color_y(0.f, 1.f, 0.f);
@@ -69,15 +65,15 @@ int main()
                      DeltaTime());
 
 
+        view = glm::lookAt(cameraVariables.cameraPos,
+                           cameraVariables.cameraPos + cameraVariables.cameraLookDirection, cameraVariables.cameraUp);
 
-        view = glm::mat4(1.0f);
+
+        cubeModel.Render(9, false, glm::mat4(1.0f), view, projection);
+        
         axisX.Render(color_x, modelMat_x, view, projection);
         axisY.Render(color_y, modelMat_y, view, projection);
         axisZ.Render(color_z, modelMat_z, view, projection);
-
-        view = glm::lookAt(cameraVariables.cameraPos,
-                           cameraVariables.cameraPos + cameraVariables.cameraLookDirection, cameraVariables.cameraUp);
-        cubeModel.Render(9, false, glm::mat4(1.0f), view, projection);
 
         //// check and call events, and swap buffers
         PollEvents();
