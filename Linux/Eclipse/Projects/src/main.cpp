@@ -36,6 +36,10 @@ int main()
     modelMat_x = glm::rotate(modelMat_x, glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
     modelMat_z = glm::rotate(modelMat_z, glm::half_pi<float>() , glm::vec3(1.f, 0.0f, 0.f));
 
+    modelMat_y = glm::scale(modelMat_y, 10.f* glm::vec3(0.f, 1.f, 0.f));
+    modelMat_x = glm::scale(modelMat_x, 10.f* glm::vec3(0.f, 1.f, 0.f));
+    modelMat_z = glm::scale(modelMat_z, 10.f* glm::vec3(0.f, 1.f, 0.f));
+
     glm::vec3 color_x(1.f, 0.f, 0.f);
     glm::vec3 color_y(0.f, 1.f, 0.f);
     glm::vec3 color_z(0.f, 0.f, 1.f);
@@ -70,7 +74,7 @@ int main()
 
 
         cubeModel.Render(9, false, glm::mat4(1.0f), view, projection);
-        
+
         axisX.Render(color_x, modelMat_x, view, projection);
         axisY.Render(color_y, modelMat_y, view, projection);
         axisZ.Render(color_z, modelMat_z, view, projection);
