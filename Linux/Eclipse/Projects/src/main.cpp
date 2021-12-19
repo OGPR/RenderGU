@@ -33,12 +33,17 @@ int main()
     glm::mat4 modelMat_x(1.0f);
     glm::mat4 modelMat_z(1.0f);
     glm::mat4 modelMat_y(1.0f);
-    modelMat_x = glm::rotate(modelMat_x, glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
-    modelMat_z = glm::rotate(modelMat_z, glm::half_pi<float>() , glm::vec3(1.f, 0.0f, 0.f));
+    modelMat_x = glm::rotate(modelMat_x, -glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
+    modelMat_z = glm::rotate(modelMat_z, -glm::half_pi<float>() , glm::vec3(1.f, 0.0f, 0.f));
 
-    modelMat_y = glm::scale(modelMat_y, 10.f* glm::vec3(0.f, 1.f, 0.f));
-    modelMat_x = glm::scale(modelMat_x, 10.f* glm::vec3(0.f, 1.f, 0.f));
-    modelMat_z = glm::scale(modelMat_z, 10.f* glm::vec3(0.f, 1.f, 0.f));
+    modelMat_y = glm::translate(modelMat_y, glm::vec3(-1.5f, -0.9f, 0.f));
+    modelMat_y = glm::scale(modelMat_y, glm::vec3(0.f, 0.2f, 0.f));
+
+    modelMat_x = glm::translate(modelMat_x, glm::vec3(0.9f, -1.5f, 0.f));
+    modelMat_x = glm::scale(modelMat_x, glm::vec3(0.f, 0.2f, 0.f));
+
+    modelMat_z = glm::translate(modelMat_z, glm::vec3(-1.5f, 0.0f, -0.9f));
+    modelMat_z = glm::scale(modelMat_z, glm::vec3(0.f, 0.2f, 0.f));
 
     glm::vec3 color_x(1.f, 0.f, 0.f);
     glm::vec3 color_y(0.f, 1.f, 0.f);
