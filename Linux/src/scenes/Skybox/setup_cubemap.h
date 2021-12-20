@@ -17,12 +17,12 @@ GLuint setupCubemap()
     GLubyte* data;
     const char* faceTextures [6] =
             {
-                    "right.jpg",
-                    "left.jpg",
-                    "top.jpg",
-                    "bottom.jpg",
-                    "front.jpg",
-                    "back.jpg"
+                    "resources/right.jpg",
+                    "resources/left.jpg",
+                    "resources/top.jpg",
+                    "resources/bottom.jpg",
+                    "resources/front.jpg",
+                    "resources/back.jpg"
             };
 
     for (GLubyte i = 0; i < 6; ++i)
