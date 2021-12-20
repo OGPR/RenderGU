@@ -9,10 +9,10 @@ include_directories(../../Libs/Libs/glm)
 include_directories(../../Libs/Libs/glad/include)
 include_directories(../../Libs/Libs/glfw-3.3.4-x86/include)
 
-link_directories(../../Libs/Libs/glad/lib/Debug/linux/)
 link_directories(/home/philippe/Downloads/glfw-3.1.2/cmake-build-debug/src)
 
 add_executable(RenderGU
+        ${CMAKE_SOURCE_DIR}/../../Libs/Libs/glad/src/glad.c
         Projects/src/CompileShaders.h
         Projects/src/CustomMatrices.h
         Projects/src/data.h
@@ -41,7 +41,6 @@ add_executable(RenderGU
         Projects/src/models/cube/shaders.h)
 
 
-target_link_libraries(RenderGU LINK_PUBLIC libglad_build.a)
 target_link_libraries(RenderGU LINK_PUBLIC glfw3)
 target_link_libraries(RenderGU LINK_PUBLIC GL)
 target_link_libraries(RenderGU LINK_PUBLIC X11)
