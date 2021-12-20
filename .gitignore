@@ -389,3 +389,4 @@ FodyWeavers.xsd
 
 # CLion / CMake
 cmake*/
+build/
