@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cmake -B build -S . && cd build && make
+cmake -B build -S . && cd build && make && mv RenderGU ../bin/RenderGU.bin
