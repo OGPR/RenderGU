@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(Eclipse)
+project(RenderGU)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS " -Wall -Werror")
@@ -9,10 +9,10 @@ include_directories(../../Libs/Libs/glm)
 include_directories(../../Libs/Libs/glad/include)
 include_directories(../../Libs/Libs/glfw-3.3.4-x86/include)
 
-link_directories(../../Libs/Libs/glad/lib/Debug/linux/)
 link_directories(/home/philippe/Downloads/glfw-3.1.2/cmake-build-debug/src)
 
-add_executable(Eclipse
+add_executable(RenderGU
+        ${CMAKE_SOURCE_DIR}/../../Libs/Libs/glad/src/glad.c
         Projects/src/CompileShaders.h
         Projects/src/CustomMatrices.h
         Projects/src/data.h
@@ -41,14 +41,13 @@ add_executable(Eclipse
         Projects/src/models/cube/shaders.h)
 
 
-target_link_libraries(Eclipse LINK_PUBLIC libglad_build.a)
-target_link_libraries(Eclipse LINK_PUBLIC glfw3)
-target_link_libraries(Eclipse LINK_PUBLIC GL)
-target_link_libraries(Eclipse LINK_PUBLIC X11)
-target_link_libraries(Eclipse LINK_PUBLIC pthread)
-target_link_libraries(Eclipse LINK_PUBLIC Xrandr)
-target_link_libraries(Eclipse LINK_PUBLIC Xi)
-target_link_libraries(Eclipse LINK_PUBLIC Xxf86vm)
-target_link_libraries(Eclipse LINK_PUBLIC Xinerama)
-target_link_libraries(Eclipse LINK_PUBLIC Xcursor)
-target_link_libraries(Eclipse LINK_PUBLIC dl)
+target_link_libraries(RenderGU LINK_PUBLIC glfw3)
+target_link_libraries(RenderGU LINK_PUBLIC GL)
+target_link_libraries(RenderGU LINK_PUBLIC X11)
+target_link_libraries(RenderGU LINK_PUBLIC pthread)
+target_link_libraries(RenderGU LINK_PUBLIC Xrandr)
+target_link_libraries(RenderGU LINK_PUBLIC Xi)
+target_link_libraries(RenderGU LINK_PUBLIC Xxf86vm)
+target_link_libraries(RenderGU LINK_PUBLIC Xinerama)
+target_link_libraries(RenderGU LINK_PUBLIC Xcursor)
+target_link_libraries(RenderGU LINK_PUBLIC dl)
