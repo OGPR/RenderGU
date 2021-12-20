@@ -518,11 +518,11 @@ void processInput(GLFWwindow *window,
 
 }
 
-static float lastxpos = 0.f;
-static float lastypos = 0.f;
 
 //TODO Mouse
 /*
+static float lastxpos = 0.f;
+static float lastypos = 0.f;
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 		if (xpos > lastxpos)

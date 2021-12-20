@@ -60,8 +60,7 @@ void SetInputMode(GLFWwindow* window, int mode, int value)
 
 GLFWcursorposfun SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
 {
-	glfwSetCursorPosCallback(window, callback);
-
+	return glfwSetCursorPosCallback(window, callback);
 }
 
 void CheckFramebufferStatus()
