@@ -11,6 +11,7 @@ GLuint setupCubemap()
     // Setup textures
     GLuint textureID;
     glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
     int width, height, nChannels;
     GLubyte* data;
@@ -30,7 +31,7 @@ GLuint setupCubemap()
 
         if (!data)
         {
-            printf("Failed to load texture ", faceTextures[i]);
+            printf("Failed to load texture %s ", faceTextures[i]);
             stbi_image_free(data);
             continue;
         }
@@ -52,4 +53,6 @@ GLuint setupCubemap()
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
 }

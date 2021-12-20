@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 project(Eclipse)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS " -Wall -Werror")
 
 include_directories(Projects/src)
 include_directories(../../Libs/Libs/glm)

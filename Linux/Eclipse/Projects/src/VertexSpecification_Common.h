@@ -16,7 +16,7 @@ void SetAttribute(GLuint index, GLint size, GLsizei stride, const void* offset);
 
 struct QuadData
 {
-	int numberOfEntries = 3*5 + 3*5;
+	unsigned int numberOfEntries = 3*5 + 3*5;
 	float* data = quad;
 } _quadData;
 

@@ -20,9 +20,9 @@ Matrix YawMatrix (float theta)
 	return std::vector< std::vector<float> >
 	{
 		{0, 0, 0, 0},
-		{0, cos(theta), 0, -sin(theta)},
+		{0, cosf(theta), 0, -sinf(theta)},
 		{0, 0, 1, 0},
-		{0, sin(theta), 0, cos(theta)},
+		{0, sinf(theta), 0, cosf(theta)},
 	};
 }
 
@@ -32,8 +32,8 @@ Matrix PitchMatrix (float theta)
 	{
     	    {0, 0, 0, 0},
     	    {0, 1, 0, 0},
-    	    {0, 0, cos(theta), -sin(theta)},
-    	    {0, 0, sin(theta), cos(theta)},
+    	    {0, 0, cosf(theta), -sinf(theta)},
+    	    {0, 0, sinf(theta), cosf(theta)},
 	};
 }
 
@@ -42,8 +42,8 @@ Matrix RollMatrix (float theta)
 	return std::vector< std::vector<float> >
 	{
 		{0, 0, 0, 0},
-		{0, cos(theta), -sin(theta), 0},
-		{0, sin(theta), cos(theta), 0},
+		{0, cosf(theta), -sinf(theta), 0},
+		{0, sinf(theta), cosf(theta), 0},
 		{0, 0, 0, 1},
 	};
 }
