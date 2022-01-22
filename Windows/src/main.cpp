@@ -72,6 +72,12 @@ int main()
 
     unsigned int VAO_Triangle = render_setup_tri(triangle, 18);
 
+    unsigned int shaderProgram_Point = linkShaders(
+        compileVertexShader(vertexShaderSource_Point),
+        compileFragmentShader(fragmentShaderSource_Point));
+
+    unsigned int VAO_Point = render_setup_tri(triangle, 3);
+
 
 
 	//// Transformations
@@ -104,7 +110,7 @@ int main()
 
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
-        render_draw(shaderProgram_Tri, VAO_Triangle, true);
+        render_draw(shaderProgram_Point, VAO_Point, false);
 
 
 
