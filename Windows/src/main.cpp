@@ -36,7 +36,13 @@ int main()
     WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-    Window* window = CreateWindow(800, 600, "RenderGU_Win0", NULL, NULL);
+    const GLFWvidmode* vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    const int screenWidth = vidMode->width;
+    const int screenHeight = vidMode->height;
+
+    const float windowPercentage[2] = { 0.4f, 0.4f }; // Width, Height
+
+    Window* window = CreateWindow(*windowPercentage * screenWidth, *(windowPercentage + 1) * screenHeight , "RenderGU_Win0", NULL, NULL);
     if (!window)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -47,6 +53,7 @@ int main()
     MakeContextCurrent(window);
     //SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     //SetCursorPosCallback(window, mouse_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
     int gladInitialise = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -56,14 +63,6 @@ int main()
         std::cout << "Perhaps you have not called a \"MakeContextCurrent(window) \" function prior?" << std::endl;
         return -1;
     }
-
-    Viewport viewport;
-    viewport.LowerLeftX = 0;
-    viewport.LowerLeftY = 0;
-    viewport.Width = /*0.9 */ 800;
-    viewport.Height = /*0.9 */ 600;
-
-    glViewport(viewport.LowerLeftX, viewport.LowerLeftY, viewport.Width, viewport.Height);
 
 
     unsigned int shaderProgram_Tri = linkShaders(
@@ -110,6 +109,8 @@ int main()
     {
 
 
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
         render_draw(shaderProgram_Point, VAO_Point, false);
 
