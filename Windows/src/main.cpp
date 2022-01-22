@@ -19,7 +19,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
 #include "input.h"
-#include "VertexSpecification.h"
 #include <assert.h>
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -71,7 +70,7 @@ int main()
         compileVertexShader(vertexShaderSource_Tri),
         compileFragmentShader(fragmentShaderSource_Tri));
 
-    unsigned int VAO_Triangle = render_setup_tri(triangle, 24);
+    unsigned int VAO_Triangle = render_setup_tri(triangle, 18);
 
 
 
@@ -105,7 +104,7 @@ int main()
 
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraLookDirection, cameraUp);
-        render_draw(shaderProgram_Tri, VAO_Triangle, nullptr, true);
+        render_draw(shaderProgram_Tri, VAO_Triangle, true);
 
 
 
