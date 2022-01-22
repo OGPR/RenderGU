@@ -44,6 +44,24 @@ const char* vertexShaderSource_Point =
     }
 );
 
+const char* geomShaderSource_Point =
+    GLSL(330 core,
+    layout(points) in;
+	layout(line_strip, max_vertices = 2) out;
+
+    void main()
+    {
+
+        gl_Position = gl_in[0].gl_Position + vec4(0.5f, vec2(0.0f), 1.0f);
+        EmitVertex();
+
+        gl_Position = gl_in[0].gl_Position + vec4(-0.5f, vec2(0.0f), 1.0f);
+        EmitVertex();
+
+        EndPrimitive();
+    }
+);
+
 const char* fragmentShaderSource_Point =
     GLSL(330 core,
     out vec4 FragColor;

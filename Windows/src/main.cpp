@@ -74,6 +74,7 @@ int main()
 
     unsigned int shaderProgram_Point = linkShaders(
         compileVertexShader(vertexShaderSource_Point),
+        compileGeomShader(geomShaderSource_Point),
         compileFragmentShader(fragmentShaderSource_Point));
 
     unsigned int VAO_Point = render_setup_tri(point, 3);

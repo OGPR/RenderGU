@@ -45,3 +45,25 @@ unsigned int compileFragmentShader(const char* fragmentShaderSource)
 
     return fragmentShader;
 }
+
+unsigned int compileGeomShader(const char* geomShaderSource)
+{
+    unsigned int geomShader;
+    geomShader = glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(geomShader, 1, &geomShaderSource, NULL);
+    glCompileShader(geomShader);
+
+    //geomShader compilation error checking
+    {
+        int success;
+        char infoLog[512];
+        glGetShaderiv(geomShader, GL_COMPILE_STATUS, &success);
+        if (!success)
+        {
+            glGetShaderInfoLog(geomShader, 512, NULL, infoLog);
+            std::cout << "ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+        }
+    }
+
+    return geomShader;
+}
