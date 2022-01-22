@@ -76,7 +76,7 @@ int main()
         compileVertexShader(vertexShaderSource_Point),
         compileFragmentShader(fragmentShaderSource_Point));
 
-    unsigned int VAO_Point = render_setup_tri(triangle, 3);
+    unsigned int VAO_Point = render_setup_tri(point, 3);
 
 
 
