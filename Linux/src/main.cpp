@@ -11,7 +11,7 @@
 #include "Rendering_Common.h"
 #include "scenes/CubeGrassWindowFloor/scene_render.h"
 #include "scenes/Skybox/scene_render.h"
-
+#include <irrKlang.h>
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -20,10 +20,15 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+using namespace irrklang;
 int main()
 {
     GLFWwindow* window = Window();
 
+    ISoundEngine* SoundEngine = createIrrKlangDevice();
+    
+
+    
     //SceneRender_CubeGrassWindowFloor(window);
     SceneRender_Skybox(window);
 

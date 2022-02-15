@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.13)
 project(RenderGU)
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS " -Wall -Werror")
+#set(CMAKE_CXX_FLAGS " -Wall -Werror")
 
 include_directories(src)
 include_directories(../Libs/Libs/glm)
 include_directories(../Libs/Libs/glad/include)
+include_directories(../Libs/Libs/irrKlang-64bit-1.5.0/include)
 
 
 add_executable(RenderGU
@@ -39,6 +40,8 @@ add_executable(RenderGU
         src/models/cube/shaders.h)
 
 
+    target_link_directories(RenderGU PUBLIC ../Libs/Libs/irrKlang-64bit-1.5.0/bin/linux-gcc-64)
+target_link_libraries(RenderGU LINK_PUBLIC IrrKlang)
 target_link_libraries(RenderGU LINK_PUBLIC glfw)
 target_link_libraries(RenderGU LINK_PUBLIC GL)
 target_link_libraries(RenderGU LINK_PUBLIC X11)
@@ -49,3 +52,4 @@ target_link_libraries(RenderGU LINK_PUBLIC Xxf86vm)
 target_link_libraries(RenderGU LINK_PUBLIC Xinerama)
 target_link_libraries(RenderGU LINK_PUBLIC Xcursor)
 target_link_libraries(RenderGU LINK_PUBLIC dl)
+
