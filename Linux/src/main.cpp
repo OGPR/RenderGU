@@ -24,8 +24,8 @@ int main()
     GLFWwindow* window = Window();
 
     
-    //SceneRender_CubeGrassWindowFloor(window);
-    SceneRender_Skybox(window);
+    SceneRender_CubeGrassWindowFloor(window);
+    //SceneRender_Skybox(window);
 
     Terminate();
     return 0;
