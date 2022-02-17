@@ -186,6 +186,7 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        glEnable(GL_CULL_FACE);
         cubeModel.Render(
                 0,
                 visualiseDepthBuffer,
@@ -194,7 +195,6 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
                 projection);
 
         // Cube 2
-        glEnable(GL_CULL_FACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
         cubeModel.Render(
@@ -301,6 +301,7 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        glEnable(GL_CULL_FACE);
         cubeModel.Render(
                 0,
                 visualiseDepthBuffer,
@@ -309,7 +310,6 @@ SCENERENDERFUNC(CubeGrassWindowFloor)
                 projection);
 
         // Cube 2
-        glEnable(GL_CULL_FACE);
         model = glm::mat4(1.f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
         cubeModel.Render(
