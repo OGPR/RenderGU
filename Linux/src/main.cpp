@@ -17,6 +17,8 @@
 #include "CompileShaders.h"
 #include "LinkShaders.h"
 #include "DeltaTime.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -50,10 +52,11 @@ int main()
         out vec4 FragColor;
 
         uniform float multiplier;
+        uniform vec3 color;
 
         void main()
         {
-            FragColor = vec4(multiplier * vec3(1.0f), 1.0f);
+            FragColor = vec4(multiplier * color , 1.0f);
         }
         );
 
@@ -76,7 +79,8 @@ int main()
     float colorAmount = 0.0f;
     bool fadeIn = true;
 
-
+    // 2D_Cube color
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
 
     while(!WindowShouldClose(window))
@@ -106,6 +110,7 @@ int main()
 
 
         glUniform1f(glGetUniformLocation(ShaderProgram, "multiplier"), colorAmount); 
+        glUniform3fv(glGetUniformLocation(ShaderProgram, "color"), 1, glm::value_ptr(color)); 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
