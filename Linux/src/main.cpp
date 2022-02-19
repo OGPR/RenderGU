@@ -39,11 +39,10 @@ int main()
         GLSL(330 core,
         layout(location = 0) in vec3 inPos;
 
-        mat4 model = mat4(0.5f);
 
         void main()
         {
-            gl_Position = model * vec4(inPos, 2.0f);
+            gl_Position = vec4(inPos, 2.0f);
         }
         );
     const char* fs =
