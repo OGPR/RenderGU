@@ -96,8 +96,8 @@ int main()
 
 
         // Draw to screen
-        displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
-        //displayPlane_withTex(planeWithTexShader, planeWithTexVAO);
+        //displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
+        displayPlane_withTex(planeWithTexShader, planeWithTexVAO);
         
         //// check and call events, and swap buffers
         PollEvents();
@@ -228,7 +228,76 @@ void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmou
 void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO)
 {
     
-    makeCube_2D_withTex(vertexData);
+    // Populate modelArr
+    
+    // Store first element pointer which we will reset to
+    // after populating data
+    float* vertexData_0 = vertexData;
+    
+    // Tri 1
+    
+    // Row 1 (top left)
+    *vertexData++ = -1; // x
+    *vertexData++ = 1; // y
+    *vertexData++ = 0; // z
+
+    // Row 2 (bottom left)
+    *vertexData++ = -1; // x
+    *vertexData++ = -1; // y
+    *vertexData++ = 0; // z
+
+    // Row 3 (bottom right)
+    *vertexData++ = 1; // x
+    *vertexData++ = -1; // y
+    *vertexData++ = 0; // z
+    
+    // Tri 2
+    
+    // Row 4 (top right)
+    *vertexData++ = 1; // x
+    *vertexData++ = 1; // y
+    *vertexData++ = 0; // z
+    
+    // Row 5 (top left)
+    *vertexData++ = -1; // x
+    *vertexData++ = 1; // y
+    *vertexData++ = 0; // z
+    
+    // Row 6 (bottom right)
+    *vertexData++ = 1; // x
+    *vertexData++ = -1; // y
+    *vertexData++ = 0; // z
+
+    // Texture coords
+    // Tri 1
+
+    // (top left)
+    *vertexData++ = 0; 
+    *vertexData++ = 1; 
+
+    // (bottom left)
+    *vertexData++ = 0; 
+    *vertexData++ = 0; 
+
+    // (bottom right)
+    *vertexData++ = 1; 
+    *vertexData++ = 0; 
+    
+    // Tri 2
+    
+    // (top right)
+    *vertexData++ = 1; 
+    *vertexData++ = 1; 
+    
+    // (top left)
+    *vertexData++ = 0; 
+    *vertexData++ = 1; 
+    
+    // (bottom right)
+    *vertexData++ = 1; 
+    *vertexData++ = 0; 
+
+    vertexData = vertexData_0;
         
     // Write shaders
     const char* vs =
