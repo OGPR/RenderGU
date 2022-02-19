@@ -27,6 +27,63 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO);
+void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn, glm::vec3* color);
+
+int main()
+{
+    // Create main window
+    GLFWwindow* window = Window();
+
+    // Create Plane 
+    float cube2D[18] = {0}; 
+    unsigned int planeShader;
+    unsigned int planeVAO;
+    createPlane(cube2D, &planeShader, &planeVAO);
+
+
+
+    // Fade effect variables 
+    float colorAmount = 0.0f;
+    bool fadeIn = true;
+
+    // 2D_Cube color
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+
+
+    while(!WindowShouldClose(window))
+    {
+        // Process Input
+         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+         {
+            glfwSetWindowShouldClose(window, true);
+         }
+
+
+        // Draw to screen
+        displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
+        //// check and call events, and swap buffers
+        PollEvents();
+        SwapBuffers(window);
+       
+    }
+
+
+
+
+    
+
+    // Exit
+    Terminate();
+    return 0;
+
+
+
+
+
+}
+//--------------------------------------------------------------------------------------------
+
 void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO)
 {
     makeCube_2D(vertexData);
@@ -92,55 +149,3 @@ void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmou
 }
 
 
-int main()
-{
-    // Create main window
-    GLFWwindow* window = Window();
-
-    // Create Plane 
-    float cube2D[18] = {0}; 
-    unsigned int planeShader;
-    unsigned int planeVAO;
-    createPlane(cube2D, &planeShader, &planeVAO);
-
-
-
-    // Fade effect variables 
-    float colorAmount = 0.0f;
-    bool fadeIn = true;
-
-    // 2D_Cube color
-    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
-
-
-    while(!WindowShouldClose(window))
-    {
-        // Process Input
-         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-         {
-            glfwSetWindowShouldClose(window, true);
-         }
-
-
-        // Draw to screen
-        displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
-        //// check and call events, and swap buffers
-        PollEvents();
-        SwapBuffers(window);
-       
-    }
-
-
-
-
-    
-
-    // Exit
-    Terminate();
-    return 0;
-
-
-
-
-
-}
