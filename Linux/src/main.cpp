@@ -27,15 +27,10 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
-int main()
+void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO)
 {
-    // Create main window
-    GLFWwindow* window = Window();
-
-    // Create model
-    float cube2D[18] = {0}; 
-    makeCube_2D(cube2D);
-
+    makeCube_2D(vertexData);
+    
     // Write shaders
     const char* vs =
         GLSL(330 core,
@@ -61,18 +56,23 @@ int main()
         );
 
     // Make Shader Program
-    unsigned int ShaderProgram = linkShaders(
-                                    compileVertexShader(vs),
-                                    compileFragmentShader(fs)
-                                    );
-    
-
-
-    
+   *shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
     // Specify Vertices
-    unsigned int VAO;  
-    specifyVertices(cube2D, 18, &VAO); 
+    specifyVertices(vertexData, 18, VAO); 
+}
+
+int main()
+{
+    // Create main window
+    GLFWwindow* window = Window();
+
+    // Create Plane 
+    float cube2D[18] = {0}; 
+    unsigned int planeShader;
+    unsigned int planeVAO;
+    createPlane(cube2D, &planeShader, &planeVAO);
+
 
 
     // Fade effect variables 
@@ -94,7 +94,7 @@ int main()
 
         // Draw to screen
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(ShaderProgram);
+        glUseProgram(planeShader);
 
         if (fadeIn)
         {
@@ -109,9 +109,9 @@ int main()
 
 
 
-        glUniform1f(glGetUniformLocation(ShaderProgram, "multiplier"), colorAmount); 
-        glUniform3fv(glGetUniformLocation(ShaderProgram, "color"), 1, glm::value_ptr(color)); 
-        glBindVertexArray(VAO);
+        glUniform1f(glGetUniformLocation(planeShader, "multiplier"), colorAmount); 
+        glUniform3fv(glGetUniformLocation(planeShader, "color"), 1, glm::value_ptr(color)); 
+        glBindVertexArray(planeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         //// check and call events, and swap buffers
