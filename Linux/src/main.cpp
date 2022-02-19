@@ -7,10 +7,16 @@
 //============================================================================
 
 
+//macro to write shader programs inline
+#ifndef GLSL 
+#define GLSL(version,A) "#version " #version "\n" #A
+#endif
+
 #include "Window.h"
 #include "Rendering_Common.h"
-#include "scenes/CubeGrassWindowFloor/scene_render.h"
-#include "scenes/Skybox/scene_render.h"
+#include "Utility.h"
+#include "CompileShaders.h"
+#include "LinkShaders.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -21,12 +27,77 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 int main()
 {
+    // Create main window
     GLFWwindow* window = Window();
 
-    
-    SceneRender_CubeGrassWindowFloor(window);
-    //SceneRender_Skybox(window);
+    // Create model
+    float cube2D[18] = {0}; 
+    makeCube_2D(cube2D);
 
+    // Write shaders
+    const char* vs =
+        GLSL(330 core,
+        layout(location = 0) in vec3 inPos;
+
+        mat4 model = mat4(0.5f);
+
+        void main()
+        {
+            gl_Position = model * vec4(inPos, 2.0f);
+        }
+        );
+    const char* fs =
+        GLSL(330 core,
+        out vec4 FragColor;
+
+        void main()
+        {
+            FragColor = vec4(0.2f, 0.7f, 0.1f, 1.0f);
+        }
+        );
+
+    // Make Shader Program
+    unsigned int ShaderProgram = linkShaders(
+                                    compileVertexShader(vs),
+                                    compileFragmentShader(fs)
+                                    );
+    
+
+
+    
+
+    // Specify Vertices
+    int VAO;
+    specifyVertices(cube2D, 18); 
+
+
+    while(!WindowShouldClose(window))
+    {
+        // Process Input
+         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+         {
+            glfwSetWindowShouldClose(window, true);
+         }
+
+
+        // Draw to screen
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(ShaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        //// check and call events, and swap buffers
+        PollEvents();
+        SwapBuffers(window);
+       
+    }
+
+
+
+
+    
+
+    // Exit
     Terminate();
     return 0;
 

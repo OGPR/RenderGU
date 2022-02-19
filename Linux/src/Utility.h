@@ -8,6 +8,7 @@
 
 #include<glad/glad.h> // Need glad before glew as it includes OpenGL headers
 #include<GLFW/glfw3.h>
+#include "VertexSpecification_Common.h"
 
 int Init()
 {
@@ -83,3 +84,59 @@ void CheckFramebufferStatus()
 			printf("Something else has gone wrong\n");
 	}
 }
+
+// Crete a 2D unit cube
+void makeCube_2D(float* modelArr)
+{
+
+    // Tri 1
+    
+    // Row 1 (top left)
+    *modelArr++ = -1; // x
+    *modelArr++ = 1; // y
+    *modelArr++ = 0; // z
+
+    // Row 2 (bottom left)
+    *modelArr++ = -1; // x
+    *modelArr++ = -1; // y
+    *modelArr++ = 0; // z
+
+    // Row 3 (bottom right)
+    *modelArr++ = 1; // x
+    *modelArr++ = -1; // y
+    *modelArr++ = 0; // z
+    
+    // Tri 2
+    
+    // Row 4 (top right)
+    *modelArr++ = 1; // x
+    *modelArr++ = 1; // y
+    *modelArr++ = 0; // z
+    
+    // Row 5 (top left)
+    *modelArr++ = -1; // x
+    *modelArr++ = 1; // y
+    *modelArr++ = 0; // z
+    
+    // Row 6 (bottom right)
+    *modelArr++ = 1; // x
+    *modelArr++ = -1; // y
+    *modelArr++ = 0; // z
+}
+
+// Specify Vertices of Model
+void specifyVertices(float* model, unsigned short int sizeModelArray)
+{
+    BindVBO(CreateVBO());
+    
+    AllocateMemoryVBO(sizeModelArray, model);
+
+    unsigned int VAO = CreateVAO();
+
+    BindVAO(VAO);
+
+    SetAttribute(0, 3, 0, (void*)0);
+
+}
+
+
