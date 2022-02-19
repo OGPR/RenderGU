@@ -47,11 +47,13 @@ void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* V
         out vec4 FragColor;
 
         uniform float multiplier;
-        uniform vec3 color;
+        uniform float color_r;
+        uniform float color_g;
+        uniform float color_b;
 
         void main()
         {
-            FragColor = vec4(multiplier * color , 1.0f);
+            FragColor = vec4(multiplier * vec3(color_r, color_g, color_b) , 1.0f);
         }
         );
 
@@ -61,6 +63,34 @@ void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* V
     // Specify Vertices
     specifyVertices(vertexData, 18, VAO); 
 }
+
+void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn, glm::vec3* color)
+{
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+
+        if (*fadeIn)
+        {
+            *colorAmount += DeltaTime() * 0.2f;
+            if (*colorAmount > 1.0f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
+                *fadeIn = false;
+        }
+        else
+        {
+            *colorAmount -= DeltaTime() * 0.2f;
+        }
+
+
+
+        glUniform1f(glGetUniformLocation(shaderProgram, "multiplier"), *colorAmount); 
+        glUniform1f(glGetUniformLocation(shaderProgram, "color_r"), (*color)[0]); 
+        glUniform1f(glGetUniformLocation(shaderProgram, "color_g"), (*color)[1]); 
+        glUniform1f(glGetUniformLocation(shaderProgram, "color_b"), (*color)[2]); 
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+}
+
 
 int main()
 {
@@ -93,27 +123,7 @@ int main()
 
 
         // Draw to screen
-        glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(planeShader);
-
-        if (fadeIn)
-        {
-            colorAmount += DeltaTime() * 0.2f;
-            if (colorAmount > 1.0f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
-                fadeIn = false;
-        }
-        else
-        {
-            colorAmount -= DeltaTime() * 0.2f;
-        }
-
-
-
-        glUniform1f(glGetUniformLocation(planeShader, "multiplier"), colorAmount); 
-        glUniform3fv(glGetUniformLocation(planeShader, "color"), 1, glm::value_ptr(color)); 
-        glBindVertexArray(planeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
+        displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
         //// check and call events, and swap buffers
         PollEvents();
         SwapBuffers(window);
