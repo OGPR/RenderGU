@@ -85,45 +85,6 @@ void CheckFramebufferStatus()
 	}
 }
 
-// Crete a 2D unit cube
-void makeCube_2D(float* modelArr)
-{
-
-    // Tri 1
-    
-    // Row 1 (top left)
-    *modelArr++ = -1; // x
-    *modelArr++ = 1; // y
-    *modelArr++ = 0; // z
-
-    // Row 2 (bottom left)
-    *modelArr++ = -1; // x
-    *modelArr++ = -1; // y
-    *modelArr++ = 0; // z
-
-    // Row 3 (bottom right)
-    *modelArr++ = 1; // x
-    *modelArr++ = -1; // y
-    *modelArr++ = 0; // z
-    
-    // Tri 2
-    
-    // Row 4 (top right)
-    *modelArr++ = 1; // x
-    *modelArr++ = 1; // y
-    *modelArr++ = 0; // z
-    
-    // Row 5 (top left)
-    *modelArr++ = -1; // x
-    *modelArr++ = 1; // y
-    *modelArr++ = 0; // z
-    
-    // Row 6 (bottom right)
-    *modelArr++ = 1; // x
-    *modelArr++ = -1; // y
-    *modelArr++ = 0; // z
-}
-
 // Crete a 2D unit cube with Texture coords
 void makeCube_2D_withTex(float* modelArr)
 {
