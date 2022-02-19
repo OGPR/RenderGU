@@ -71,8 +71,8 @@ int main()
     
 
     // Specify Vertices
-    int VAO;
-    specifyVertices(cube2D, 18); 
+    unsigned int VAO;  
+    specifyVertices(cube2D, 18, &VAO); 
 
 
     // Fade effect variables 

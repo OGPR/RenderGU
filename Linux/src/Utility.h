@@ -125,15 +125,15 @@ void makeCube_2D(float* modelArr)
 }
 
 // Specify Vertices of Model
-void specifyVertices(float* model, unsigned short int sizeModelArray)
+void specifyVertices(float* model, unsigned short int sizeModelArray, unsigned int* VAO)
 {
     BindVBO(CreateVBO());
     
     AllocateMemoryVBO(sizeModelArray, model);
 
-    unsigned int VAO = CreateVAO();
+    *VAO = CreateVAO();
 
-    BindVAO(VAO);
+    BindVAO(*VAO);
 
     SetAttribute(0, 3, 0, (void*)0);
 
