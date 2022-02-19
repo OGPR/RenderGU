@@ -19,6 +19,8 @@
 #include "DeltaTime.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -29,6 +31,9 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO);
 void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn, glm::vec3* color);
+
+void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO);
+void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO);
 
 int main()
 {
@@ -49,6 +54,36 @@ int main()
 
     // 2D_Cube color
     glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+    
+    // Create Plane with Texture 
+    float planeWithTexVertexData[30] = {0}; 
+    unsigned int planeWithTexShader;
+    unsigned int planeWithTexVAO;
+    createPlane_withTex(planeWithTexVertexData, &planeWithTexShader, &planeWithTexVAO);
+
+    // Load Texture
+    glActiveTexture(GL_TEXTURE0);
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    // set the texture wrapping/filtering options (on the currently bound texture object)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load and generate the texture
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load("resources/container.jpg", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
 
 
     while(!WindowShouldClose(window))
@@ -61,7 +96,9 @@ int main()
 
 
         // Draw to screen
-        displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
+        //displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
+        displayPlane_withTex(planeWithTexShader, planeWithTexVAO);
+        
         //// check and call events, and swap buffers
         PollEvents();
         SwapBuffers(window);
@@ -148,4 +185,56 @@ void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmou
 
 }
 
+void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO)
+{
+    
+    makeCube_2D_withTex(vertexData);
+        
+    // Write shaders
+    const char* vs =
+        GLSL(330 core,
+        layout(location = 0) in vec3 inPos;
+        layout(location = 1) in vec2 inTexCoord;
 
+        out vec2 texCoord;
+
+
+        void main()
+        {
+            gl_Position = vec4(inPos, 2.0f);
+            texCoord = inTexCoord;
+        }
+        );
+    const char* fs =
+        GLSL(330 core,
+        in vec2 texCoord;
+        out vec4 FragColor;
+
+        uniform sampler2D Texture;
+        void main()
+        {
+            FragColor = texture(Texture, texCoord);
+        }
+        );
+
+    // Make Shader Program
+   *shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+
+    // Specify Vertices
+    BindVBO(CreateVBO());
+    AllocateMemoryVBO(30, vertexData);
+    *VAO = CreateVAO();
+    BindVAO(*VAO);
+    SetAttribute(0, 3, 0, (void*)0);
+    SetAttribute(1, 2, 0, (void*)(18 * sizeof(float)));
+}
+
+void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO)
+{
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+
+        glUniform1f(glGetUniformLocation(shaderProgram, "Texture"), 0); 
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+}
