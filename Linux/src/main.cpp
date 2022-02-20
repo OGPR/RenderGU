@@ -79,16 +79,18 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load and generate the texture
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("resources/container.jpg", &width, &height, &nrChannels, 0);
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char *data = stbi_load("resources/grass.png", &width, &height, &nrChannels, 0);
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
     {
         std::cout << "Failed to load texture" << std::endl;
     }
+    stbi_set_flip_vertically_on_load(false);
     stbi_image_free(data);
 
 
@@ -105,7 +107,7 @@ int main()
 
 
         // Do we switch display state?
-        if (colorAmountArr[0] < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        if (colorAmountArr[1] < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
         {
             DISPLAY_STATE = START_SCREEN_2;
         }
@@ -323,7 +325,8 @@ void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigne
 
         void main()
         {
-            gl_Position = vec4(inPos, 2.0f);
+            mat4 modelMat;
+            gl_Position = vec4(inPos, 4.0f);
             texCoord = inTexCoord;
         }
         );
@@ -342,7 +345,11 @@ void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigne
             if (_multiplier > 1.0f)
                 _multiplier = 1.0f;
 
-            FragColor = _multiplier * texture(Texture, texCoord);
+            vec4 texColor = texture(Texture, texCoord);
+            if (texColor.a < 0.1f)
+                discard;
+
+            FragColor = _multiplier * texColor ;
         }
         );
 
@@ -385,11 +392,11 @@ void display(unsigned int* shaderProgramArr, unsigned int* VAOArr, float* colorA
     switch(DISPLAY_STATE)
     {
         case START_SCREEN_1:
-            displayPlane(*shaderProgramArr, *VAOArr, &*colorAmountArr, &*fadeInArr, &*colorArr);
+            displayPlane_withTex(*(++shaderProgramArr), *(++VAOArr), &*(++colorAmountArr), &*(++fadeInArr));
             break;
        
         case START_SCREEN_2:
-            displayPlane_withTex(*(++shaderProgramArr), *(++VAOArr), &*(++colorAmountArr), &*(++fadeInArr));
+            displayPlane(*shaderProgramArr, *VAOArr, &*colorAmountArr, &*fadeInArr, &*colorArr);
             break;
             
         default:
