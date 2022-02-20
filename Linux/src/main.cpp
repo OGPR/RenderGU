@@ -321,9 +321,15 @@ void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigne
 
         uniform float multiplier;
         uniform sampler2D Texture;
+
+        float _multiplier;  // local var as can't assign to uniform
         void main()
         {
-            FragColor = multiplier * texture(Texture, texCoord);
+            _multiplier = multiplier;
+            if (_multiplier > 1.0f)
+                _multiplier = 1.0f;
+
+            FragColor = _multiplier * texture(Texture, texCoord);
         }
         );
 
@@ -347,7 +353,7 @@ void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* c
         if (*fadeIn)
         {
             *colorAmount += DeltaTime() * 0.2f;
-            if (*colorAmount > 1.0f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
+            if (*colorAmount > 1.05f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
                 *fadeIn = false;
         }
         else
