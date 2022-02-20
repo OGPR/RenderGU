@@ -33,7 +33,7 @@ void createPlane(float* vertexData, unsigned int* shaderProgram, unsigned int* V
 void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn, glm::vec3* color);
 
 void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO);
-void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO);
+void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn);
 
 int main()
 {
@@ -97,7 +97,7 @@ int main()
 
         // Draw to screen
         //displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
-        displayPlane_withTex(planeWithTexShader, planeWithTexVAO);
+        displayPlane_withTex(planeWithTexShader, planeWithTexVAO, &colorAmount, &fadeIn);
         
         //// check and call events, and swap buffers
         PollEvents();
@@ -319,10 +319,11 @@ void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigne
         in vec2 texCoord;
         out vec4 FragColor;
 
+        uniform float multiplier;
         uniform sampler2D Texture;
         void main()
         {
-            FragColor = texture(Texture, texCoord);
+            FragColor = multiplier * texture(Texture, texCoord);
         }
         );
 
@@ -338,12 +339,24 @@ void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigne
     SetAttribute(1, 2, 0, (void*)(18 * sizeof(float)));
 }
 
-void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO)
+void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn)
 {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(shaderProgram);
 
+        if (*fadeIn)
+        {
+            *colorAmount += DeltaTime() * 0.2f;
+            if (*colorAmount > 1.0f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
+                *fadeIn = false;
+        }
+        else
+        {
+            *colorAmount -= DeltaTime() * 0.2f;
+        }
+
         glUniform1f(glGetUniformLocation(shaderProgram, "Texture"), 0); 
+        glUniform1f(glGetUniformLocation(shaderProgram, "multiplier"), *colorAmount); 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 }
