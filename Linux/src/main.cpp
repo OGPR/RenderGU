@@ -35,31 +35,37 @@ void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmou
 void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO);
 void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn);
 
+void display(unsigned int* shaderProgramArr, unsigned int* VAOArr, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr);
+
+enum E_DISPLAY_STATE
+{
+    START_SCREEN_1,
+    START_SCREEN_2
+}DISPLAY_STATE;
+
 int main()
 {
     // Create main window
     GLFWwindow* window = Window();
 
+    // Arrays to store display parameters
+    unsigned int shaderProgramArr[2] = {0, 0};
+    unsigned int VAOArr[2] = {0, 0};
+    float colorAmountArr[2] = {0.0f, 0.0f};
+    bool fadeInArr[2] = {true, true};
+    glm::vec3 colorArr[2] = {glm::vec3(1.0f), glm::vec3(1.0f)};
+
     // Create Plane 
     float cube2D[18] = {0}; 
-    unsigned int planeShader;
-    unsigned int planeVAO;
-    createPlane(cube2D, &planeShader, &planeVAO);
+    createPlane(cube2D, &shaderProgramArr[0], &VAOArr[0]);
 
-
-
-    // Fade effect variables 
-    float colorAmount = 0.0f;
-    bool fadeIn = true;
-
-    // 2D_Cube color
-    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
     
     // Create Plane with Texture 
     float planeWithTexVertexData[30] = {0}; 
-    unsigned int planeWithTexShader;
-    unsigned int planeWithTexVAO;
-    createPlane_withTex(planeWithTexVertexData, &planeWithTexShader, &planeWithTexVAO);
+    createPlane_withTex(planeWithTexVertexData, &shaderProgramArr[1], &VAOArr[1]);
+
+    printf("ShaderPrograms: %i, %i", shaderProgramArr[0], shaderProgramArr[1]);
+    printf("VAOs: %i, %i", VAOArr[0], VAOArr[1]);
 
     // Load Texture
     glActiveTexture(GL_TEXTURE0);
@@ -86,6 +92,9 @@ int main()
     stbi_image_free(data);
 
 
+    // Starting display state
+    DISPLAY_STATE = START_SCREEN_1;
+
     while(!WindowShouldClose(window))
     {
         // Process Input
@@ -95,9 +104,14 @@ int main()
          }
 
 
+        // Do we switch display state?
+        if (colorAmountArr[0] < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        {
+            DISPLAY_STATE = START_SCREEN_2;
+        }
+
         // Draw to screen
-        //displayPlane(planeShader, planeVAO, &colorAmount, &fadeIn, &color);
-        displayPlane_withTex(planeWithTexShader, planeWithTexVAO, &colorAmount, &fadeIn);
+        display(shaderProgramArr, VAOArr, colorAmountArr, fadeInArr, colorArr);
         
         //// check and call events, and swap buffers
         PollEvents();
@@ -213,7 +227,6 @@ void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmou
         {
             *colorAmount -= DeltaTime() * 0.2f;
         }
-
 
 
         glUniform1f(glGetUniformLocation(shaderProgram, "multiplier"), *colorAmount); 
@@ -366,3 +379,21 @@ void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* c
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 }
+
+void display(unsigned int* shaderProgramArr, unsigned int* VAOArr, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr)
+{
+    switch(DISPLAY_STATE)
+    {
+        case START_SCREEN_1:
+            displayPlane(*shaderProgramArr, *VAOArr, &*colorAmountArr, &*fadeInArr, &*colorArr);
+            break;
+       
+        case START_SCREEN_2:
+            displayPlane_withTex(*(++shaderProgramArr), *(++VAOArr), &*(++colorAmountArr), &*(++fadeInArr));
+            break;
+            
+        default:
+            break;
+    }
+}
+
