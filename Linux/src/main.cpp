@@ -96,6 +96,7 @@ int main()
 
     while(!WindowShouldClose(window))
     {
+        
         // Process Input
          if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
          {
@@ -114,7 +115,10 @@ int main()
         
         //// check and call events, and swap buffers
         PollEvents();
+        printf("\rFrame Time:  %f ms", DeltaTime() * 1000.0f);
+        fflush(stdout);
         SwapBuffers(window);
+
        
     }
 
