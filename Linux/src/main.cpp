@@ -33,7 +33,9 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAm
 
 void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn);
 
-void display(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr);
+struct Screen1Data;
+struct Screen2Data;
+void display(Screen1Data*, Screen2Data* , float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr);
 
 enum E_DISPLAY_STATE
 {
@@ -41,14 +43,24 @@ enum E_DISPLAY_STATE
     START_SCREEN_2
 }DISPLAY_STATE;
 
+struct Screen1Data
+{
+    unsigned int VAO = 0;
+    unsigned int shaderProgram = 0;
+}screen1Data;
+
+struct Screen2Data
+{
+    unsigned int VAO = 0;
+    unsigned int shaderProgram = 0;
+}screen2Data;
+
 int main()
 {
     // Create main window
     GLFWwindow* window = Window();
 
     // Arrays to store display parameters
-    unsigned int shaderProgramArr[2] = {0, 0};
-    unsigned int VAOArr[2] = {0, 0};
     float colorAmountArr[2] = {0.0f, 0.0f};
     bool fadeInArr[2] = {true, true};
     glm::vec3 colorArr[2] = {glm::vec3(1.0f), glm::vec3(1.0f)};
@@ -83,13 +95,9 @@ int main()
     // Starting display state
     DISPLAY_STATE = START_SCREEN_1;
 
-    unsigned int VAO = 0;
-    unsigned int shaderProgram = 0;
 
     unsigned int frameNumber = 0;
     bool sceneSwitch = false;
-
-   
 
     while(!WindowShouldClose(window))
     {
@@ -109,7 +117,7 @@ int main()
         }
 
         // Draw to screen
-        display(&VAO, &shaderProgram, colorAmountArr, fadeInArr, colorArr);
+        display(&screen1Data, &screen2Data, colorAmountArr, fadeInArr, colorArr);
         
         //// check and call events, and swap buffers
         PollEvents();
@@ -397,17 +405,16 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
 }
 
 
-void display(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr)
+void display(Screen1Data* screen1Data, Screen2Data* screen2Data, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr)
 {
     switch(DISPLAY_STATE)
     {
         case START_SCREEN_1:
-            displayPlane_withTex(VAO, shaderProgram, &*(++colorAmountArr), &*(++fadeInArr));
+            displayPlane_withTex(&screen1Data->VAO, &screen1Data->shaderProgram, &*(++colorAmountArr), &*(++fadeInArr));
             break;
 
         case START_SCREEN_2:
-            *VAO = 0;
-            displayPlane(VAO, shaderProgram, &*colorAmountArr, &*fadeInArr, &*colorArr);
+            displayPlane(&screen2Data->VAO, &screen2Data->shaderProgram, &*colorAmountArr, &*fadeInArr, &*colorArr);
             break;
             
         default:
