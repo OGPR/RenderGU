@@ -34,9 +34,10 @@ void displayPlane(unsigned int shaderProgram, unsigned int VAO, float* colorAmou
 
 void createPlane_withTex(float* vertexData, unsigned int* shaderProgram, unsigned int* VAO);
 void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* colorAmount, bool* fadeIn);
-void displayPlane_withTex(float* colorAmount, bool* fadeIn);
+void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn);
 
 void display(unsigned int* shaderProgramArr, unsigned int* VAOArr, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr);
+void display_2(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr);
 
 enum E_DISPLAY_STATE
 {
@@ -95,6 +96,11 @@ int main()
     // Starting display state
     DISPLAY_STATE = START_SCREEN_1;
 
+    unsigned int VAO = 0;
+    unsigned int shaderProgram = 0;
+
+    unsigned int frameNumber = 0;
+
     while(!WindowShouldClose(window))
     {
         
@@ -106,17 +112,26 @@ int main()
 
 
         // Do we switch display state?
+        #if 0 
         if (colorAmountArr[1] < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
         {
             DISPLAY_STATE = START_SCREEN_2;
         }
+        #endif
 
         // Draw to screen
-        display(shaderProgramArr, VAOArr, colorAmountArr, fadeInArr, colorArr);
+        //display(shaderProgramArr, VAOArr, colorAmountArr, fadeInArr, colorArr);
+        display_2(&VAO, &shaderProgram, colorAmountArr, fadeInArr, colorArr);
         
         //// check and call events, and swap buffers
         PollEvents();
-        printf("\rFrame Time:  %f ms", DeltaTime() * 1000.0f);
+
+        // Print frame time
+        ++frameNumber;
+        if (frameNumber < 11)
+            printf("Frame Time:  %f ms\n", DeltaTime() * 1000.0f);
+        else
+            printf("\rFrame Time:  %f ms", DeltaTime() * 1000.0f);
         fflush(stdout);
         SwapBuffers(window);
 
@@ -389,130 +404,133 @@ void displayPlane_withTex(unsigned int shaderProgram, unsigned int VAO, float* c
         glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void displayPlane_withTex(float* colorAmount, bool* fadeIn)
+void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn)
 {
 
-    // Populate modelArr
-    float vertexDataArr[30] = {0};
+    if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
+    {
 
-    float* vertexData = vertexDataArr;
-    
-    
-    // Tri 1
-    
-    // Row 1 (top left)
-    *vertexData++ = -1; // x
-    *vertexData++ = 1; // y
-    *vertexData++ = 0; // z
-
-    // Row 2 (bottom left)
-    *vertexData++ = -1; // x
-    *vertexData++ = -1; // y
-    *vertexData++ = 0; // z
-
-    // Row 3 (bottom right)
-    *vertexData++ = 1; // x
-    *vertexData++ = -1; // y
-    *vertexData++ = 0; // z
-    
-    // Tri 2
-    
-    // Row 4 (top right)
-    *vertexData++ = 1; // x
-    *vertexData++ = 1; // y
-    *vertexData++ = 0; // z
-    
-    // Row 5 (top left)
-    *vertexData++ = -1; // x
-    *vertexData++ = 1; // y
-    *vertexData++ = 0; // z
-    
-    // Row 6 (bottom right)
-    *vertexData++ = 1; // x
-    *vertexData++ = -1; // y
-    *vertexData++ = 0; // z
-
-    // Texture coords
-    // Tri 1
-
-    // (top left)
-    *vertexData++ = 0; 
-    *vertexData++ = 1; 
-
-    // (bottom left)
-    *vertexData++ = 0; 
-    *vertexData++ = 0; 
-
-    // (bottom right)
-    *vertexData++ = 1; 
-    *vertexData++ = 0; 
-    
-    // Tri 2
-    
-    // (top right)
-    *vertexData++ = 1; 
-    *vertexData++ = 1; 
-    
-    // (top left)
-    *vertexData++ = 0; 
-    *vertexData++ = 1; 
-    
-    // (bottom right)
-    *vertexData++ = 1; 
-    *vertexData++ = 0;
+        float vertexDataArr[30] = {0};
+        float* vertexData = vertexDataArr;
         
-    // Write shaders
-    const char* vs =
-        GLSL(330 core,
-        layout(location = 0) in vec3 inPos;
-        layout(location = 1) in vec2 inTexCoord;
+        // Tri 1
+        
+        // Row 1 (top left)
+        *vertexData++ = -1; // x
+        *vertexData++ = 1; // y
+        *vertexData++ = 0; // z
 
-        out vec2 texCoord;
+        // Row 2 (bottom left)
+        *vertexData++ = -1; // x
+        *vertexData++ = -1; // y
+        *vertexData++ = 0; // z
+
+        // Row 3 (bottom right)
+        *vertexData++ = 1; // x
+        *vertexData++ = -1; // y
+        *vertexData++ = 0; // z
+        
+        // Tri 2
+        
+        // Row 4 (top right)
+        *vertexData++ = 1; // x
+        *vertexData++ = 1; // y
+        *vertexData++ = 0; // z
+        
+        // Row 5 (top left)
+        *vertexData++ = -1; // x
+        *vertexData++ = 1; // y
+        *vertexData++ = 0; // z
+        
+        // Row 6 (bottom right)
+        *vertexData++ = 1; // x
+        *vertexData++ = -1; // y
+        *vertexData++ = 0; // z
+
+        // Texture coords
+        // Tri 1
+
+        // (top left)
+        *vertexData++ = 0; 
+        *vertexData++ = 1; 
+
+        // (bottom left)
+        *vertexData++ = 0; 
+        *vertexData++ = 0; 
+
+        // (bottom right)
+        *vertexData++ = 1; 
+        *vertexData++ = 0; 
+        
+        // Tri 2
+        
+        // (top right)
+        *vertexData++ = 1; 
+        *vertexData++ = 1; 
+        
+        // (top left)
+        *vertexData++ = 0; 
+        *vertexData++ = 1; 
+        
+        // (bottom right)
+        *vertexData++ = 1; 
+        *vertexData++ = 0;
+            
+        // Write shaders
+        const char* vs =
+            GLSL(330 core,
+            layout(location = 0) in vec3 inPos;
+            layout(location = 1) in vec2 inTexCoord;
+
+            out vec2 texCoord;
 
 
-        void main()
-        {
-            mat4 modelMat;
-            gl_Position = vec4(inPos, 4.0f);
-            texCoord = inTexCoord;
-        }
-        );
-    const char* fs =
-        GLSL(330 core,
-        in vec2 texCoord;
-        out vec4 FragColor;
+            void main()
+            {
+                mat4 modelMat;
+                gl_Position = vec4(inPos, 4.0f);
+                texCoord = inTexCoord;
+            }
+            );
+        const char* fs =
+            GLSL(330 core,
+            in vec2 texCoord;
+            out vec4 FragColor;
 
-        uniform float multiplier;
-        uniform sampler2D Texture;
+            uniform float multiplier;
+            uniform sampler2D Texture;
 
-        float _multiplier;  // local var as can't assign to uniform
-        void main()
-        {
-            _multiplier = multiplier;
-            if (_multiplier > 1.0f)
-                _multiplier = 1.0f;
+            float _multiplier;  // local var as can't assign to uniform
+            void main()
+            {
+                _multiplier = multiplier;
+                if (_multiplier > 1.0f)
+                    _multiplier = 1.0f;
 
-            vec4 texColor = texture(Texture, texCoord);
-            if (texColor.a < 0.1f)
-                discard;
+                vec4 texColor = texture(Texture, texCoord);
+                if (texColor.a < 0.1f)
+                    discard;
 
-            FragColor = _multiplier * texColor ;
-        }
-        );
+                FragColor = _multiplier * texColor ;
+            }
+            );
 
-    // Make Shader Program
-   int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+        // Make Shader Program
+        *shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
-    // Specify Vertices
-    BindVBO(CreateVBO());
-    AllocateMemoryVBO(30, vertexDataArr);
-    unsigned int VAO = CreateVAO();
-    BindVAO(VAO);
-    SetAttribute(0, 3, 0, (void*)0);
-    SetAttribute(1, 2, 0, (void*)(18 * sizeof(float)));
+        // Specify Vertices
+        BindVBO(CreateVBO());
+        AllocateMemoryVBO(30, vertexDataArr);
+        *VAO = CreateVAO();
+        assert(*VAO);
+        BindVAO(*VAO);
+        SetAttribute(0, 3, 0, (void*)0);
+        SetAttribute(1, 2, 0, (void*)(18 * sizeof(float)));
+
+    } // !VAO
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(shaderProgram);
+    glUseProgram(*shaderProgram);
 
     if (*fadeIn)
     {
@@ -525,9 +543,9 @@ void displayPlane_withTex(float* colorAmount, bool* fadeIn)
         *colorAmount -= DeltaTime() * 0.2f;
     }
 
-    glUniform1f(glGetUniformLocation(shaderProgram, "Texture"), 0); 
-    glUniform1f(glGetUniformLocation(shaderProgram, "multiplier"), *colorAmount); 
-    glBindVertexArray(VAO);
+    glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
+    glUniform1f(glGetUniformLocation(*shaderProgram, "multiplier"), *colorAmount); 
+    glBindVertexArray(*VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
@@ -537,8 +555,7 @@ void display(unsigned int* shaderProgramArr, unsigned int* VAOArr, float* colorA
     switch(DISPLAY_STATE)
     {
         case START_SCREEN_1:
-            //displayPlane_withTex(*(++shaderProgramArr), *(++VAOArr), &*(++colorAmountArr), &*(++fadeInArr));
-            displayPlane_withTex(&*(++colorAmountArr), &*(++fadeInArr));
+            displayPlane_withTex(*(++shaderProgramArr), *(++VAOArr), &*(++colorAmountArr), &*(++fadeInArr));
             break;
        
         case START_SCREEN_2:
@@ -550,3 +567,15 @@ void display(unsigned int* shaderProgramArr, unsigned int* VAOArr, float* colorA
     }
 }
 
+void display_2(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmountArr, bool* fadeInArr, glm::vec3* colorArr)
+{
+    switch(DISPLAY_STATE)
+    {
+        case START_SCREEN_1:
+            displayPlane_withTex(VAO, shaderProgram, &*(++colorAmountArr), &*(++fadeInArr));
+            break;
+            
+        default:
+            break;
+    }
+}
