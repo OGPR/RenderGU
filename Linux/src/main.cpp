@@ -33,16 +33,6 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAm
 
 void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn);
 
-struct Screen1Data;
-struct Screen2Data;
-void display(Screen1Data*, Screen2Data*);
-
-enum E_DISPLAY_STATE
-{
-    START_SCREEN_1,
-    START_SCREEN_2
-}DISPLAY_STATE;
-
 struct Screen1Data
 {
     unsigned int VAO = 0;
@@ -50,7 +40,7 @@ struct Screen1Data
     float colorAmount = 0.0f;
     bool fadeIn = true;
     glm::vec3 color = glm::vec3(1.0f);
-}screen1Data;
+};
 
 struct Screen2Data
 {
@@ -59,7 +49,22 @@ struct Screen2Data
     float colorAmount = 0.0f;
     bool fadeIn = true;
     glm::vec3 color = glm::vec3(1.0f);
-}screen2Data;
+};
+
+struct SceneData
+{
+    Screen1Data screen1Data;
+    Screen2Data screen2Data;
+}sceneData;
+
+void display(SceneData*);
+
+enum E_DISPLAY_STATE
+{
+    START_SCREEN_1,
+    START_SCREEN_2
+}DISPLAY_STATE;
+
 
 int main()
 {
@@ -87,14 +92,14 @@ int main()
 
 
         // Do we switch display state?
-        if (screen1Data.colorAmount < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        if (sceneData.screen1Data.colorAmount < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
         {
             DISPLAY_STATE = START_SCREEN_2;
             sceneSwitch = true;
         }
 
         // Draw to screen
-        display(&screen1Data, &screen2Data);
+        display(&sceneData);
         
         //// check and call events, and swap buffers
         PollEvents();
@@ -409,16 +414,16 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
 }
 
 
-void display(Screen1Data* screen1Data, Screen2Data* screen2Data)
+void display(SceneData* sceneData)
 {
     switch(DISPLAY_STATE)
     {
         case START_SCREEN_1:
-            displayPlane_withTex(&screen1Data->VAO, &screen1Data->shaderProgram, &screen1Data->colorAmount, &screen1Data->fadeIn);
+            displayPlane_withTex(&sceneData->screen1Data.VAO, &sceneData->screen1Data.shaderProgram, &sceneData->screen1Data.colorAmount, &sceneData->screen1Data.fadeIn);
             break;
 
         case START_SCREEN_2:
-            displayPlane(&screen2Data->VAO, &screen2Data->shaderProgram, &screen2Data->colorAmount, &screen2Data->fadeIn, &screen2Data->color);
+            displayPlane(&sceneData->screen2Data.VAO, &sceneData->screen2Data.shaderProgram, &sceneData->screen2Data.colorAmount, &sceneData->screen2Data.fadeIn, &sceneData->screen2Data.color);
             break;
             
         default:
