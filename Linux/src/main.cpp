@@ -64,9 +64,6 @@ int main()
     float planeWithTexVertexData[30] = {0}; 
     createPlane_withTex(planeWithTexVertexData, &shaderProgramArr[1], &VAOArr[1]);
 
-    printf("ShaderPrograms: %i, %i", shaderProgramArr[0], shaderProgramArr[1]);
-    printf("VAOs: %i, %i", VAOArr[0], VAOArr[1]);
-
     // Load Texture
     glActiveTexture(GL_TEXTURE0);
     unsigned int texture;
