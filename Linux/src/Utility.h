@@ -8,6 +8,7 @@
 
 #include<glad/glad.h> // Need glad before glew as it includes OpenGL headers
 #include<GLFW/glfw3.h>
+#include "VertexSpecification_Common.h"
 
 int Init()
 {
@@ -83,3 +84,20 @@ void CheckFramebufferStatus()
 			printf("Something else has gone wrong\n");
 	}
 }
+
+// Specify Vertices of Model
+void specifyVertices(float* model, unsigned short int sizeModelArray, unsigned int* VAO)
+{
+    BindVBO(CreateVBO());
+    
+    AllocateMemoryVBO(sizeModelArray, model);
+
+    *VAO = CreateVAO();
+
+    BindVAO(*VAO);
+
+    SetAttribute(0, 3, 0, (void*)0);
+
+}
+
+

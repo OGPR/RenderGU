@@ -9,7 +9,7 @@
 void textureSetup(unsigned int* textureTarget)
 {
 	int img_width, img_height, img_nChannels;
-	unsigned char* img_data = stbi_load("container.jpg", &img_width, &img_height, &img_nChannels,0);
+	unsigned char* img_data = stbi_load("resources/container.jpg", &img_width, &img_height, &img_nChannels,0);
 
 	if (!img_data)
 		printf("Failed to load texture...");
@@ -33,7 +33,7 @@ void textureSetup(unsigned int* textureTarget)
 	//TODO it would be cool to fist check if we _need_ to do this - would have to check where 0.0 is on image y-axis
 	stbi_set_flip_vertically_on_load(true);
 
-	img_data = stbi_load("awesomeface.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/awesomeface.png", &img_width, &img_height, &img_nChannels, 0);
 
 
 	if (!img_data)
@@ -57,7 +57,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Diffuse Lighting map (our 3rd texture here)
-	img_data = stbi_load("diffuseMap.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/diffuseMap.png", &img_width, &img_height, &img_nChannels, 0);
 
 
 	if (!img_data)
@@ -81,7 +81,7 @@ void textureSetup(unsigned int* textureTarget)
 
 	// Ambient Lighting map (our 4th texture here)
 	// Same as diffuse at the moment
-	img_data = stbi_load("diffuseMap.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/diffuseMap.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load texture 3...");
@@ -103,7 +103,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Specular Lighting map (our 5th texture here)
-	img_data = stbi_load("specularMap.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/specularMap.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load texture 3...");
@@ -125,7 +125,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Floor texture  (our 6th texture here)
-	img_data = stbi_load("metal.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/metal.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load texture 6...");
@@ -148,7 +148,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Depth/Stencil buffer work cube texture  (our 7th texture here)
-	img_data = stbi_load("marble.jpg", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/marble.jpg", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load texture 7...");
@@ -171,7 +171,7 @@ void textureSetup(unsigned int* textureTarget)
 
 	// Grass  (our 8th texture here)
 	stbi_set_flip_vertically_on_load(true);
-	img_data = stbi_load("grass.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/grass.png", &img_width, &img_height, &img_nChannels, 0);
 	stbi_set_flip_vertically_on_load(false);
 
 	if (!img_data)
@@ -194,7 +194,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Window  (our 9th texture here)
-	img_data = stbi_load("window.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/window.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load texture 9...");
@@ -228,7 +228,7 @@ void textureSetup(unsigned int* textureTarget)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
 	// Marble2
-	img_data = stbi_load("marble2.jpg", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/marble2.jpg", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load marble2...");
@@ -250,7 +250,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Metal2
-	img_data = stbi_load("metal2.png", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/metal2.png", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load metal2...");
@@ -273,7 +273,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Blue
-	img_data = stbi_load("Blue.jpg", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/Blue.jpg", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load blue...");
@@ -295,7 +295,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Red
-	img_data = stbi_load("Red.jpg", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/Red.jpg", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load Red...");
@@ -317,7 +317,7 @@ void textureSetup(unsigned int* textureTarget)
 	stbi_image_free(img_data);
 
 	// Green
-	img_data = stbi_load("Green.jpg", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/Green.jpg", &img_width, &img_height, &img_nChannels, 0);
 
 	if (!img_data)
 		printf("Failed to load Green...");
@@ -340,7 +340,7 @@ void textureSetup(unsigned int* textureTarget)
 
 	// ErrorShaderVar
 	stbi_set_flip_vertically_on_load(true);
-	img_data = stbi_load("ErrorShaderVar.jpg", &img_width, &img_height, &img_nChannels, 0);
+	img_data = stbi_load("resources/ErrorShaderVar.jpg", &img_width, &img_height, &img_nChannels, 0);
 	stbi_set_flip_vertically_on_load(false);
 
 	if (!img_data)
