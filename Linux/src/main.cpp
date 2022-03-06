@@ -71,12 +71,8 @@ int main()
     // Create main window
     GLFWwindow* window = Window();
 
-
-
-
     // Starting display state
     DISPLAY_STATE = START_SCREEN_1;
-
 
     unsigned int frameNumber = 0;
     bool sceneSwitch = false;
@@ -120,26 +116,13 @@ int main()
 
 
         SwapBuffers(window);
-
-       
     }
-
-
-
-
-    
 
     // Exit
     Terminate();
     return 0;
-
-
-
-
-
 }
 //--------------------------------------------------------------------------------------------
-
 
 void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn, glm::vec3* color)
 {
@@ -182,13 +165,11 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAm
         *vertexData++ = 1; // x
         *vertexData++ = -1; // y
         *vertexData++ = 0; // z
-
         
         // Write shaders
         const char* vs =
             GLSL(330 core,
             layout(location = 0) in vec3 inPos;
-
 
             void main()
             {
@@ -231,22 +212,18 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAm
         *colorAmount -= DeltaTime() * 0.2f;
     }
 
-
     glUniform1f(glGetUniformLocation(*shaderProgram, "multiplier"), *colorAmount); 
     glUniform1f(glGetUniformLocation(*shaderProgram, "color_r"), (*color)[0]); 
     glUniform1f(glGetUniformLocation(*shaderProgram, "color_g"), (*color)[1]); 
     glUniform1f(glGetUniformLocation(*shaderProgram, "color_b"), (*color)[2]); 
     glBindVertexArray(*VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
 }
 
 void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn)
 {
-
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
-
         float vertexDataArr[30] = {0};
         float* vertexData = vertexDataArr;
         
@@ -321,7 +298,6 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
 
             out vec2 texCoord;
 
-
             void main()
             {
                 mat4 modelMat;
@@ -389,7 +365,6 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
         }
         stbi_set_flip_vertically_on_load(false);
         stbi_image_free(data);
-
 
     } // !VAO
 
