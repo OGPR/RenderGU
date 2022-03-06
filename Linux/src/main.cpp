@@ -33,6 +33,8 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAm
 
 void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn);
 
+void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram);
+
 struct Screen1Data
 {
     unsigned int VAO = 0;
@@ -51,10 +53,18 @@ struct Screen2Data
     glm::vec3 color = glm::vec3(1.0f);
 };
 
+struct MenuScreenData
+{
+    unsigned int VAO = 0;
+    unsigned int shaderProgram = 0;
+};
+
+
 struct SceneData
 {
     Screen1Data screen1Data;
     Screen2Data screen2Data;
+    MenuScreenData menuScreenData;
 }sceneData;
 
 void display(SceneData*);
@@ -62,7 +72,8 @@ void display(SceneData*);
 enum E_DISPLAY_STATE
 {
     START_SCREEN_1,
-    START_SCREEN_2
+    START_SCREEN_2,
+    MENU_SCREEN
 }DISPLAY_STATE;
 
 
@@ -77,6 +88,8 @@ int main()
     unsigned int frameNumber = 0;
     bool sceneSwitch = false;
 
+    bool enter_pressed = false;
+
     while(!WindowShouldClose(window))
     {
         
@@ -88,9 +101,26 @@ int main()
 
 
         // Do we switch display state?
-        if (sceneData.screen1Data.colorAmount < 0.0f || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        if (DISPLAY_STATE == START_SCREEN_1 &&
+                (sceneData.screen1Data.colorAmount < 0.0f ||
+                (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
         {
+            enter_pressed = true;
             DISPLAY_STATE = START_SCREEN_2;
+            sceneSwitch = true;
+        }
+
+        if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && enter_pressed)
+        {
+            enter_pressed = false;
+        }
+
+
+        if (DISPLAY_STATE == START_SCREEN_2 &&
+                (sceneData.screen2Data.colorAmount < 0.0f || (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
+        {
+            enter_pressed = true;
+            DISPLAY_STATE = MENU_SCREEN;
             sceneSwitch = true;
         }
 
@@ -388,6 +418,151 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram)
+{
+    if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
+    {
+        float vertexDataArr[30] = {0};
+        float* vertexData = vertexDataArr;
+        
+        // Tri 1
+        
+        // Row 1 (top left)
+        *vertexData++ = -1; // x
+        *vertexData++ = 1; // y
+        *vertexData++ = 0; // z
+
+        // Row 2 (bottom left)
+        *vertexData++ = -1; // x
+        *vertexData++ = -1; // y
+        *vertexData++ = 0; // z
+
+        // Row 3 (bottom right)
+        *vertexData++ = 1; // x
+        *vertexData++ = -1; // y
+        *vertexData++ = 0; // z
+        
+        // Tri 2
+        
+        // Row 4 (top right)
+        *vertexData++ = 1; // x
+        *vertexData++ = 1; // y
+        *vertexData++ = 0; // z
+        
+        // Row 5 (top left)
+        *vertexData++ = -1; // x
+        *vertexData++ = 1; // y
+        *vertexData++ = 0; // z
+        
+        // Row 6 (bottom right)
+        *vertexData++ = 1; // x
+        *vertexData++ = -1; // y
+        *vertexData++ = 0; // z
+
+        // Texture coords
+        // Tri 1
+
+        // (top left)
+        *vertexData++ = 0; 
+        *vertexData++ = 1; 
+
+        // (bottom left)
+        *vertexData++ = 0; 
+        *vertexData++ = 0; 
+
+        // (bottom right)
+        *vertexData++ = 1; 
+        *vertexData++ = 0; 
+        
+        // Tri 2
+        
+        // (top right)
+        *vertexData++ = 1; 
+        *vertexData++ = 1; 
+        
+        // (top left)
+        *vertexData++ = 0; 
+        *vertexData++ = 1; 
+        
+        // (bottom right)
+        *vertexData++ = 1; 
+        *vertexData++ = 0;
+            
+        // Write shaders
+        const char* vs =
+            GLSL(330 core,
+            layout(location = 0) in vec3 inPos;
+            layout(location = 1) in vec2 inTexCoord;
+
+            out vec2 texCoord;
+
+            void main()
+            {
+                gl_Position = vec4(inPos, 1.0f);
+                texCoord = inTexCoord;
+            }
+            );
+        const char* fs =
+            GLSL(330 core,
+            in vec2 texCoord;
+            out vec4 FragColor;
+
+            uniform sampler2D Texture;
+
+            void main()
+            {
+                vec4 texColor = texture(Texture, texCoord);
+                FragColor = texColor ;
+            }
+            );
+
+        // Make Shader Program
+        *shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+
+        // Specify Vertices
+        BindVBO(CreateVBO());
+        AllocateMemoryVBO(30, vertexDataArr);
+        *VAO = CreateVAO();
+        assert(*VAO);
+        BindVAO(*VAO);
+        SetAttribute(0, 3, 0, (void*)0);
+        SetAttribute(1, 2, 0, (void*)(18 * sizeof(float)));
+
+        // Load Texture
+        glActiveTexture(GL_TEXTURE0);
+        unsigned int texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // set the texture wrapping/filtering options (on the currently bound texture object)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load and generate the texture
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true);
+        unsigned char *data = stbi_load("resources/2DMenu/2D_Menu_Prototype.png", &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_set_flip_vertically_on_load(false);
+        stbi_image_free(data);
+    } // !VAO
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(*shaderProgram);
+
+    glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
+    glBindVertexArray(*VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
 
 void display(SceneData* sceneData)
 {
@@ -399,6 +574,9 @@ void display(SceneData* sceneData)
 
         case START_SCREEN_2:
             displayPlane(&sceneData->screen2Data.VAO, &sceneData->screen2Data.shaderProgram, &sceneData->screen2Data.colorAmount, &sceneData->screen2Data.fadeIn, &sceneData->screen2Data.color);
+            break;
+        case MENU_SCREEN:
+            display2DMenu(&sceneData->menuScreenData.VAO, &sceneData->menuScreenData.shaderProgram);
             break;
             
         default:
