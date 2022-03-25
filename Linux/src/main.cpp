@@ -47,7 +47,7 @@ struct Screen2Data
     glm::vec3 color = glm::vec3(1.0f);
 };
 
-struct MenuScreenData
+struct MenuScreenPrototypeData
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
@@ -72,7 +72,7 @@ struct SceneData
 {
     Screen1Data screen1Data;
     Screen2Data screen2Data;
-    MenuScreenData menuScreenData;
+    MenuScreenPrototypeData menuScreenPrototypeData;
     Scene1Data scene1Data;
     Scene2Data scene2Data;
 }sceneData;
@@ -83,7 +83,7 @@ enum E_DISPLAY_STATE
 {
     START_SCREEN_1,
     START_SCREEN_2,
-    MENU_SCREEN,
+    MENU_SCREEN_PROTOTYPE,
     SCENE_1,
     SCENE_2,
 }DISPLAY_STATE;
@@ -139,16 +139,16 @@ int main()
                 (sceneData.screen2Data.colorAmount < 0.0f || (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
         {
             enter_pressed = true;
-            DISPLAY_STATE = MENU_SCREEN;
+            DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
             sceneSwitch = true;
         }
 
-        if (DISPLAY_STATE == MENU_SCREEN)
+        if (DISPLAY_STATE == MENU_SCREEN_PROTOTYPE)
         {
             if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !button1_pressed)
             {
                 button1_pressed = true;
-                sceneData.menuScreenData.button1 = true;
+                sceneData.menuScreenPrototypeData.button1 = true;
                 scene1_selected = true;
             }
 
@@ -160,7 +160,7 @@ int main()
             if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !button2_pressed)
             {
                 button2_pressed = true;
-                sceneData.menuScreenData.button2 = true;   
+                sceneData.menuScreenPrototypeData.button2 = true;   
                 scene2_selected = true;
             }
 
@@ -482,7 +482,7 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram, bool button1, bool button2)
+void display2DMenuPrototype(unsigned int* VAO, unsigned int* shaderProgram, bool button1, bool button2)
 {
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
@@ -961,11 +961,11 @@ void display(SceneData* sceneData)
         case START_SCREEN_2:
             displayPlane(&sceneData->screen2Data.VAO, &sceneData->screen2Data.shaderProgram, &sceneData->screen2Data.colorAmount, &sceneData->screen2Data.fadeIn, &sceneData->screen2Data.color);
             break;
-        case MENU_SCREEN:
-            display2DMenu(&sceneData->menuScreenData.VAO,
-                    &sceneData->menuScreenData.shaderProgram,
-                    sceneData->menuScreenData.button1,
-                    sceneData->menuScreenData.button2);
+        case MENU_SCREEN_PROTOTYPE:
+            display2DMenuPrototype(&sceneData->menuScreenPrototypeData.VAO,
+                    &sceneData->menuScreenPrototypeData.shaderProgram,
+                    sceneData->menuScreenPrototypeData.button1,
+                    sceneData->menuScreenPrototypeData.button2);
             break;
         case SCENE_1:
             displayScene1(&sceneData->scene1Data.VAO,
