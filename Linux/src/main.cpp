@@ -29,13 +29,6 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
-// TODO I don't think I need these declarations any longer
-void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn, glm::vec3* color);
-
-void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn);
-
-void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram);
-
 struct Screen1Data
 {
     unsigned int VAO = 0;
@@ -103,7 +96,6 @@ int main()
 
     // Starting display state
     DISPLAY_STATE = START_SCREEN_1;
-    DISPLAY_STATE = MENU_SCREEN;
 
     unsigned int frameNumber = 0;
     bool sceneSwitch = false;
