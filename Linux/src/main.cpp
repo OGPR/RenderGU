@@ -110,14 +110,16 @@ int main()
 
     // Starting display state
     DISPLAY_STATE = START_SCREEN_1;
-    DISPLAY_STATE = MENU_SCREEN;
 
     unsigned int frameNumber = 0;
     bool sceneSwitch = false;
 
+    //---START key input variables---//
     bool enter_pressed = false;
     bool button1_pressed = false;
     bool button2_pressed = false;
+    bool m_pressed = false;
+    //---END key input variables---//
     
     bool scene1_selected = false;
     bool scene2_selected = false;
@@ -227,12 +229,29 @@ int main()
             && DISPLAY_STATE != START_SCREEN_1
             && DISPLAY_STATE != START_SCREEN_2)
         {
-            if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+
+            if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS && !m_pressed)
             {
-                printf("M has been pressed \n");
-                DISPLAY_STATE = MENU_SCREEN;
+                m_pressed = true;
+
+                if (DISPLAY_STATE == SCENE_1
+                    || DISPLAY_STATE == SCENE_2)
+                {
+                    DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
+                }
+                else
+                {
+                    DISPLAY_STATE = MENU_SCREEN;
+                }
             }
+
         }
+
+        if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE && m_pressed)
+        {
+            m_pressed = false;
+        }
+
 
 
         printf("DISPLAY STATE is %i ", DISPLAY_STATE);
