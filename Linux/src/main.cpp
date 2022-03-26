@@ -33,6 +33,7 @@ struct Screen1Data
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
+    unsigned int texture = 0;
     float colorAmount = 0.0f;
     bool fadeIn = true;
     glm::vec3 color = glm::vec3(1.0f);
@@ -42,6 +43,7 @@ struct Screen2Data
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
+    unsigned int texture = 0;
     float colorAmount = 0.0f;
     bool fadeIn = true;
     glm::vec3 color = glm::vec3(1.0f);
@@ -51,12 +53,14 @@ struct MenuScreenData
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
+    unsigned int texture = 0;
 };
 
 struct MenuScreenPrototypeData
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
+    unsigned int texture = 0;
     bool button1 = false;
     bool button2 = false;
 };
@@ -65,12 +69,14 @@ struct Scene1Data
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
+    unsigned int texture = 0;
 };
 
 struct Scene2Data
 {
     unsigned int VAO = 0;
     unsigned int shaderProgram = 0;
+    unsigned int texture = 0;
 };
 
 
@@ -104,6 +110,7 @@ int main()
 
     // Starting display state
     DISPLAY_STATE = START_SCREEN_1;
+    DISPLAY_STATE = MENU_SCREEN;
 
     unsigned int frameNumber = 0;
     bool sceneSwitch = false;
@@ -204,6 +211,21 @@ int main()
 
         }
 
+        // Handle return to menu
+        if (DISPLAY_STATE != MENU_SCREEN
+            && DISPLAY_STATE != START_SCREEN_1
+            && DISPLAY_STATE != START_SCREEN_2)
+        {
+            if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+            {
+                printf("M has been pressed \n");
+                DISPLAY_STATE = MENU_SCREEN;
+            }
+        }
+
+
+        printf("DISPLAY STATE is %i ", DISPLAY_STATE);
+        fflush(stdout);
         // Draw to screen
         display(&sceneData);
         
@@ -234,7 +256,7 @@ int main()
 }
 //--------------------------------------------------------------------------------------------
 
-void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn, glm::vec3* color)
+void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* texture, float* colorAmount, bool* fadeIn, glm::vec3* color)
 {
     if (!*VAO)
     {
@@ -330,7 +352,7 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, float* colorAm
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float* colorAmount, bool* fadeIn)
+void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* texture, float* colorAmount, bool* fadeIn)
 {
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
@@ -452,9 +474,8 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
 
         // Load Texture
         glActiveTexture(GL_TEXTURE0);
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glGenTextures(1, texture);
+        glBindTexture(GL_TEXTURE_2D, *texture);
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -495,10 +516,11 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, float*
     glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
     glUniform1f(glGetUniformLocation(*shaderProgram, "multiplier"), *colorAmount); 
     glBindVertexArray(*VAO);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram)
+void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* texture)
 {
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
@@ -612,9 +634,8 @@ void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram)
 
         // Load Texture
         glActiveTexture(GL_TEXTURE0);
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glGenTextures(1, texture);
+        glBindTexture(GL_TEXTURE_2D, *texture);
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -643,10 +664,11 @@ void display2DMenu(unsigned int* VAO, unsigned int* shaderProgram)
 
     glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
     glBindVertexArray(*VAO);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void display2DMenuPrototype(unsigned int* VAO, unsigned int* shaderProgram, bool button1, bool button2)
+void display2DMenuPrototype(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* texture, bool button1, bool button2)
 {
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
@@ -786,9 +808,8 @@ void display2DMenuPrototype(unsigned int* VAO, unsigned int* shaderProgram, bool
 
         // Load Texture
         glActiveTexture(GL_TEXTURE0);
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glGenTextures(1, texture);
+        glBindTexture(GL_TEXTURE_2D, *texture);
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -819,10 +840,11 @@ void display2DMenuPrototype(unsigned int* VAO, unsigned int* shaderProgram, bool
     glUniform1i(glGetUniformLocation(*shaderProgram, "Button1"), button1); 
     glUniform1i(glGetUniformLocation(*shaderProgram, "Button2"), button2); 
     glBindVertexArray(*VAO);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void displayScene1(unsigned int* VAO, unsigned int* shaderProgram)
+void displayScene1(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* texture)
 {
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
@@ -934,9 +956,8 @@ void displayScene1(unsigned int* VAO, unsigned int* shaderProgram)
 
         // Load Texture
         glActiveTexture(GL_TEXTURE0);
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glGenTextures(1, texture);
+        glBindTexture(GL_TEXTURE_2D, *texture);
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -965,10 +986,11 @@ void displayScene1(unsigned int* VAO, unsigned int* shaderProgram)
 
     glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
     glBindVertexArray(*VAO);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void displayScene2(unsigned int* VAO, unsigned int* shaderProgram)
+void displayScene2(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* texture)
 {
     if (!*VAO) // Create model, specify vertices and compile shaders in only once in the loop that this function will be called in
     {
@@ -1080,9 +1102,8 @@ void displayScene2(unsigned int* VAO, unsigned int* shaderProgram)
 
         // Load Texture
         glActiveTexture(GL_TEXTURE0);
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glGenTextures(1, texture);
+        glBindTexture(GL_TEXTURE_2D, *texture);
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -1111,6 +1132,7 @@ void displayScene2(unsigned int* VAO, unsigned int* shaderProgram)
 
     glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
     glBindVertexArray(*VAO);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
@@ -1119,29 +1141,42 @@ void display(SceneData* sceneData)
     switch(DISPLAY_STATE)
     {
         case START_SCREEN_1:
-            displayPlane_withTex(&sceneData->screen1Data.VAO, &sceneData->screen1Data.shaderProgram, &sceneData->screen1Data.colorAmount, &sceneData->screen1Data.fadeIn);
+            displayPlane_withTex(&sceneData->screen1Data.VAO,
+                    &sceneData->screen1Data.shaderProgram,
+                    &sceneData->screen1Data.texture,
+                    &sceneData->screen1Data.colorAmount,
+                    &sceneData->screen1Data.fadeIn);
             break;
 
         case START_SCREEN_2:
-            displayPlane(&sceneData->screen2Data.VAO, &sceneData->screen2Data.shaderProgram, &sceneData->screen2Data.colorAmount, &sceneData->screen2Data.fadeIn, &sceneData->screen2Data.color);
+            displayPlane(&sceneData->screen2Data.VAO,
+                    &sceneData->screen2Data.shaderProgram,
+                    &sceneData->screen2Data.texture,
+                    &sceneData->screen2Data.colorAmount,
+                    &sceneData->screen2Data.fadeIn,
+                    &sceneData->screen2Data.color);
             break;
         case MENU_SCREEN:
             display2DMenu(&sceneData->menuScreenData.VAO,
-                    &sceneData->menuScreenData.shaderProgram);
+                    &sceneData->menuScreenData.shaderProgram,
+                    &sceneData->menuScreenData.texture);
             break;
         case MENU_SCREEN_PROTOTYPE:
             display2DMenuPrototype(&sceneData->menuScreenPrototypeData.VAO,
                     &sceneData->menuScreenPrototypeData.shaderProgram,
+                    &sceneData->menuScreenPrototypeData.texture,
                     sceneData->menuScreenPrototypeData.button1,
                     sceneData->menuScreenPrototypeData.button2);
             break;
         case SCENE_1:
             displayScene1(&sceneData->scene1Data.VAO,
-                    &sceneData->scene1Data.shaderProgram);
+                    &sceneData->scene1Data.shaderProgram,
+                    &sceneData->scene1Data.texture);
             break;
         case SCENE_2:
             displayScene2(&sceneData->scene2Data.VAO,
-                    &sceneData->scene2Data.shaderProgram);
+                    &sceneData->scene2Data.shaderProgram,
+                    &sceneData->scene2Data.texture);
             break;
             
         default:
