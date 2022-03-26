@@ -196,7 +196,12 @@ int main()
             if (scene1_selected)
             {
                 if (scene1Countdown < 0)
+                {
                     DISPLAY_STATE = SCENE_1;
+                    scene1_selected = false;
+                    sceneData.menuScreenPrototypeData.button1 = false;
+                    scene1Countdown = 10.0f;
+                }
 
                 scene1Countdown -= 61.0f * DeltaTime();
             }
@@ -204,7 +209,13 @@ int main()
             if (scene2_selected)
             {
                 if (scene2Countdown < 0)
+                {
                     DISPLAY_STATE = SCENE_2;
+                    scene2_selected = false;
+                    sceneData.menuScreenPrototypeData.button2 = false;
+                    scene2Countdown = 10.0f;
+                }
+
 
                 scene2Countdown -= 61.0f * DeltaTime();
             }
