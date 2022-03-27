@@ -21,6 +21,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "SceneDisplayFuncs.h"
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -88,6 +89,7 @@ struct SceneData
     MenuScreenPrototypeData menuScreenPrototypeData;
     Scene1Data scene1Data;
     Scene2Data scene2Data;
+    TriangleSceneData triangleSceneData;
 }sceneData;
 
 void display(SceneData*);
@@ -100,6 +102,7 @@ enum E_DISPLAY_STATE
     MENU_SCREEN_PROTOTYPE,
     SCENE_1,
     SCENE_2,
+    TRIANGLE_SCENE
 }DISPLAY_STATE;
 
 
@@ -165,6 +168,11 @@ int main()
             if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
             {
                 DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
+            {
+                DISPLAY_STATE = TRIANGLE_SCENE;
             }
         }
 
@@ -1208,6 +1216,11 @@ void display(SceneData* sceneData)
                     &sceneData->scene2Data.shaderProgram,
                     &sceneData->scene2Data.texture);
             break;
+        case TRIANGLE_SCENE:
+            displayTriangle(&sceneData->triangleSceneData.VAO,
+                    &sceneData->triangleSceneData.shaderProgram);
+            break;
+
             
         default:
             break;
