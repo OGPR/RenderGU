@@ -22,6 +22,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "scenes/BarycentricTriangle.h"
+#include "scenes/Camera3D.h"
+#include "models/cube/model.h"
+
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
 void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
@@ -90,6 +93,7 @@ struct SceneData
     Scene1Data scene1Data;
     Scene2Data scene2Data;
     TriangleSceneData triangleSceneData;
+    Camera3DSceneData camera3DSceneData;
 }sceneData;
 
 void display(SceneData*);
@@ -102,7 +106,8 @@ enum E_DISPLAY_STATE
     MENU_SCREEN_PROTOTYPE,
     SCENE_1,
     SCENE_2,
-    TRIANGLE_SCENE
+    TRIANGLE_SCENE,
+    CAMERA3D_SCENE
 }DISPLAY_STATE;
 
 
@@ -129,6 +134,18 @@ int main()
     short int scene1Countdown = 10.0f;
     short int scene2Countdown = 10.0f;
 
+    //---START Transform matrices init---//
+    glm::mat4 modelMat = glm::mat4(1.0f);
+    glm::mat4 viewMat = glm::mat4(1.0f);
+    glm::mat4 projectionMat = glm::mat4(1.0f);
+    //---END Transform matrices init---//
+    
+
+    //---START Viewport variables---//
+    float ViewportWidth = 800.0f;
+    float ViewportHeight = 600.0f;
+    //---END Viewport variables---//
+    
     while(!WindowShouldClose(window))
     {
         
@@ -173,6 +190,11 @@ int main()
             if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
             {
                 DISPLAY_STATE = TRIANGLE_SCENE;
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
+            {
+                DISPLAY_STATE = CAMERA3D_SCENE;
             }
         }
 
@@ -258,6 +280,25 @@ int main()
         if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE && m_pressed)
         {
             m_pressed = false;
+        }
+
+        if (DISPLAY_STATE == CAMERA3D_SCENE)
+        {
+            //Per frame transform matrix reset and reassignment
+            modelMat = glm::mat4(1.f);
+            modelMat = glm::rotate(modelMat, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            
+            viewMat = glm::mat4(1.f);
+            viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+
+            projectionMat = glm::mat4(1.f);
+            projectionMat = glm::perspective(glm::radians(45.0f), ViewportWidth/ViewportHeight, 0.1f, 100.0f); 
+
+
+            sceneData.camera3DSceneData.model = cube;
+            sceneData.camera3DSceneData.modelMat = modelMat;
+            sceneData.camera3DSceneData.viewMat = viewMat;
+            sceneData.camera3DSceneData.projectionMat = projectionMat;
         }
 
 
@@ -1220,7 +1261,17 @@ void display(SceneData* sceneData)
             displayTriangle(&sceneData->triangleSceneData.VAO,
                     &sceneData->triangleSceneData.shaderProgram);
             break;
+        case CAMERA3D_SCENE:
+            displayCube(&sceneData->camera3DSceneData.VAO,
+                    &sceneData->camera3DSceneData.shaderProgram,
+                    &sceneData->camera3DSceneData.texture,
+                    sceneData->camera3DSceneData.model,
+                    &sceneData->camera3DSceneData.modelMat,
+                    &sceneData->camera3DSceneData.viewMat,
+                    &sceneData->camera3DSceneData.projectionMat);
 
+
+            break;
             
         default:
             break;
