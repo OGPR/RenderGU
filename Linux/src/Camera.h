@@ -97,4 +97,132 @@ void PitchDown(glm::vec3* CameraLookDirection,
     CameraLookDirection->y = cos(*CameraPitch);
 
 }
-////
+
+void processInputCamera(GLFWwindow *window,
+                  CameraVariables* cameraVariables,
+                  float deltaTime)
+{
+    if (!cameraVariables)
+        return;
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos +=
+                cameraVariables->cameraMoveStep.z * deltaTime * cameraVariables->cameraLookDirection;
+
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos -=
+                cameraVariables->cameraMoveStep.z * deltaTime * cameraVariables->cameraLookDirection;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos -=
+                glm::normalize(glm::cross(
+                        cameraVariables->cameraLookDirection, cameraVariables->cameraUp))
+                        * cameraVariables->cameraMoveStep.x * deltaTime;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos += glm::normalize(glm::cross(
+                cameraVariables->cameraLookDirection, cameraVariables->cameraUp))
+                        * cameraVariables->cameraMoveStep.x * deltaTime;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        YawLeft(&cameraVariables->cameraLookDirection,
+                &cameraVariables->cameraYaw,
+                cameraVariables->cameraPitch,
+                cameraVariables->cameraCurrRotAngle.y,
+                deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        YawRight(&cameraVariables->cameraLookDirection,
+                 &cameraVariables->cameraYaw,
+                 cameraVariables->cameraPitch,
+                 cameraVariables->cameraCurrRotAngle.y,
+                 deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        PitchUp(&cameraVariables->cameraLookDirection,
+                cameraVariables->cameraYaw,
+                &cameraVariables->cameraPitch,
+                cameraVariables->cameraCurrRotAngle.x,
+                deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        PitchDown(&cameraVariables->cameraLookDirection,
+                  cameraVariables->cameraYaw,
+                  &cameraVariables->cameraPitch,
+                  cameraVariables->cameraCurrRotAngle.x,
+                  deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+    {
+    	float thetaPrev = cameraVariables->cameraCurrRotAngle.z;
+        cameraVariables->cameraCurrRotAngle.z += cameraVariables->cameraRotateStep.z * deltaTime;
+    	float theta = cameraVariables->cameraCurrRotAngle.z -thetaPrev;
+
+        cameraVariables->RotMat_xy = RollMatrix(theta);
+    	glm::vec3 cameraUpNew = TransformVec(cameraVariables->cameraUp, cameraVariables->RotMat_xy);
+
+        cameraVariables->cameraUp = cameraUpNew;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+    {
+    	float thetaPrev = cameraVariables->cameraCurrRotAngle.z;
+        cameraVariables->cameraCurrRotAngle.z -= cameraVariables->cameraRotateStep.z * deltaTime;
+    	float theta = cameraVariables->cameraCurrRotAngle.z -thetaPrev;
+
+        cameraVariables->RotMat_xy = RollMatrix(theta);
+    	glm::vec3 cameraUpNew = TransformVec(cameraVariables->cameraUp, cameraVariables->RotMat_xy);
+
+        cameraVariables->cameraUp = cameraUpNew;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+    {
+        cameraVariables->cameraUp = glm::vec3(0.f, 1.f, 0.f);
+    }
+
+
+    if (glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos.y += cameraVariables->cameraMoveStep.y * deltaTime;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos.y -= cameraVariables->cameraMoveStep.y * deltaTime;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS
+    		|| glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+    {
+        cameraVariables->cameraPos = cameraVariables->cameraPosHome;
+        cameraVariables->cameraCurrRotAngle = glm::vec3(glm::half_pi<float>(), glm::pi<float>(), 0.f);
+        cameraVariables->cameraYaw = cameraVariables->cameraCurrRotAngle.y;
+        cameraVariables->cameraPitch = cameraVariables->cameraCurrRotAngle.x;
+        cameraVariables->cameraLookDirection = cameraVariables->cameraLookAtHome;
+        cameraVariables->cameraUp = glm::vec3(0.f, 1.f, 0.f);
+    }
+
+
+}

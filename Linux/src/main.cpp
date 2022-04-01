@@ -24,6 +24,7 @@
 #include "scenes/BarycentricTriangle.h"
 #include "scenes/Camera3D.h"
 #include "models/cube/model.h"
+#include "Camera.h"
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -145,6 +146,8 @@ int main()
     float ViewportWidth = 800.0f;
     float ViewportHeight = 600.0f;
     //---END Viewport variables---//
+    
+    CameraVariables cameraVariables;
     
     while(!WindowShouldClose(window))
     {
@@ -284,12 +287,18 @@ int main()
 
         if (DISPLAY_STATE == CAMERA3D_SCENE)
         {
+            processInputCamera(window, &cameraVariables, DeltaTime());
+
             //Per frame transform matrix reset and reassignment
             modelMat = glm::mat4(1.f);
             modelMat = glm::rotate(modelMat, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             
             viewMat = glm::mat4(1.f);
-            viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+            //viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+            viewMat = glm::lookAt(
+                    cameraVariables.cameraPos,
+                    cameraVariables.cameraPos + cameraVariables.cameraLookDirection,
+                    cameraVariables.cameraUp);
 
             projectionMat = glm::mat4(1.f);
             projectionMat = glm::perspective(glm::radians(45.0f), ViewportWidth/ViewportHeight, 0.1f, 100.0f); 
