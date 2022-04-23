@@ -18,8 +18,8 @@ struct Viewport
 GLFWwindow* Window()
 {
     Init();
-    WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    WindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    WindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = CreateWindow(800, 600, "RenderGU", NULL, NULL);

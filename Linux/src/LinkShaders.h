@@ -33,14 +33,10 @@ unsigned int linkShaders(
 }
 
 unsigned int linkShaders(
-        unsigned int vertexShader,
-        unsigned int fragmentShader,
         unsigned int computeShader)
 {
     unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
     glAttachShader(shaderProgram, computeShader);
     glLinkProgram(shaderProgram);
 
@@ -56,9 +52,7 @@ unsigned int linkShaders(
         }
     }
 
-    // We have finished building the shader program, so can delete the vertex and fragment shader objects
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    // We have finished building the shader program, so can delete
     glDeleteShader(computeShader);
 
     return shaderProgram;

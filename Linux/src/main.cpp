@@ -310,6 +310,12 @@ int main()
             sceneData.camera3DSceneData.projectionMat = projectionMat;
         }
 
+        if (DISPLAY_STATE == TRIANGLE_SCENE)
+        {
+            sceneData.triangleSceneData.fadeAmount += 0.01f;
+        }
+
+
 
 
         printf("DISPLAY STATE is %i ", DISPLAY_STATE);
@@ -1268,7 +1274,8 @@ void display(SceneData* sceneData)
             break;
         case TRIANGLE_SCENE:
             displayTriangle(&sceneData->triangleSceneData.VAO,
-                    &sceneData->triangleSceneData.shaderProgram);
+                       &sceneData->triangleSceneData.shaderProgram,
+                       &sceneData->triangleSceneData.fadeAmount);
             break;
         case CAMERA3D_SCENE:
             displayCube(&sceneData->camera3DSceneData.VAO,
