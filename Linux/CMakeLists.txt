@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(src)
 include_directories(../Libs/Libs/glm)
-include_directories(../Libs/Libs/glad/include)
+include_directories(../Libs/Libs/glad_gl46/include)
 include_directories(../Libs/Libs/irrKlang-64bit-1.5.0/include)
 
 
 add_executable(RenderGU
-        ${CMAKE_SOURCE_DIR}/../Libs/Libs/glad/src/glad.c
+        ${CMAKE_SOURCE_DIR}/../Libs/Libs/glad_gl46/src/glad.c
         src/CompileShaders.h
         src/CustomMatrices.h
         src/data.h

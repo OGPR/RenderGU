@@ -45,3 +45,25 @@ unsigned int compileFragmentShader(const char* fragmentShaderSource)
 
     return fragmentShader;
 }
+
+unsigned int compileComputeShader(const char* computeShaderSource)
+{
+    unsigned int computeShader;
+    computeShader = glCreateShader(GL_COMPUTE_SHADER);
+    glShaderSource(computeShader, 1, &computeShaderSource, NULL);
+    glCompileShader(computeShader);
+
+    //fragmentShader compilation error checking
+    {
+        int success;
+        char infoLog[512];
+        glGetShaderiv(computeShader, GL_COMPILE_STATUS, &success);
+        if (!success)
+        {
+            glGetShaderInfoLog(computeShader, 512, NULL, infoLog);
+            std::cout << "ERROR::SHADER::COMPUTE::COMPILATION_FAILED\n" << infoLog << std::endl;
+        }
+    }
+
+    return computeShader;
+}
