@@ -143,7 +143,29 @@ $\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p 
 
 
 
-### Postprocess Effects
+### Post-process Effects
+Post-processing implemented by executing two render passes - the first one is an off screen render pass that renders the screen to a texture. This is achieved by creating a framebuffer and binding to that (using renderbuffers for when we don't need to sample depth and stencil buffers):
+```
+ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureTarget, 0);
+
+		// Create renderbuffer for attaching depth to currently bound framebuffer
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+		assert(glGetError() == 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+		CheckFramebufferStatus();
+```
+There is:
+
+- Inversion
+- Greyscale (simple average)
+- Greyscale (weighted average, eye)
+- A scrolling effect
+- Multiple Kernel effects: sharpen, blur, edge detection.
+- Rear View Mirror
+
 
 ## Resources
 - [LearnOpenGL](https://learnopengl.com/)
