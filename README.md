@@ -122,15 +122,16 @@ unsigned int linkShaders(unsigned int computeShader);
 ### Lighting
 
 Phong Reflection:
-$$ Ambient + Diffuse + Specular $$
+
+$$Ambient + Diffuse + Specular$$
 
 Phong Exponent, $p$: 
 
-$$\boldsymbol{viewDir}$$ and $$\boldsymbol{reflectionDir}$$ are unit vetors.
+$$\boldsymbol{viewDir}$$ and $$\boldsymbol{reflectionDir}$$ are unit vectors.
 
-$$ (max (\boldsymbol{viewDir} \cdot \boldsymbol{reflectionDir}, 0 ))^{p} $$
+$$(max (\boldsymbol{viewDir} \cdot \boldsymbol{reflectionDir}, 0 ))^{p}$$
 
-$\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p $ has the effect of simulating specular reflection more accurately (in the fragment shader, the specular reflection factor multiplies the light source).
+$\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p$ has the effect of simulating specular reflection more accurately (in the fragment shader, the specular reflection factor multiplies the light source).
 
 |Ambient | Diffuse | Specular | $p$ | |
 |--------|--------|---------|--|:--:|
