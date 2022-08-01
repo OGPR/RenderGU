@@ -1,5 +1,5 @@
 # RenderGU
-Rendering ground up (GU) using modern OpenGL
+Rendering ground up (GU) using modern OpenGL.
 
 ## Current Engine Features
 ### Display state scene switching
@@ -85,7 +85,7 @@ display(&sceneData)
 
 If there is no VAO do the following for each scene display, once only, inside a frame:
 
-- Create model vertex data -i.e the model
+- Create model vertex data - i.e. the model
 - Write your shaders
 - Make the shader program
 - Specify the vertices
@@ -117,8 +117,8 @@ unsigned int linkShaders(unsigned int computeShader);
 
 ### Other Features
 
-- Keyboard Input with Rising/Falling Edge Handling
-- 3D Camera System (Pitch, Roll, Yaw) and Strafe
+- Keyboard input with rising/falling edge handling
+- 3D camera system (pitch, roll, yaw) and strafe
 
 ## Rendering Showcase
 ### Lighting
@@ -144,8 +144,6 @@ $\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p$
 | yes| yes|yes|64 |![](Images/Lighting/Phong64.png)|
 
 
-
-
 ### Post-process Effects
 Post-processing implemented by executing two render passes - the first one is an off screen render pass that renders the screen to a texture. This is achieved by creating a framebuffer and binding to that (using renderbuffers for when we don't need to sample depth and stencil buffers):
 ```
@@ -163,11 +161,11 @@ Post-processing implemented by executing two render passes - the first one is an
 There is:
 
 - Inversion
-- Greyscale (simple average)
-- Greyscale (weighted average, eye)
+- Grey-scale (simple average)
+- Grey-scale (weighted average, eye)
 - A scrolling effect
 - Multiple Kernel effects: sharpen, blur, edge detection.
-- Rear View Mirror
+- Rear view mirror
 
 
 ## Resources
