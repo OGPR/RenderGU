@@ -112,9 +112,38 @@ unsigned int linkShaders(unsigned int computeShader);
 *shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 ```
 
-## Real-time Console Performance Data
+### Real-time Console Performance Data
 ![Console performance data](Images/EngineFeatures/ConsolePerfMetrics.png)
 
+### Keyboard Input with Rising/Falling Edge Handling
+### 3D Camera System (Pitch, Roll, Yaw) and Strafe
+
+## Rendering Showcase
+### Lighting
+
+Phong Reflection:
+$$ Ambient + Diffuse + Specular $$
+
+Phong Exponent, $p$: 
+
+$$\boldsymbol{viewDir}$$ and $$\boldsymbol{reflectionDir}$$ are unit vetors.
+
+$$ (max (\boldsymbol{viewDir} \cdot \boldsymbol{reflectionDir}, 0 ))^{p} $$
+
+$\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p $ has the effect of simulating specular reflection more accurately (in the fragment shader, the specular reflection factor multiplies the light source).
+
+|Ambient | Diffuse | Specular | $p$ | |
+|--------|--------|---------|--|:--:|
+| yes| yes|yes|32 |![](Images/Lighting/phong32_amb_diff_spec.png)|
+| no| yes|yes|32 | ![](Images/Lighting/phong32_diff_spec.png) |
+| no| no|yes|32 |![](Images/Lighting/phong32_spec.png)|
+| yes| yes|yes|16 |![](Images/Lighting/Phong16_allLight.png)|
+| yes| yes|yes|64 |![](Images/Lighting/Phong64.png)|
+
+
+
+
+### Postprocess Effects
 
 ## Resources
 - [LearnOpenGL](https://learnopengl.com/)
