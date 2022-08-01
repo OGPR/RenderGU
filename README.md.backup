@@ -115,8 +115,10 @@ unsigned int linkShaders(unsigned int computeShader);
 ### Real-time Console Performance Data
 ![Console performance data](Images/EngineFeatures/ConsolePerfMetrics.png)
 
-### Keyboard Input with Rising/Falling Edge Handling
-### 3D Camera System (Pitch, Roll, Yaw) and Strafe
+### Other Features
+
+- Keyboard Input with Rising/Falling Edge Handling
+- 3D Camera System (Pitch, Roll, Yaw) and Strafe
 
 ## Rendering Showcase
 ### Lighting
@@ -131,7 +133,7 @@ $$\boldsymbol{viewDir}$$ and $$\boldsymbol{reflectionDir}$$ are unit vectors.
 
 $$(max (\boldsymbol{viewDir} \cdot \boldsymbol{reflectionDir}, 0 ))^{p}$$
 
-$\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p $ has the effect of simulating specular reflection more accurately (in the fragment shader, the specular reflection factor multiplies the light source).
+$\theta\$ is the angle between the above vectors. As $\cos \theta \in\ [0,1], p$ has the effect of simulating specular reflection more accurately (in the fragment shader, the specular reflection factor multiplies the light source).
 
 |Ambient | Diffuse | Specular | $p$ | |
 |--------|--------|---------|--|:--:|

@@ -115,8 +115,10 @@ unsigned int linkShaders(unsigned int computeShader);
 ### Real-time Console Performance Data
 ![Console performance data](Images/EngineFeatures/ConsolePerfMetrics.png)
 
-### Keyboard Input with Rising/Falling Edge Handling
-### 3D Camera System (Pitch, Roll, Yaw) and Strafe
+### Other Features
+
+- Keyboard Input with Rising/Falling Edge Handling
+- 3D Camera System (Pitch, Roll, Yaw) and Strafe
 
 ## Rendering Showcase
 ### Lighting
