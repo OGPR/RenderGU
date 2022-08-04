@@ -4,12 +4,11 @@
 
 static float currFrameTime;
 static float lastFrameTime = 0.f;
+static float deltaTime;
 
-float DeltaTime()
+void DeltaTime()
 {
-    float deltaTime;
     currFrameTime = glfwGetTime();
     deltaTime = currFrameTime - lastFrameTime;
-    lastFrameTime = currFrameTime;
-    return deltaTime;
+    lastFrameTime = currFrameTime;   
 }

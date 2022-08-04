@@ -151,6 +151,7 @@ int main()
     
     while(!WindowShouldClose(window))
     {
+         DeltaTime();
         
         // Process Input
          if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -238,7 +239,7 @@ int main()
                     scene1Countdown = 10.0f;
                 }
 
-                scene1Countdown -= 61.0f * DeltaTime();
+                scene1Countdown -= 61.0f * deltaTime;
             }
 
             if (scene2_selected)
@@ -252,7 +253,7 @@ int main()
                 }
 
 
-                scene2Countdown -= 61.0f * DeltaTime();
+                scene2Countdown -= 61.0f * deltaTime;
             }
 
         }
@@ -287,7 +288,7 @@ int main()
 
         if (DISPLAY_STATE == CAMERA3D_SCENE)
         {
-            processInputCamera(window, &cameraVariables, DeltaTime());
+            processInputCamera(window, &cameraVariables, deltaTime);
 
             //Per frame transform matrix reset and reassignment
             modelMat = glm::mat4(1.f);
@@ -335,9 +336,9 @@ int main()
 
         ++frameNumber;
         if (frameNumber < 11)
-            printf("Frame Time:  %f ms\n", DeltaTime() * 1000.0f);
+            printf("Frame Time:  %f ms\n", deltaTime * 1000.0f);
         else
-            printf("\rFrame Time:  %f ms", DeltaTime() * 1000.0f);
+            printf("\rFrame Time:  %f ms", deltaTime * 1000.0f);
         fflush(stdout);
 
 
@@ -429,13 +430,13 @@ void displayPlane(unsigned int* VAO, unsigned int* shaderProgram, unsigned int* 
 
     if (*fadeIn)
     {
-        *colorAmount += DeltaTime() * 0.2f;
+        *colorAmount += deltaTime * 0.2f;
         if (*colorAmount > 1.0f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
             *fadeIn = false;
     }
     else
     {
-        *colorAmount -= DeltaTime() * 0.2f;
+        *colorAmount -= deltaTime * 0.2f;
     }
 
     glUniform1f(glGetUniformLocation(*shaderProgram, "multiplier"), *colorAmount); 
@@ -598,13 +599,13 @@ void displayPlane_withTex(unsigned int* VAO, unsigned int* shaderProgram, unsign
 
     if (*fadeIn)
     {
-        *colorAmount += DeltaTime() * 0.2f;
+        *colorAmount += deltaTime * 0.2f;
         if (*colorAmount > 1.05f) // To delay the fade out effect (i.e stay at full color), change this (e.g to 1.5f)
             *fadeIn = false;
     }
     else
     {
-        *colorAmount -= DeltaTime() * 0.2f;
+        *colorAmount -= deltaTime * 0.2f;
     }
 
     glUniform1f(glGetUniformLocation(*shaderProgram, "Texture"), 0); 
