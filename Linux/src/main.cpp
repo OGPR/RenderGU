@@ -128,6 +128,7 @@ int main()
     bool button1_pressed = false;
     bool button2_pressed = false;
     bool m_pressed = false;
+    bool space_pressed = false;
     //---END key input variables---//
     
     bool scene1_selected = false;
@@ -147,6 +148,8 @@ int main()
     float ViewportHeight = 600.0f;
     //---END Viewport variables---//
     
+    bool pause = false;
+    
     CameraVariables cameraVariables;
     
     while(!WindowShouldClose(window))
@@ -158,6 +161,25 @@ int main()
          {
             glfwSetWindowShouldClose(window, true);
          }
+
+         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !space_pressed)
+         {
+             space_pressed = true;
+             pause = !pause;
+         }
+
+         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && space_pressed)
+         {
+             space_pressed = false;
+         }
+
+         if (pause)
+         {
+             PollEvents();
+             continue;
+         }
+
+
 
 
         // Do we switch display state?
