@@ -27,6 +27,7 @@
 #include "Camera.h"
 #include "games/TransitionAndMenuShowcase/Game.h"
 #include "engine/EngineVariables.h"
+#include "engine/EngineInputProcessing.h"
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -47,49 +48,31 @@ int main()
 
     while(!WindowShouldClose(window))
     {
-         DeltaTime();
-        
-        //---START Engine input processing
-         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-         {
-            glfwSetWindowShouldClose(window, true);
-         }
+        DeltaTime();
 
-         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !engineVariables.space_pressed)
-         {
-             engineVariables.space_pressed = true;
-             engineVariables.pause = !engineVariables.pause;
-         }
+        EngineInputProcessing(window, &engineVariables);
 
-         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && engineVariables.space_pressed)
-         {
-             engineVariables.space_pressed = false;
-         }
-
-         if (engineVariables.pause)
-         {
-             PollEvents();
-             continue;
-         }
-        //---END Engine input processing
-
-         Play(window, &engineVariables.frameNumber, &DisplayState);
-        
-        ///---START Engine Code---///
-        //// check and call events, and swap buffers
-        PollEvents();
+        if (!engineVariables.pause)
+        {
+            Play(window, &engineVariables.frameNumber, &DisplayState);
+            
+            ///---START Engine Code---///
+            //// check and call events, and swap buffers
+            PollEvents();
 
 
-        ++engineVariables.frameNumber;
-        if (engineVariables.frameNumber < 11)
-            printf("Frame Time:  %f ms\n", deltaTime * 1000.0f);
-        else
-            printf("\rFrame Time:  %f ms", deltaTime * 1000.0f);
-        fflush(stdout);
-        ///---END Engine Code---///
+            ++engineVariables.frameNumber;
+            if (engineVariables.frameNumber < 11)
+                printf("Frame Time:  %f ms\n", deltaTime * 1000.0f);
+            else
+                printf("\rFrame Time:  %f ms", deltaTime * 1000.0f);
+            fflush(stdout);
+            ///---END Engine Code---///
 
 
-        SwapBuffers(window);
+            SwapBuffers(window);
+        }
+
     }
 
     // Exit
