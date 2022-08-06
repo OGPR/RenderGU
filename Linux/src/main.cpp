@@ -26,6 +26,7 @@
 #include "models/cube/model.h"
 #include "Camera.h"
 #include "games/TransitionAndMenuShowcase/Game.h"
+#include "engine/EngineVariables.h"
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -41,12 +42,8 @@ int main()
     // Create main window
     GLFWwindow* window = Window();
 
-    
-    //---START Engine variables---///
-    unsigned int frameNumber = 0;
-    bool pause = false;
-    bool space_pressed = false;
-    //---END Engine variables---///
+    // Initialise Engine Variables
+    EngineVariables engineVariables;
 
     while(!WindowShouldClose(window))
     {
@@ -58,33 +55,33 @@ int main()
             glfwSetWindowShouldClose(window, true);
          }
 
-         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !space_pressed)
+         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !engineVariables.space_pressed)
          {
-             space_pressed = true;
-             pause = !pause;
+             engineVariables.space_pressed = true;
+             engineVariables.pause = !engineVariables.pause;
          }
 
-         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && space_pressed)
+         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && engineVariables.space_pressed)
          {
-             space_pressed = false;
+             engineVariables.space_pressed = false;
          }
 
-         if (pause)
+         if (engineVariables.pause)
          {
              PollEvents();
              continue;
          }
         //---END Engine input processing
 
-         Play(window, &frameNumber, &DisplayState);
+         Play(window, &engineVariables.frameNumber, &DisplayState);
         
         ///---START Engine Code---///
         //// check and call events, and swap buffers
         PollEvents();
 
 
-        ++frameNumber;
-        if (frameNumber < 11)
+        ++engineVariables.frameNumber;
+        if (engineVariables.frameNumber < 11)
             printf("Frame Time:  %f ms\n", deltaTime * 1000.0f);
         else
             printf("\rFrame Time:  %f ms", deltaTime * 1000.0f);
