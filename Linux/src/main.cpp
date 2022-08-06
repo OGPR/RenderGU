@@ -39,6 +39,11 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 }
 
 
+void TickGame(GLFWwindow* window, EngineVariables* engineVariables, E_DISPLAY_STATE* DisplayState)
+{
+    GameFrame(window, &engineVariables->frameNumber, DisplayState);
+}
+
 int main()
 {
     // Create main window
@@ -55,7 +60,7 @@ int main()
 
         if (!engineVariables.pause)
         {
-            Play(window, &engineVariables.frameNumber, &DisplayState);
+            TickGame(window, &engineVariables, &DisplayState);
 
             EngineEndFrame(window, &engineVariables);
         }
