@@ -97,7 +97,6 @@ struct SceneData
     Camera3DSceneData camera3DSceneData;
 }sceneData;
 
-void display(SceneData*);
 
 enum E_DISPLAY_STATE
 {
@@ -109,54 +108,235 @@ enum E_DISPLAY_STATE
     SCENE_2,
     TRIANGLE_SCENE,
     CAMERA3D_SCENE
-}DISPLAY_STATE;
+};
 
+void display(SceneData*, E_DISPLAY_STATE*);
+
+
+bool sceneSwitch = false;
+
+//---START key input variables---//
+bool enter_pressed = false;
+bool button1_pressed = false;
+bool button2_pressed = false;
+bool m_pressed = false;
+//---END key input variables---//
+
+bool scene1_selected = false;
+bool scene2_selected = false;
+short int scene1Countdown = 10.0f;
+short int scene2Countdown = 10.0f;
+
+//---START Transform matrices init---//
+glm::mat4 modelMat = glm::mat4(1.0f);
+glm::mat4 viewMat = glm::mat4(1.0f);
+glm::mat4 projectionMat = glm::mat4(1.0f);
+//---END Transform matrices init---//
+
+
+//TODO - these should be able to go
+//---START Viewport variables---//
+float ViewportWidth = 800.0f;
+float ViewportHeight = 600.0f;
+//---END Viewport variables---//
+
+
+CameraVariables cameraVariables;
+E_DISPLAY_STATE DisplayState = START_SCREEN_1;
+
+// TODO this modifies the _engine_ framenumber. Make own copy (decouple from engine)
+void Play(GLFWwindow* window, unsigned int* frameNumber, E_DISPLAY_STATE* DISPLAY_STATE)
+{
+    // Do we switch display state?
+    if (*DISPLAY_STATE == START_SCREEN_1 &&
+            (sceneData.screen1Data.colorAmount < 0.0f ||
+            (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
+    {
+        enter_pressed = true;
+        *DISPLAY_STATE = START_SCREEN_2;
+        sceneSwitch = true;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && enter_pressed)
+    {
+        enter_pressed = false;
+    }
+
+
+    if (*DISPLAY_STATE == START_SCREEN_2 &&
+            (sceneData.screen2Data.colorAmount < 0.0f || (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
+    {
+        enter_pressed = true;
+        *DISPLAY_STATE = MENU_SCREEN;
+        sceneSwitch = true;
+    }
+
+    if (*DISPLAY_STATE == MENU_SCREEN)
+    {
+        if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
+        {
+            *DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
+        {
+            *DISPLAY_STATE = TRIANGLE_SCENE;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
+        {
+            *DISPLAY_STATE = CAMERA3D_SCENE;
+        }
+    }
+
+
+    if (*DISPLAY_STATE == MENU_SCREEN_PROTOTYPE)
+    {
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !button1_pressed)
+        {
+            button1_pressed = true;
+            sceneData.menuScreenPrototypeData.button1 = true;
+            scene1_selected = true;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_RELEASE && button1_pressed)
+        {
+            button1_pressed = false;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !button2_pressed)
+        {
+            button2_pressed = true;
+            sceneData.menuScreenPrototypeData.button2 = true;   
+            scene2_selected = true;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE && button2_pressed)
+        {
+            button2_pressed = false;
+        }
+
+        if (scene1_selected)
+        {
+            if (scene1Countdown < 0)
+            {
+                *DISPLAY_STATE = SCENE_1;
+                scene1_selected = false;
+                sceneData.menuScreenPrototypeData.button1 = false;
+                scene1Countdown = 10.0f;
+            }
+
+            scene1Countdown -= 61.0f * deltaTime;
+        }
+
+        if (scene2_selected)
+        {
+            if (scene2Countdown < 0)
+            {
+                *DISPLAY_STATE = SCENE_2;
+                scene2_selected = false;
+                sceneData.menuScreenPrototypeData.button2 = false;
+                scene2Countdown = 10.0f;
+            }
+
+
+            scene2Countdown -= 61.0f * deltaTime;
+        }
+
+    }
+
+    // Handle return to menu
+    if (*DISPLAY_STATE != MENU_SCREEN
+        && *DISPLAY_STATE != START_SCREEN_1
+        && *DISPLAY_STATE != START_SCREEN_2)
+    {
+
+        if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS && !m_pressed)
+        {
+            m_pressed = true;
+
+            if (*DISPLAY_STATE == SCENE_1
+                || *DISPLAY_STATE == SCENE_2)
+            {
+                *DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
+            }
+            else
+            {
+                *DISPLAY_STATE = MENU_SCREEN;
+            }
+        }
+
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE && m_pressed)
+    {
+        m_pressed = false;
+    }
+
+    if (*DISPLAY_STATE == CAMERA3D_SCENE)
+    {
+        processInputCamera(window, &cameraVariables, deltaTime);
+
+        //Per frame transform matrix reset and reassignment
+        modelMat = glm::mat4(1.f);
+        modelMat = glm::rotate(modelMat, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        
+        viewMat = glm::mat4(1.f);
+        //viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+        viewMat = glm::lookAt(
+                cameraVariables.cameraPos,
+                cameraVariables.cameraPos + cameraVariables.cameraLookDirection,
+                cameraVariables.cameraUp);
+
+        projectionMat = glm::mat4(1.f);
+        projectionMat = glm::perspective(glm::radians(45.0f), ViewportWidth/ViewportHeight, 0.1f, 100.0f); 
+
+
+        sceneData.camera3DSceneData.model = cube;
+        sceneData.camera3DSceneData.modelMat = modelMat;
+        sceneData.camera3DSceneData.viewMat = viewMat;
+        sceneData.camera3DSceneData.projectionMat = projectionMat;
+    }
+
+    if (*DISPLAY_STATE == TRIANGLE_SCENE)
+    {
+        sceneData.triangleSceneData.fadeAmount += 0.01f;
+    }
+
+
+
+
+    printf("DISPLAY STATE is %i ", *DISPLAY_STATE);
+    fflush(stdout);
+    // Draw to screen
+    display(&sceneData, DISPLAY_STATE);
+    
+    // Print frame time
+    if (sceneSwitch)
+    {
+        *frameNumber = 0;
+        sceneSwitch = false;
+    }
+
+}
 
 int main()
 {
     // Create main window
     GLFWwindow* window = Window();
 
-    // Starting display state
-    DISPLAY_STATE = START_SCREEN_1;
-
+    
+    //---START Engine variables---///
     unsigned int frameNumber = 0;
-    bool sceneSwitch = false;
-
-    //---START key input variables---//
-    bool enter_pressed = false;
-    bool button1_pressed = false;
-    bool button2_pressed = false;
-    bool m_pressed = false;
-    bool space_pressed = false;
-    //---END key input variables---//
-    
-    bool scene1_selected = false;
-    bool scene2_selected = false;
-    short int scene1Countdown = 10.0f;
-    short int scene2Countdown = 10.0f;
-
-    //---START Transform matrices init---//
-    glm::mat4 modelMat = glm::mat4(1.0f);
-    glm::mat4 viewMat = glm::mat4(1.0f);
-    glm::mat4 projectionMat = glm::mat4(1.0f);
-    //---END Transform matrices init---//
-    
-
-    //---START Viewport variables---//
-    float ViewportWidth = 800.0f;
-    float ViewportHeight = 600.0f;
-    //---END Viewport variables---//
-    
     bool pause = false;
-    
-    CameraVariables cameraVariables;
-    
+    bool space_pressed = false;
+    //---END Engine variables---///
+
     while(!WindowShouldClose(window))
     {
          DeltaTime();
         
-        // Process Input
+        //---START Engine input processing
          if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
          {
             glfwSetWindowShouldClose(window, true);
@@ -178,183 +358,18 @@ int main()
              PollEvents();
              continue;
          }
+        //---END Engine input processing
+
+         Play(window, &frameNumber, &DisplayState);
 
 
 
 
-        // Do we switch display state?
-        if (DISPLAY_STATE == START_SCREEN_1 &&
-                (sceneData.screen1Data.colorAmount < 0.0f ||
-                (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
-        {
-            enter_pressed = true;
-            DISPLAY_STATE = START_SCREEN_2;
-            sceneSwitch = true;
-        }
-
-        if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && enter_pressed)
-        {
-            enter_pressed = false;
-        }
-
-
-        if (DISPLAY_STATE == START_SCREEN_2 &&
-                (sceneData.screen2Data.colorAmount < 0.0f || (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !enter_pressed)))
-        {
-            enter_pressed = true;
-            DISPLAY_STATE = MENU_SCREEN;
-            sceneSwitch = true;
-        }
-
-        if (DISPLAY_STATE == MENU_SCREEN)
-        {
-            if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
-            {
-                DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
-            }
-
-            if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
-            {
-                DISPLAY_STATE = TRIANGLE_SCENE;
-            }
-
-            if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
-            {
-                DISPLAY_STATE = CAMERA3D_SCENE;
-            }
-        }
-
-
-        if (DISPLAY_STATE == MENU_SCREEN_PROTOTYPE)
-        {
-            if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !button1_pressed)
-            {
-                button1_pressed = true;
-                sceneData.menuScreenPrototypeData.button1 = true;
-                scene1_selected = true;
-            }
-
-            if (glfwGetKey(window, GLFW_KEY_1) == GLFW_RELEASE && button1_pressed)
-            {
-                button1_pressed = false;
-            }
-
-            if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !button2_pressed)
-            {
-                button2_pressed = true;
-                sceneData.menuScreenPrototypeData.button2 = true;   
-                scene2_selected = true;
-            }
-
-            if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE && button2_pressed)
-            {
-                button2_pressed = false;
-            }
-
-            if (scene1_selected)
-            {
-                if (scene1Countdown < 0)
-                {
-                    DISPLAY_STATE = SCENE_1;
-                    scene1_selected = false;
-                    sceneData.menuScreenPrototypeData.button1 = false;
-                    scene1Countdown = 10.0f;
-                }
-
-                scene1Countdown -= 61.0f * deltaTime;
-            }
-
-            if (scene2_selected)
-            {
-                if (scene2Countdown < 0)
-                {
-                    DISPLAY_STATE = SCENE_2;
-                    scene2_selected = false;
-                    sceneData.menuScreenPrototypeData.button2 = false;
-                    scene2Countdown = 10.0f;
-                }
-
-
-                scene2Countdown -= 61.0f * deltaTime;
-            }
-
-        }
-
-        // Handle return to menu
-        if (DISPLAY_STATE != MENU_SCREEN
-            && DISPLAY_STATE != START_SCREEN_1
-            && DISPLAY_STATE != START_SCREEN_2)
-        {
-
-            if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS && !m_pressed)
-            {
-                m_pressed = true;
-
-                if (DISPLAY_STATE == SCENE_1
-                    || DISPLAY_STATE == SCENE_2)
-                {
-                    DISPLAY_STATE = MENU_SCREEN_PROTOTYPE;
-                }
-                else
-                {
-                    DISPLAY_STATE = MENU_SCREEN;
-                }
-            }
-
-        }
-
-        if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE && m_pressed)
-        {
-            m_pressed = false;
-        }
-
-        if (DISPLAY_STATE == CAMERA3D_SCENE)
-        {
-            processInputCamera(window, &cameraVariables, deltaTime);
-
-            //Per frame transform matrix reset and reassignment
-            modelMat = glm::mat4(1.f);
-            modelMat = glm::rotate(modelMat, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            
-            viewMat = glm::mat4(1.f);
-            //viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
-            viewMat = glm::lookAt(
-                    cameraVariables.cameraPos,
-                    cameraVariables.cameraPos + cameraVariables.cameraLookDirection,
-                    cameraVariables.cameraUp);
-
-            projectionMat = glm::mat4(1.f);
-            projectionMat = glm::perspective(glm::radians(45.0f), ViewportWidth/ViewportHeight, 0.1f, 100.0f); 
-
-
-            sceneData.camera3DSceneData.model = cube;
-            sceneData.camera3DSceneData.modelMat = modelMat;
-            sceneData.camera3DSceneData.viewMat = viewMat;
-            sceneData.camera3DSceneData.projectionMat = projectionMat;
-        }
-
-        if (DISPLAY_STATE == TRIANGLE_SCENE)
-        {
-            sceneData.triangleSceneData.fadeAmount += 0.01f;
-        }
-
-
-
-
-        printf("DISPLAY STATE is %i ", DISPLAY_STATE);
-        fflush(stdout);
-        // Draw to screen
-        display(&sceneData);
         
+        ///---START Engine Code---///
         //// check and call events, and swap buffers
         PollEvents();
 
-        // Print frame time
-        if (sceneSwitch)
-        {
-            frameNumber = 0;
-            sceneSwitch = false;
-        }
 
         ++frameNumber;
         if (frameNumber < 11)
@@ -362,6 +377,7 @@ int main()
         else
             printf("\rFrame Time:  %f ms", deltaTime * 1000.0f);
         fflush(stdout);
+        ///---END Engine Code---///
 
 
         SwapBuffers(window);
@@ -1253,9 +1269,9 @@ void displayScene2(unsigned int* VAO, unsigned int* shaderProgram, unsigned int*
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void display(SceneData* sceneData)
+void display(SceneData* sceneData, E_DISPLAY_STATE* DISPLAY_STATE)
 {
-    switch(DISPLAY_STATE)
+    switch(*DISPLAY_STATE)
     {
         case START_SCREEN_1:
             displayPlane_withTex(&sceneData->screen1Data.VAO,
