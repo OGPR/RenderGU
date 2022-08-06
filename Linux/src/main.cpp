@@ -28,6 +28,7 @@
 #include "games/TransitionAndMenuShowcase/Game.h"
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
+#include "engine/EngineEndFrame.h"
 
 
 // To resize viewport whenever window is resized - define a callback (with following signature)
@@ -55,26 +56,12 @@ int main()
         if (!engineVariables.pause)
         {
             Play(window, &engineVariables.frameNumber, &DisplayState);
-            
-            ///---START Engine Code---///
-            //// check and call events, and swap buffers
-            PollEvents();
 
-
-            ++engineVariables.frameNumber;
-            if (engineVariables.frameNumber < 11)
-                printf("Frame Time:  %f ms\n", deltaTime * 1000.0f);
-            else
-                printf("\rFrame Time:  %f ms", deltaTime * 1000.0f);
-            fflush(stdout);
-            ///---END Engine Code---///
-
-
-            SwapBuffers(window);
+            EngineEndFrame(window, &engineVariables);
         }
 
     }
-
+    
     // Exit
     Terminate();
     return 0;
