@@ -116,8 +116,11 @@ struct GameData
 };
 
 
-void GameFrame(GLFWwindow* window, unsigned int* frameNumber, E_DISPLAY_STATE* DISPLAY_STATE)
+void GameFrame(GLFWwindow* window, GameData* gameData)
 {
+    E_DISPLAY_STATE* DISPLAY_STATE = &gameData->DisplayState;
+    unsigned int* frameNumber = &gameData->gameFrameNumber;
+
     // Do we switch display state?
     if (*DISPLAY_STATE == START_SCREEN_1 &&
             (sceneData.screen1Data.colorAmount < 0.0f ||

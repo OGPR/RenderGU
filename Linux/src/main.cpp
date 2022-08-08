@@ -41,7 +41,7 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 void TickGame(GLFWwindow* window, struct GameData* gameData)
 {
-    GameFrame(window, &gameData->gameFrameNumber, &gameData->DisplayState);
+    GameFrame(window, gameData);
 }
 
 int main()
