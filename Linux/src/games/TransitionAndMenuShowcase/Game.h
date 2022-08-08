@@ -272,7 +272,7 @@ void GameFrame(GLFWwindow* window, unsigned int* frameNumber, E_DISPLAY_STATE* D
 
 
 
-    printf("DISPLAY STATE is %i ", *DISPLAY_STATE);
+    printf("\rDISPLAY STATE is %i ", *DISPLAY_STATE);
     fflush(stdout);
     // Draw to screen
     display(&sceneData, DISPLAY_STATE);

@@ -62,7 +62,7 @@ int main()
         {
             TickGame(window, &engineVariables, &DisplayState);
 
-            EngineEndFrame(window, &engineVariables);
+            EngineEndFrame(window, &engineVariables, false);
         }
 
     }
