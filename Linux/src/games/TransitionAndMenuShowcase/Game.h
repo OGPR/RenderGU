@@ -109,6 +109,7 @@ float ViewportHeight = 600.0f;
 
 CameraVariables cameraVariables;
 E_DISPLAY_STATE DisplayState = START_SCREEN_1;
+unsigned int gameFrameNumber;
 
 // TODO this modifies the _engine_ framenumber. Make own copy (decouple from engine)
 void GameFrame(GLFWwindow* window, unsigned int* frameNumber, E_DISPLAY_STATE* DISPLAY_STATE)
@@ -276,6 +277,15 @@ void GameFrame(GLFWwindow* window, unsigned int* frameNumber, E_DISPLAY_STATE* D
     fflush(stdout);
     // Draw to screen
     display(&sceneData, DISPLAY_STATE);
+
+    ++*frameNumber;
+
+
+    if (*frameNumber < 11)
+        printf("Game Frame Time:  %f ms\n", deltaTime * 1000.0f);
+    else
+        printf("\rGame Frame Time:  %f ms", deltaTime * 1000.0f);
+    fflush(stdout);
     
     // Print frame time
     if (sceneSwitch)
