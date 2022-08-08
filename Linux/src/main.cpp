@@ -29,20 +29,7 @@
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
 #include "engine/EngineEndFrame.h"
-
-
-// To resize viewport whenever window is resized - define a callback (with following signature)
-void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
-{
-    //Note--- this will change viewport location to have lower left corner at (0,0) (how to change this?)
-    glViewport(0, 0, newWidth, newHeight);
-}
-
-
-void TickGame(GLFWwindow* window, EngineVariables* engineVariables, E_DISPLAY_STATE* DisplayState)
-{
-    GameFrame(window, &engineVariables->frameNumber, DisplayState);
-}
+#include "engine/EngineTickGame.h"
 
 int main()
 {
@@ -52,6 +39,9 @@ int main()
     // Initialise Engine Variables
     EngineVariables engineVariables;
 
+    // Initialise Game Data
+    GameData gameData;
+
     while(!WindowShouldClose(window))
     {
         DeltaTime();
@@ -60,9 +50,9 @@ int main()
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &engineVariables, &DisplayState);
+            TickGame(window, &gameData, &GameFrame);
 
-            EngineEndFrame(window, &engineVariables);
+            EngineEndFrame(window, &engineVariables, false);
         }
 
     }
