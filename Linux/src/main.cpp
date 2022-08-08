@@ -38,10 +38,9 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
-
-void TickGame(GLFWwindow* window, struct GameData* gameData)
+void TickGame(GLFWwindow* window, struct GameData* gameData, void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*))
 {
-    GameFrame(window, gameData);
+    (*GameTickFuncPtr)(window, gameData); 
 }
 
 int main()
@@ -63,7 +62,7 @@ int main()
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &gameData);
+            TickGame(window, &gameData, &GameFrame);
 
             EngineEndFrame(window, &engineVariables, false);
         }
