@@ -39,9 +39,9 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
 }
 
 
-void TickGame(GLFWwindow* window, E_DISPLAY_STATE* DisplayState)
+void TickGame(GLFWwindow* window, struct GameData* gameData)
 {
-    GameFrame(window, &gameFrameNumber, DisplayState);
+    GameFrame(window, &gameData->gameFrameNumber, &gameData->DisplayState);
 }
 
 int main()
@@ -52,6 +52,9 @@ int main()
     // Initialise Engine Variables
     EngineVariables engineVariables;
 
+    // Initialise Game Data
+    GameData gameData;
+
     while(!WindowShouldClose(window))
     {
         DeltaTime();
@@ -60,7 +63,7 @@ int main()
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &DisplayState);
+            TickGame(window, &gameData);
 
             EngineEndFrame(window, &engineVariables, false);
         }

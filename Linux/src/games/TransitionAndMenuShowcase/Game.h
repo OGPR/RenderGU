@@ -108,10 +108,14 @@ float ViewportHeight = 600.0f;
 
 
 CameraVariables cameraVariables;
-E_DISPLAY_STATE DisplayState = START_SCREEN_1;
-unsigned int gameFrameNumber;
 
-// TODO this modifies the _engine_ framenumber. Make own copy (decouple from engine)
+struct GameData
+{
+    E_DISPLAY_STATE DisplayState = START_SCREEN_1;
+    unsigned int gameFrameNumber = 0;
+};
+
+
 void GameFrame(GLFWwindow* window, unsigned int* frameNumber, E_DISPLAY_STATE* DISPLAY_STATE)
 {
     // Do we switch display state?
