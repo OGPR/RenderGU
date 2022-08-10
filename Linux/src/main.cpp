@@ -25,7 +25,7 @@
 #include "scenes/Camera3D.h"
 #include "models/cube/model.h"
 #include "Camera.h"
-#include "games/TransitionAndMenuShowcase/Game.h"
+#include "games/BaselineTriangle/Triangle.h"
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
 #include "engine/EngineEndFrame.h"
@@ -41,6 +41,14 @@ int main()
 
     // Initialise Game Data
     GameData gameData;
+
+    // Specify the vertices based on gameData model
+    BindVBO(CreateVBO());
+    AllocateMemoryVBO(9, gameData.models.TriangleModel);
+    unsigned int VAO = CreateVAO();
+    BindVAO(VAO);
+    SetAttribute(0, 3, 0, (void*)0);
+    
 
     while(!WindowShouldClose(window))
     {
