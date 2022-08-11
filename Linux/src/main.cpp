@@ -48,6 +48,13 @@ int main()
     unsigned int VAO = CreateVAO();
     BindVAO(VAO);
     SetAttribute(0, 3, 0, (void*)0);
+
+    // Compile the shaders
+    const char* vs = gameData.shaders.VertexShader;
+    const char* fs = gameData.shaders.FragmentShader;
+    
+   
+    unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
     
 
     while(!WindowShouldClose(window))
@@ -58,7 +65,7 @@ int main()
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &gameData, &GameFrame);
+            TickGame(window, &shaderProgram, &VAO, &gameData, &GameFrame);
 
             EngineEndFrame(window, &engineVariables, false);
         }
