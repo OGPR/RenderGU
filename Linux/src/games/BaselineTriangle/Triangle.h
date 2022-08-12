@@ -31,11 +31,14 @@ struct GameData
         
         // For now manually create the model array here
         // Use NDC
-        float TriangleModel[9] = 
+        float TriangleModel[15] = 
         {
             -1.0f, -1.0f, 0.0f,
              0.0f,  1.0f, 0.0f,
              1.0f, -1.0f, 0.0f,
+             1.0f, 0.0f,
+             0.0f, 1.0f,
+             0.0f, 0.0f
         };
 
     }models;

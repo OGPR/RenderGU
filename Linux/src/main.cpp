@@ -36,7 +36,7 @@ void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
 {
     // Specify the vertices based on gameData model
     BindVBO(CreateVBO());
-    AllocateMemoryVBO(9, gameData->models.TriangleModel);
+    AllocateMemoryVBO(15, gameData->models.TriangleModel);
     unsigned int VAO = CreateVAO();
     BindVAO(VAO);
     SetAttribute(0, 3, 0, (void*)0);
