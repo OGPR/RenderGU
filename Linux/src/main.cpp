@@ -31,6 +31,27 @@
 #include "engine/EngineEndFrame.h"
 #include "engine/EngineTickGame.h"
 
+// Load game data will include vertex specification, shader compilation
+void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
+{
+    // Specify the vertices based on gameData model
+    BindVBO(CreateVBO());
+    AllocateMemoryVBO(9, gameData->models.TriangleModel);
+    unsigned int VAO = CreateVAO();
+    BindVAO(VAO);
+    SetAttribute(0, 3, 0, (void*)0);
+
+    engineVariables->VAO = VAO;
+    
+    // Compile the shaders
+    const char* vs = gameData->shaders.VertexShader;
+    const char* fs = gameData->shaders.FragmentShader;
+
+    unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+
+    engineVariables->shaderProgram = shaderProgram;
+}
+
 int main()
 {
     // Create main window
@@ -42,19 +63,8 @@ int main()
     // Initialise Game Data
     GameData gameData;
 
-    // Specify the vertices based on gameData model
-    BindVBO(CreateVBO());
-    AllocateMemoryVBO(9, gameData.models.TriangleModel);
-    unsigned int VAO = CreateVAO();
-    BindVAO(VAO);
-    SetAttribute(0, 3, 0, (void*)0);
-
-    // Compile the shaders
-    const char* vs = gameData.shaders.VertexShader;
-    const char* fs = gameData.shaders.FragmentShader;
-    
+    LoadGame(&gameData, &engineVariables);
    
-    unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
     
 
     while(!WindowShouldClose(window))
@@ -65,7 +75,7 @@ int main()
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &shaderProgram, &VAO, &gameData, &GameFrame);
+            TickGame(window, &engineVariables, &gameData, &GameFrame);
 
             EngineEndFrame(window, &engineVariables, false);
         }

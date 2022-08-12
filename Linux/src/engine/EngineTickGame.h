@@ -1,16 +1,16 @@
 #pragma once
 
 #include "../Utility.h"
+#include "EngineVariables.h"
 
 void TickGame(GLFWwindow* window,
-        unsigned int* shaderProgram,
-        unsigned int* VAO,
+        EngineVariables* engineVariables,
         struct GameData* gameData,
         void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*))
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(*shaderProgram);
-    glBindVertexArray(*VAO);
+    glUseProgram(engineVariables->shaderProgram);
+    glBindVertexArray(engineVariables->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     (*GameTickFuncPtr)(window, gameData); 
 }
