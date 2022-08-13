@@ -51,9 +51,13 @@ struct GameData
             GLSL(330 core,
             layout(location = 0) in vec3 inPos;
 
+            uniform mat4 ModelMatrix;
+            uniform mat4 ViewMatrix;
+            uniform mat4 ProjectionMatrix;
+
             void main()
             {
-                gl_Position = vec4(inPos, 1.0f);
+                gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPos, 1.0f);
             }
             );
 
@@ -79,6 +83,10 @@ struct GameData
             const unsigned int ModelIndices = models.TriangleModel_Indices; 
             const char* VertexShader = shaders.VertexShader;
             const char* FragmentShader = shaders.FragmentShader;
+
+            glm::mat4 ModelMatrix = glm::mat4(1.0f);
+            glm::mat4 ViewMatrix = glm::mat4(1.0f);
+            glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
 
             bool Draw = false;
 

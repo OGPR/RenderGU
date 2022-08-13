@@ -51,6 +51,10 @@ void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
     unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
     engineVariables->renderObjectSlot1.ShaderProgram = shaderProgram;
+
+    engineVariables->renderObjectSlot1.ModelMatrix = gameData->shadersToModelAssignment.slot1.ModelMatrix;
+    engineVariables->renderObjectSlot1.ViewMatrix = gameData->shadersToModelAssignment.slot1.ViewMatrix;
+    engineVariables->renderObjectSlot1.ProjectionMatrix = gameData->shadersToModelAssignment.slot1.ProjectionMatrix;
 }
 
 int main()
