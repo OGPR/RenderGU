@@ -101,6 +101,9 @@ struct GameData
 void GameFrame(GLFWwindow* window, GameData* gameData)
 {
     gameData->shadersToModelAssignment.slot1.Draw = true;
+    glm::mat4* ModelMatrix = &gameData->shadersToModelAssignment.slot1.ModelMatrix;
+    *ModelMatrix = glm::scale(*ModelMatrix, glm::vec3(0.99f, 0.99f, 0.99f));
+
 }
 
 
