@@ -84,7 +84,7 @@ struct GameData
             const char* VertexShader = shaders.VertexShader;
             const char* FragmentShader = shaders.FragmentShader;
 
-            glm::mat4 ModelMatrix = glm::mat4(1.0f);
+            glm::mat4 ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
             glm::mat4 ViewMatrix = glm::mat4(1.0f);
             glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
 
