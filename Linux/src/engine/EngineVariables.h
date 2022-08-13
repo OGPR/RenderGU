@@ -6,6 +6,7 @@ struct EngineVariables
     {
         unsigned int VAO = 0;
         unsigned int ShaderProgram = 0;
+        unsigned int Indices = 0;
     } renderObjectSlot1;
 
 

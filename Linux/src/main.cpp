@@ -42,6 +42,7 @@ void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
     SetAttribute(0, 3, 0, (void*)0);
 
     engineVariables->renderObjectSlot1.VAO = VAO;
+    engineVariables->renderObjectSlot1.Indices = gameData->shadersToModelAssignment.slot1.ModelIndices;
     
     // Compile the shaders
     const char* vs = gameData->shadersToModelAssignment.slot1.VertexShader;

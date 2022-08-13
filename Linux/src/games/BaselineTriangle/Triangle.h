@@ -40,6 +40,8 @@ struct GameData
              0.0f, 1.0f,
              0.0f, 0.0f
         };
+        
+        unsigned int TriangleModel_Indices = 3;
 
     };
 
@@ -74,6 +76,7 @@ struct GameData
             Models models;
             Shaders shaders;
             float* Model = models.TriangleModel;
+            const unsigned int ModelIndices = models.TriangleModel_Indices; 
             const char* VertexShader = shaders.VertexShader;
             const char* FragmentShader = shaders.FragmentShader;
 
