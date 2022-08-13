@@ -2,9 +2,12 @@
 
 struct EngineVariables
 {
-    // VAOs and ShaderPrograms
-    unsigned int shaderProgram = 0;
-    unsigned int VAO = 0;
+    struct RenderObjectSlot1
+    {
+        unsigned int VAO = 0;
+        unsigned int ShaderProgram = 0;
+    } renderObjectSlot1;
+
 
     unsigned int frameNumber = 0;
     bool pause = false;

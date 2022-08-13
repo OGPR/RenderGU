@@ -36,20 +36,20 @@ void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
 {
     // Specify the vertices based on gameData model
     BindVBO(CreateVBO());
-    AllocateMemoryVBO(15, gameData->models.TriangleModel);
+    AllocateMemoryVBO(15, gameData->shadersToModelAssignment.slot1.Model);
     unsigned int VAO = CreateVAO();
     BindVAO(VAO);
     SetAttribute(0, 3, 0, (void*)0);
 
-    engineVariables->VAO = VAO;
+    engineVariables->renderObjectSlot1.VAO = VAO;
     
     // Compile the shaders
-    const char* vs = gameData->shaders.VertexShader;
-    const char* fs = gameData->shaders.FragmentShader;
+    const char* vs = gameData->shadersToModelAssignment.slot1.VertexShader;
+    const char* fs = gameData->shadersToModelAssignment.slot1.FragmentShader;
 
     unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
-    engineVariables->shaderProgram = shaderProgram;
+    engineVariables->renderObjectSlot1.ShaderProgram = shaderProgram;
 }
 
 int main()

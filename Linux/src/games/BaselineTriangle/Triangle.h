@@ -41,11 +41,11 @@ struct GameData
              0.0f, 0.0f
         };
 
-    }models;
+    };
 
     struct Shaders
     {
-        const char* VertexShader = 
+            const char* VertexShader = 
             GLSL(330 core,
             layout(location = 0) in vec3 inPos;
 
@@ -55,7 +55,7 @@ struct GameData
             }
             );
 
-        const char* FragmentShader = 
+            const char* FragmentShader = 
             GLSL(330 core,
             out vec4 FragColor;
 
@@ -65,14 +65,31 @@ struct GameData
             }
             );
 
-    }shaders;
+    };
+
+    struct ShadersToModelAssignment
+    {
+        struct Slot1
+        {
+            Models models;
+            Shaders shaders;
+            float* Model = models.TriangleModel;
+            const char* VertexShader = shaders.VertexShader;
+            const char* FragmentShader = shaders.FragmentShader;
+
+            bool Draw = false;
+
+        }slot1;
+
+
+    }shadersToModelAssignment;
 
 
 };
 
 void GameFrame(GLFWwindow* window, GameData* gameData)
 {
-
+    gameData->shadersToModelAssignment.slot1.Draw = true;
 }
 
 

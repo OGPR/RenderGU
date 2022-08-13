@@ -8,9 +8,17 @@ void TickGame(GLFWwindow* window,
         struct GameData* gameData,
         void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*))
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(engineVariables->shaderProgram);
-    glBindVertexArray(engineVariables->VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
     (*GameTickFuncPtr)(window, gameData); 
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+   
+    if (gameData->shadersToModelAssignment.slot1.Draw)
+    {
+        glUseProgram(engineVariables->renderObjectSlot1.ShaderProgram);
+        glBindVertexArray(engineVariables->renderObjectSlot1.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
+
+
 }
