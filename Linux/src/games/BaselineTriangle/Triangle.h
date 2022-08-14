@@ -81,14 +81,11 @@ struct GameData
             Models* models;
             Shaders* shaders;
             float* Model;
-            unsigned int ModelIndices; 
-            const char* VertexShader;
-            const char* FragmentShader;
+            unsigned int ModelIndices = 0; 
+            const char* VertexShader = nullptr;
+            const char* FragmentShader = nullptr;
 
-            glm::mat4 ModelMatrix_0;
             glm::mat4 ModelMatrix;
-
-
             glm::mat4 ViewMatrix;
             glm::mat4 ProjectionMatrix; 
 
@@ -116,19 +113,20 @@ void GameInit(GameData* gameData)
         gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
         gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader;
         gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
-        gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+
+        glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
         
         if(i == 0)
         {
             gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
-                    gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix_0,
+                    ModelMatrix_0,
                     glm::vec3(-1.0f, 0.0f, 0.0f));
         }
 
         if (i == 1)
         {
             gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
-                    gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix_0,
+                    ModelMatrix_0,
                     glm::vec3(1.0f, 0.0f, 0.0f));
 
         }
