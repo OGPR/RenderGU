@@ -34,51 +34,35 @@
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
 {
-    ///---START Slot1---/// 
-    BindVBO(CreateVBO());
-    AllocateMemoryVBO(15, gameData->shadersToModelAssignment.slot1.Model);
-    unsigned int VAO_Slot1 = CreateVAO();
-    BindVAO(VAO_Slot1);
-    SetAttribute(0, 3, 0, (void*)0);
+    GameInit(gameData);
 
-    engineVariables->renderObjectSlot1.VAO = VAO_Slot1;
-    engineVariables->renderObjectSlot1.Indices = gameData->shadersToModelAssignment.slot1.ModelIndices;
-    
-    // Compile the shaders
-    const char* vs_Slot1 = gameData->shadersToModelAssignment.slot1.VertexShader;
-    const char* fs_Slot1 = gameData->shadersToModelAssignment.slot1.FragmentShader;
+    const unsigned int LoopMax = gameData->shadersToModelAssignment.NumberOfSlots;
 
-    unsigned int shaderProgram_Slot1 = linkShaders(compileVertexShader(vs_Slot1), compileFragmentShader(fs_Slot1));
+    for (int i = 0; i < LoopMax; ++i)
+    {
+        BindVBO(CreateVBO());
+        AllocateMemoryVBO(15, gameData->shadersToModelAssignment.SlotArray[i].Model);
+        unsigned int VAO = CreateVAO();
+        BindVAO(VAO);
+        SetAttribute(0, 3, 0, (void*)0);
 
-    engineVariables->renderObjectSlot1.ShaderProgram = shaderProgram_Slot1;
+        engineVariables->RenderObjectSlotArray[i].VAO = VAO;
+        engineVariables->RenderObjectSlotArray[i].Indices = gameData->shadersToModelAssignment.SlotArray[i].ModelIndices;
+        
+        // Compile the shaders
+        const char* vs = gameData->shadersToModelAssignment.SlotArray[i].VertexShader;
+        const char* fs = gameData->shadersToModelAssignment.SlotArray[i].FragmentShader;
 
-    engineVariables->renderObjectSlot1.ModelMatrix = &gameData->shadersToModelAssignment.slot1.ModelMatrix;
-    engineVariables->renderObjectSlot1.ViewMatrix = &gameData->shadersToModelAssignment.slot1.ViewMatrix;
-    engineVariables->renderObjectSlot1.ProjectionMatrix = &gameData->shadersToModelAssignment.slot1.ProjectionMatrix;
-    ///---END Slot1---/// 
-    
-    ///---START Slot2---/// 
-    BindVBO(CreateVBO());
-    AllocateMemoryVBO(15, gameData->shadersToModelAssignment.slot2.Model);
-    unsigned int VAO_Slot2 = CreateVAO();
-    BindVAO(VAO_Slot2);
-    SetAttribute(0, 3, 0, (void*)0);
+        unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
-    engineVariables->renderObjectSlot2.VAO = VAO_Slot2;
-    engineVariables->renderObjectSlot2.Indices = gameData->shadersToModelAssignment.slot2.ModelIndices;
-    
-    // Compile the shaders
-    const char* vs_Slot2 = gameData->shadersToModelAssignment.slot2.VertexShader;
-    const char* fs_Slot2 = gameData->shadersToModelAssignment.slot2.FragmentShader;
+        engineVariables->RenderObjectSlotArray[i].ShaderProgram = shaderProgram;
 
-    unsigned int shaderProgram_Slot2 = linkShaders(compileVertexShader(vs_Slot2), compileFragmentShader(fs_Slot2));
+        engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix;
+        engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ViewMatrix;
+        engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ProjectionMatrix;
 
-    engineVariables->renderObjectSlot2.ShaderProgram = shaderProgram_Slot2;
+    }
 
-    engineVariables->renderObjectSlot2.ModelMatrix = &gameData->shadersToModelAssignment.slot2.ModelMatrix;
-    engineVariables->renderObjectSlot2.ViewMatrix = &gameData->shadersToModelAssignment.slot2.ViewMatrix;
-    engineVariables->renderObjectSlot2.ProjectionMatrix = &gameData->shadersToModelAssignment.slot2.ProjectionMatrix;
-    ///---END Slot2---/// 
 }
 
 int main()

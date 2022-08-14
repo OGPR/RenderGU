@@ -43,7 +43,7 @@ struct GameData
         
         unsigned int TriangleModel_Indices = 3;
 
-    };
+    }models;
 
     struct Shaders
     {
@@ -71,48 +71,34 @@ struct GameData
             }
             );
 
-    };
+    }shaders;
 
     struct ShadersToModelAssignment
     {
-        struct Slot1
+        // TODO move Slot out of GameData
+        struct Slot
         {
-            Models models;
-            Shaders shaders;
-            float* Model = models.TriangleModel;
-            const unsigned int ModelIndices = models.TriangleModel_Indices; 
-            const char* VertexShader = shaders.VertexShader;
-            const char* FragmentShader = shaders.FragmentShader;
+            Models* models;
+            Shaders* shaders;
+            float* Model;
+            unsigned int ModelIndices; 
+            const char* VertexShader;
+            const char* FragmentShader;
 
-            glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
-            glm::mat4 ModelMatrix = glm::translate(ModelMatrix_0, glm::vec3(-1.0f, 0.0f, 0.0f));
+            glm::mat4 ModelMatrix_0;
+            glm::mat4 ModelMatrix;
 
 
-            glm::mat4 ViewMatrix = glm::mat4(1.0f);
-            glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
+            glm::mat4 ViewMatrix;
+            glm::mat4 ProjectionMatrix; 
 
-            bool Draw = false;
+            bool Draw = false; 
+        };
 
-        }slot1;
+        Slot slot1, slot2;
 
-        struct Slot2
-        {
-            Models models;
-            Shaders shaders;
-            float* Model = models.TriangleModel;
-            const unsigned int ModelIndices = models.TriangleModel_Indices; 
-            const char* VertexShader = shaders.VertexShader;
-            const char* FragmentShader = shaders.FragmentShader;
-
-            glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
-            glm::mat4 ModelMatrix = glm::translate(ModelMatrix_0, glm::vec3(1.0f, 0.0f, 0.0f));
-
-            glm::mat4 ViewMatrix = glm::mat4(1.0f);
-            glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
-
-            bool Draw = false;
-
-        }slot2;
+        unsigned int NumberOfSlots = 2;
+        Slot SlotArray[2] = {slot1, slot2};
 
 
     }shadersToModelAssignment;
@@ -120,10 +106,46 @@ struct GameData
 
 };
 
+void GameInit(GameData* gameData)
+{
+    for (int i = 0; i < gameData->shadersToModelAssignment.NumberOfSlots; ++i)
+    {
+        gameData->shadersToModelAssignment.SlotArray[i].models = &gameData->models;
+        gameData->shadersToModelAssignment.SlotArray[i].shaders = &gameData->shaders;
+        gameData->shadersToModelAssignment.SlotArray[i].Model = gameData->models.TriangleModel;
+        gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+        gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader;
+        gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
+        gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+        
+        if(i == 0)
+        {
+            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
+                    gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix_0,
+                    glm::vec3(-1.0f, 0.0f, 0.0f));
+        }
+
+        if (i == 1)
+        {
+            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
+                    gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix_0,
+                    glm::vec3(1.0f, 0.0f, 0.0f));
+
+        }
+
+
+        gameData->shadersToModelAssignment.SlotArray[i].ViewMatrix = glm::mat4(1.0f);  
+        gameData->shadersToModelAssignment.SlotArray[i].ProjectionMatrix = glm::mat4(1.0f);
+
+    }
+
+}
+
+
 void GameFrame(GLFWwindow* window, GameData* gameData)
 {
-    gameData->shadersToModelAssignment.slot1.Draw = true;
-    gameData->shadersToModelAssignment.slot2.Draw = true;
+    gameData->shadersToModelAssignment.SlotArray[0].Draw = true;
+    gameData->shadersToModelAssignment.SlotArray[1].Draw = true;
 
 }
 
