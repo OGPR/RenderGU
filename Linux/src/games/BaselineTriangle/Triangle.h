@@ -84,13 +84,35 @@ struct GameData
             const char* VertexShader = shaders.VertexShader;
             const char* FragmentShader = shaders.FragmentShader;
 
-            glm::mat4 ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+            glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+            glm::mat4 ModelMatrix = glm::translate(ModelMatrix_0, glm::vec3(-1.0f, 0.0f, 0.0f));
+
+
             glm::mat4 ViewMatrix = glm::mat4(1.0f);
             glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
 
             bool Draw = false;
 
         }slot1;
+
+        struct Slot2
+        {
+            Models models;
+            Shaders shaders;
+            float* Model = models.TriangleModel;
+            const unsigned int ModelIndices = models.TriangleModel_Indices; 
+            const char* VertexShader = shaders.VertexShader;
+            const char* FragmentShader = shaders.FragmentShader;
+
+            glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+            glm::mat4 ModelMatrix = glm::translate(ModelMatrix_0, glm::vec3(1.0f, 0.0f, 0.0f));
+
+            glm::mat4 ViewMatrix = glm::mat4(1.0f);
+            glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
+
+            bool Draw = false;
+
+        }slot2;
 
 
     }shadersToModelAssignment;
@@ -101,8 +123,7 @@ struct GameData
 void GameFrame(GLFWwindow* window, GameData* gameData)
 {
     gameData->shadersToModelAssignment.slot1.Draw = true;
-    glm::mat4* ModelMatrix = &gameData->shadersToModelAssignment.slot1.ModelMatrix;
-    *ModelMatrix = glm::scale(*ModelMatrix, glm::vec3(0.99f, 0.99f, 0.99f));
+    gameData->shadersToModelAssignment.slot2.Draw = true;
 
 }
 
