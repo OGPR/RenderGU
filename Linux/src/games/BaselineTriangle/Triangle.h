@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Utility.h"
+#include "../../engine/GameUtils.h"
 
 // This is our triangle "game"
 
@@ -16,9 +17,6 @@
 // We want to either use a predefined model, or make our own.
 //
 
-
-
-    
 
 struct GameData
 {
@@ -75,22 +73,6 @@ struct GameData
 
     struct ShadersToModelAssignment
     {
-        // TODO move Slot out of GameData
-        struct Slot
-        {
-            Models* models;
-            Shaders* shaders;
-            float* Model;
-            unsigned int ModelIndices = 0; 
-            const char* VertexShader = nullptr;
-            const char* FragmentShader = nullptr;
-
-            glm::mat4 ModelMatrix;
-            glm::mat4 ViewMatrix;
-            glm::mat4 ProjectionMatrix; 
-
-            bool Draw = false; 
-        };
 
         Slot slot1, slot2;
 
