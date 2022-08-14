@@ -32,9 +32,11 @@
 #include "engine/EngineTickGame.h"
 
 // Load game data will include vertex specification, shader compilation
-void LoadGame(struct GameData* gameData, EngineVariables* engineVariables)
+void LoadGame(struct GameData* gameData,
+        void(*GameInitFuncPtr)(struct GameData*),
+        EngineVariables* engineVariables)
 {
-    GameInit(gameData);
+    (*GameInitFuncPtr)(gameData);
 
     const unsigned int LoopMax = gameData->shadersToModelAssignment.NumberOfSlots;
 
@@ -76,7 +78,7 @@ int main()
     // Initialise Game Data
     GameData gameData;
 
-    LoadGame(&gameData, &engineVariables);
+    LoadGame(&gameData, &GameInit, &engineVariables);
    
     
 
