@@ -16,4 +16,5 @@ struct Slot
     glm::mat4 ProjectionMatrix; 
 
     bool Draw = false; 
+    bool Texture = false;
 };

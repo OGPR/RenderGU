@@ -47,6 +47,10 @@ void LoadGame(struct GameData* gameData,
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
         SetAttribute(0, 3, 0, (void*)0);
+        
+        // TODO do we want to do this only if we have a tex? Could adjust VBO allocation also in that case.
+        SetAttribute(1, 2, 0, (void*)(9 * sizeof(float))); 
+
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
         engineVariables->RenderObjectSlotArray[i].Indices = gameData->shadersToModelAssignment.SlotArray[i].ModelIndices;
@@ -62,6 +66,32 @@ void LoadGame(struct GameData* gameData,
         engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix;
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ViewMatrix;
         engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ProjectionMatrix;
+
+        if(gameData->shadersToModelAssignment.SlotArray[i].Texture)
+        {
+            int img_width, img_height, img_nChannels;
+            unsigned char* img_data = stbi_load("resources/container.jpg", &img_width, &img_height, &img_nChannels,0);
+
+            if (!img_data)
+                    printf("Failed to load texture...");
+
+            unsigned int texture;
+            glGenTextures(1,&texture);
+
+            engineVariables->RenderObjectSlotArray[i].TextureTarget = texture; 
+
+            glBindTexture(GL_TEXTURE_2D, texture);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            stbi_image_free(img_data);
+        }
 
     }
 

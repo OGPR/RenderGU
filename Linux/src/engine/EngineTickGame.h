@@ -21,15 +21,24 @@ void TickGame(GLFWwindow* window,
         {
             glUseProgram(engineVariables->RenderObjectSlotArray[i].ShaderProgram);
 
-            unsigned int ShaderProgram = engineVariables->RenderObjectSlotArray[0].ShaderProgram;
+            unsigned int ShaderProgram = engineVariables->RenderObjectSlotArray[i].ShaderProgram;
 
             glm::mat4 ModelMatrix = *engineVariables->RenderObjectSlotArray[i].ModelMatrix;
             glm::mat4 ViewMatrix = *engineVariables->RenderObjectSlotArray[i].ViewMatrix;
             glm::mat4 ProjectionMatrix = *engineVariables->RenderObjectSlotArray[i].ProjectionMatrix;
 
+            // TODO check/handle Unifrom existence 
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+
+            if (gameData->shadersToModelAssignment.SlotArray[i].Texture)
+            {
+                //glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureTarget);
+                
+                //TODO un-hardcode the texture unit 
+                glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), 0);
+            }
 
             glBindVertexArray(engineVariables->RenderObjectSlotArray[i].VAO);
             glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
