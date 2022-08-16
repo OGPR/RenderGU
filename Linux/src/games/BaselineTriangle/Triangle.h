@@ -45,7 +45,11 @@ struct GameData
 
     struct Textures
     {
-        const char* ContainerTexture = "resources/container.jpg";
+        
+        const char* TextureArray [1] =
+        {
+            "resources/container.jpg"
+        };
 
     }textures;
 
@@ -169,7 +173,11 @@ void GameInit(GameData* gameData)
             gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
             gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
-            gameData->shadersToModelAssignment.SlotArray[i].Texture = gameData->textures.ContainerTexture; 
+
+            gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex = 0;
+
+            unsigned int TextureArrayIndex = gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex;
+            gameData->shadersToModelAssignment.SlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
 
             gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
                     ModelMatrix_0,

@@ -31,6 +31,29 @@
 #include "engine/EngineEndFrame.h"
 #include "engine/EngineTickGame.h"
 
+// TODO move this (and LoadGame) into something like "engine utils"
+int IntegerToTextureUnit(unsigned int Integer)
+{
+    if (Integer == 0) return GL_TEXTURE0;
+    if (Integer == 1) return GL_TEXTURE1;
+    if (Integer == 2) return GL_TEXTURE2;
+    if (Integer == 3) return GL_TEXTURE3;
+    if (Integer == 4) return GL_TEXTURE4;
+    if (Integer == 5) return GL_TEXTURE5;
+    if (Integer == 6) return GL_TEXTURE6;
+    if (Integer == 7) return GL_TEXTURE7;
+    if (Integer == 8) return GL_TEXTURE8;
+    if (Integer == 9) return GL_TEXTURE9;
+    if (Integer == 10) return GL_TEXTURE10;
+    if (Integer == 11) return GL_TEXTURE11;
+    if (Integer == 12) return GL_TEXTURE12;
+    if (Integer == 13) return GL_TEXTURE13;
+    if (Integer == 14) return GL_TEXTURE14;
+    if (Integer == 15) return GL_TEXTURE15;
+
+    else return -1;
+};
+
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData,
         void(*GameInitFuncPtr)(struct GameData*),
@@ -81,22 +104,35 @@ void LoadGame(struct GameData* gameData,
 
             unsigned int texture;
             glGenTextures(1,&texture);
-            printf("Texture unit is: %d\n", texture);
 
-            engineVariables->RenderObjectSlotArray[i].TextureUnit = texture; 
+            engineVariables->RenderObjectSlotArray[i].TextureID = texture; 
+            engineVariables->RenderObjectSlotArray[i].TextureUnit = gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex;
 
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, texture);
+            int TextureUnit = IntegerToTextureUnit(gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            if (TextureUnit == 1)
+            {
+                printf("Error in RenderGU_IntegerToTextureUnit function\n");
+            }
+            else
+            {
+                glActiveTexture(TextureUnit);
+                glBindTexture(GL_TEXTURE_2D, texture);
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
-            glGenerateMipmap(GL_TEXTURE_2D);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            stbi_image_free(img_data);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+                glGenerateMipmap(GL_TEXTURE_2D);
+
+                stbi_image_free(img_data);
+            }
+
+
+
+
         }
         ///---END Texture setting ---///
 

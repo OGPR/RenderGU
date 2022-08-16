@@ -13,6 +13,7 @@ struct Slot
     const char* VertexShader = nullptr;
     const char* FragmentShader = nullptr;
     const char* Texture = nullptr;
+    unsigned int TextureArrayIndex = 0;
 
     glm::mat4 ModelMatrix;
     glm::mat4 ViewMatrix;
