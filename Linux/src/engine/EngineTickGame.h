@@ -34,8 +34,6 @@ void TickGame(GLFWwindow* window,
 
             if (gameData->shadersToModelAssignment.SlotArray[i].Texture)
             {
-                //glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureTarget);
-                
                 glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureUnit);
             }
 
