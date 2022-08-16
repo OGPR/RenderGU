@@ -67,10 +67,14 @@ void LoadGame(struct GameData* gameData,
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ViewMatrix;
         engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ProjectionMatrix;
 
-        if(gameData->shadersToModelAssignment.SlotArray[i].Texture)
+        ///---START Texture setting ---///
+        const char* TextureRelPathname = gameData->shadersToModelAssignment.SlotArray[i].Texture;
+        if (TextureRelPathname)
         {
+
             int img_width, img_height, img_nChannels;
-            unsigned char* img_data = stbi_load("resources/container.jpg", &img_width, &img_height, &img_nChannels,0);
+            unsigned char* img_data = stbi_load(TextureRelPathname,
+                    &img_width, &img_height, &img_nChannels,0);
 
             if (!img_data)
                     printf("Failed to load texture...");
@@ -92,6 +96,7 @@ void LoadGame(struct GameData* gameData,
 
             stbi_image_free(img_data);
         }
+        ///---END Texture setting ---///
 
     }
 
