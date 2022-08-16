@@ -100,7 +100,7 @@ void LoadGame(struct GameData* gameData,
                     &img_width, &img_height, &img_nChannels,0);
 
             if (!img_data)
-                    printf("Failed to load texture...");
+                    printf("Failed to load texture...%s\n", TextureRelPathname);
 
             unsigned int texture;
             glGenTextures(1,&texture);
