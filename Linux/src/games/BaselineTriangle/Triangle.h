@@ -46,9 +46,10 @@ struct GameData
     struct Textures
     {
         
-        const char* TextureArray [1] =
+        const char* TextureArray [2] =
         {
-            "resources/container.jpg"
+            "resources/container.jpg",
+            "resources/wall.jpg",
         };
 
     }textures;
@@ -112,6 +113,39 @@ struct GameData
                 FragColor = texture(Texture, TexCoord);
             }
             );
+            
+            // Tex coord passthrough VS
+            const char* VertexShader_Tex2 = 
+            GLSL(330 core,
+            layout(location = 0) in vec3 inPos;
+            layout(location = 1) in vec2 inTexCoord;
+
+            out vec2 TexCoord;
+
+            uniform mat4 ModelMatrix;
+            uniform mat4 ViewMatrix;
+            uniform mat4 ProjectionMatrix;
+
+            void main()
+            {
+                gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPos, 1.0f);
+                TexCoord = inTexCoord;
+
+            }
+            );
+
+            const char* FragmentShader_Tex2 = 
+            GLSL(330 core,
+            out vec4 FragColor;
+            in vec2 TexCoord;
+
+            uniform sampler2D Texture;
+
+            void main()
+            {
+                FragColor = texture(Texture, TexCoord);
+            }
+            );
 
             
 
@@ -137,7 +171,7 @@ void GameInit(GameData* gameData)
     {
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
-        if (i == 0 || i == 1)
+        if (i == 0)
         {
             gameData->shadersToModelAssignment.SlotArray[i].models = &gameData->models;
             gameData->shadersToModelAssignment.SlotArray[i].shaders = &gameData->shaders;
@@ -157,13 +191,6 @@ void GameInit(GameData* gameData)
                     glm::vec3(-1.0f, 0.0f, 0.0f));
         }
 
-        if (i == 1)
-        {
-            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
-                    ModelMatrix_0,
-                    glm::vec3(1.0f, 0.0f, 0.0f));
-
-        }
 
         if (i == 2)
         {
@@ -182,6 +209,25 @@ void GameInit(GameData* gameData)
             gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
                     ModelMatrix_0,
                     glm::vec3(0.5f, 0.0f, 0.0f));
+        }
+
+        if (i == 1)
+        {
+            gameData->shadersToModelAssignment.SlotArray[i].models = &gameData->models;
+            gameData->shadersToModelAssignment.SlotArray[i].shaders = &gameData->shaders;
+            gameData->shadersToModelAssignment.SlotArray[i].Model = gameData->models.TriangleModel;
+            gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
+            gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
+
+            gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex = 1;
+
+            unsigned int TextureArrayIndex = gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex;
+            gameData->shadersToModelAssignment.SlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
+
+            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
+                    ModelMatrix_0,
+                    glm::vec3(1.0f, 0.0f, 0.0f));
         }
 
     }
