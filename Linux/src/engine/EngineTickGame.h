@@ -36,8 +36,7 @@ void TickGame(GLFWwindow* window,
             {
                 //glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureTarget);
                 
-                //TODO un-hardcode the texture unit 
-                glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), 0);
+                glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureUnit);
             }
 
             glBindVertexArray(engineVariables->RenderObjectSlotArray[i].VAO);
