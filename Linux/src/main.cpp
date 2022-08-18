@@ -40,7 +40,7 @@ int main()
 
     // Initialise Engine Variables
     EngineVariables engineVariables;
-
+    
     // Initialise Game Data
     GameData gameData;
 
@@ -64,6 +64,7 @@ int main()
     }
     
     // Exit
+    EngineCleanUp(&engineVariables);
     Terminate();
     return 0;
 }

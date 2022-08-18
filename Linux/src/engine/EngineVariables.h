@@ -12,11 +12,11 @@ struct EngineVariables
         glm::mat4* ModelMatrix;
         glm::mat4* ViewMatrix;
         glm::mat4* ProjectionMatrix;
-        
+
     };
 
-    // TODO un-hardcode the size of this array.
-    RenderObjectSlot RenderObjectSlotArray[3];
+    unsigned int NumberOfSlots;
+    RenderObjectSlot* RenderObjectSlotArray; 
 
 
     unsigned int frameNumber = 0;

@@ -2,6 +2,12 @@
 
 #include "../Utility.h"
 
+void EngineCleanUp(struct EngineVariables* engineVariables)
+{
+    free(engineVariables->RenderObjectSlotArray);
+    engineVariables->RenderObjectSlotArray = nullptr;
+}
+
 int IntegerToTextureUnit(unsigned int Integer)
 {
     if (Integer == 0) return GL_TEXTURE0;
@@ -32,6 +38,13 @@ void LoadGame(struct GameData* gameData,
     (*GameInitFuncPtr)(gameData);
 
     const unsigned int LoopMax = gameData->shadersToModelAssignment.NumberOfSlots;
+
+    engineVariables->NumberOfSlots = LoopMax;
+
+    assert(engineVariables->NumberOfSlots);
+    engineVariables->RenderObjectSlotArray =
+        (EngineVariables::RenderObjectSlot*)calloc(engineVariables->NumberOfSlots, sizeof(EngineVariables::RenderObjectSlot));
+
 
     for (int i = 0; i < LoopMax; ++i)
     {
@@ -107,6 +120,5 @@ void LoadGame(struct GameData* gameData,
         ///---END Texture setting ---///
 
     }
-
 }
 
