@@ -158,6 +158,7 @@ void* LoadGame_Threaded(void* args)
     printf("HELLO\n");
 
     const unsigned int LoopMax = _Args->gameData->shadersToModelAssignment.NumberOfSlots;
+    printf("HELLO2\n");
 
     _Args->engineVariables->NumberOfSlots = LoopMax;
 
@@ -167,7 +168,15 @@ void* LoadGame_Threaded(void* args)
                 _Args->engineVariables->NumberOfSlots,
                 sizeof(struct EngineVariables::RenderObjectSlot));
 
-    BindVBO(CreateVBO());
+    //BindVBO(CreateVBO());
+    // Explicit VBO bind
+    unsigned int VBO;
+    unsigned int* VBO_ptr = &VBO;
+    printf("HELLO3\n");
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+
     AllocateMemoryVBO(15, _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].Model);
     unsigned int VAO = CreateVAO();
     BindVAO(VAO);

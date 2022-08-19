@@ -62,12 +62,14 @@ int main()
         }
     }
 
-    /*
     for (int i = 0; i < 1; ++i)
     {
-        pthread_join(ThreadArray[i], NULL);
+        if (pthread_join(ThreadArray[i], NULL) != 0);
+        {
+            printf("pthread_join fail");
+            return -1;
+        }
     }
-    */
     
    //(*LoadGame_Threaded)((void *) &_Args);
    
