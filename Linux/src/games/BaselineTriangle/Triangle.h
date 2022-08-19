@@ -167,8 +167,11 @@ struct GameData
 
 void GameInit(GameData* gameData)
 {
+    printf("Entering GameInit\n");
     for (int i = 0; i < gameData->shadersToModelAssignment.NumberOfSlots; ++i)
     {
+        printf("Entering GameInit Number of slot loop\n");
+        printf("NumberOf slots is %d\n", gameData->shadersToModelAssignment.NumberOfSlots);
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
         if (i == 0)
@@ -231,6 +234,7 @@ void GameInit(GameData* gameData)
         }
 
     }
+    printf("Exiting GameInit\n");
 
 }
 

@@ -45,7 +45,6 @@ void LoadGame(struct GameData* gameData,
     engineVariables->RenderObjectSlotArray =
         (EngineVariables::RenderObjectSlot*)calloc(engineVariables->NumberOfSlots, sizeof(EngineVariables::RenderObjectSlot));
 
-
     for (int i = 0; i < LoopMax; ++i)
     {
         BindVBO(CreateVBO());
@@ -120,5 +119,129 @@ void LoadGame(struct GameData* gameData,
         ///---END Texture setting ---///
 
     }
+}
+
+/*
+void LoadGame(struct GameData* gameData,
+        void(*GameInitFuncPtr)(struct GameData*),
+        struct EngineVariables* engineVariables)
+*/
+
+// Load game for multithreading  
+struct Args
+{
+    struct GameData* gameData = nullptr;
+    void(*GameInitFuncPtr)(struct GameData*) = nullptr;
+    struct EngineVariables* engineVariables = nullptr;
+    unsigned int ThreadNum = 0;
+
+};
+
+void* LoadGame_Threaded(void* args)
+{
+    struct Args* _Args = (struct Args*)args;
+    
+    // Error checking
+    if (!_Args->gameData || !_Args->engineVariables || !_Args->GameInitFuncPtr)
+    {
+        printf("We have some null pointers\n");
+        return 0;
+    }
+    else
+    {
+        printf("We have non-null pointers\n");
+    }
+
+
+    (*_Args->GameInitFuncPtr)(_Args->gameData);
+
+    printf("HELLO\n");
+
+    const unsigned int LoopMax = _Args->gameData->shadersToModelAssignment.NumberOfSlots;
+
+    _Args->engineVariables->NumberOfSlots = LoopMax;
+
+    assert(_Args->engineVariables->NumberOfSlots);
+    _Args->engineVariables->RenderObjectSlotArray =
+        (struct EngineVariables::RenderObjectSlot*)calloc(
+                _Args->engineVariables->NumberOfSlots,
+                sizeof(struct EngineVariables::RenderObjectSlot));
+
+    BindVBO(CreateVBO());
+    AllocateMemoryVBO(15, _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].Model);
+    unsigned int VAO = CreateVAO();
+    BindVAO(VAO);
+    SetAttribute(0, 3, 0, (void*)0);
+    
+    // TODO do we want to do this only if we have a tex? Could adjust VBO allocation also in that case.
+    SetAttribute(1, 2, 0, (void*)(9 * sizeof(float))); 
+
+
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].VAO = VAO;
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].Indices = _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].ModelIndices;
+    
+    // Compile the shaders
+    const char* vs = _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].VertexShader;
+    const char* fs = _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].FragmentShader;
+
+    unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].ShaderProgram = shaderProgram;
+
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].ModelMatrix = &_Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].ModelMatrix;
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].ViewMatrix = &_Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].ViewMatrix;
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].ProjectionMatrix = &_Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].ProjectionMatrix;
+
+    ///---START Texture setting ---///
+    const char* TextureRelPathname = _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].Texture;
+    if (TextureRelPathname)
+    {
+
+        int img_width, img_height, img_nChannels;
+        unsigned char* img_data = stbi_load(TextureRelPathname,
+                &img_width, &img_height, &img_nChannels,0);
+
+        if (!img_data)
+                printf("Failed to load texture...%s\n", TextureRelPathname);
+
+        unsigned int texture;
+        glGenTextures(1,&texture);
+
+        _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].TextureID = texture; 
+        _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNum].TextureUnit = _Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].TextureArrayIndex;
+
+        int TextureUnit = IntegerToTextureUnit(_Args->gameData->shadersToModelAssignment.SlotArray[_Args->ThreadNum].TextureArrayIndex);
+
+        if (TextureUnit == -1)
+        {
+            printf("Error in RenderGU_IntegerToTextureUnit function\n");
+        }
+        else
+        {
+            glActiveTexture(TextureUnit);
+            glBindTexture(GL_TEXTURE_2D, texture);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img_data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            stbi_image_free(img_data);
+        }
+
+
+
+
+    }
+    ///---END Texture setting ---///
+    
+    // Increase ThreadNum
+    ++_Args->ThreadNum;
+
+    printf("End of LoadGame_Threaded reached\n");
+
 }
 

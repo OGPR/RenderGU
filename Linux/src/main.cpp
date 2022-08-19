@@ -31,10 +31,12 @@
 #include "engine/EngineEndFrame.h"
 #include "engine/EngineTickGame.h"
 #include "engine/EngineUtils.h"
+#include <time.h>
 
 
 int main()
 {
+    clock_t ClockBegin = clock();
     // Create main window
     GLFWwindow* window = Window();
 
@@ -44,9 +46,37 @@ int main()
     // Initialise Game Data
     GameData gameData;
 
-    LoadGame(&gameData, &GameInit, &engineVariables);
+    //LoadGame(&gameData, &GameInit, &engineVariables);
+    Args _Args;
+    _Args.gameData = &gameData;
+    _Args.engineVariables = &engineVariables;
+    _Args.GameInitFuncPtr = &GameInit;
+
+    pthread_t ThreadArray[3];
+    for (int i = 0; i < 1; ++i)
+    {
+        if(pthread_create(&ThreadArray[i], NULL, &LoadGame_Threaded, (void *)&_Args) == -1)
+        {
+            printf("pthread_create fail\n");
+            return -1;
+        }
+    }
+
+    /*
+    for (int i = 0; i < 1; ++i)
+    {
+        pthread_join(ThreadArray[i], NULL);
+    }
+    */
+    
+   //(*LoadGame_Threaded)((void *) &_Args);
    
     
+    clock_t ClockEnd = clock();
+    double Time_ms = ((double)(ClockEnd - ClockBegin) / CLOCKS_PER_SEC) * 1000;
+    printf("Time: %f ms\n", Time_ms);
+
+    return 1;
 
     while(!WindowShouldClose(window))
     {
