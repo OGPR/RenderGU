@@ -6,6 +6,7 @@ unsigned int compileVertexShader(const char* vertexShaderSource)
 {
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    printf("Do we reach here in compileVertexShaders?\n");
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
@@ -27,6 +28,7 @@ unsigned int compileVertexShader(const char* vertexShaderSource)
 unsigned int compileFragmentShader(const char* fragmentShaderSource)
 {
     unsigned int fragmentShader;
+    printf("Do we reach here in compileFragmentShaders?\n");
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);

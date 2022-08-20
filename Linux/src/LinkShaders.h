@@ -7,6 +7,7 @@ unsigned int linkShaders(
         unsigned int vertexShader,
         unsigned int fragmentShader)
 {
+    printf("Do we reach here in linkShaders?\n");
     unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);

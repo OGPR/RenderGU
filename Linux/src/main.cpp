@@ -44,10 +44,14 @@ int main()
     // Initialise Game Data
     GameData gameData;
 
-    LoadGame(&gameData, &GameInit, &engineVariables);
+    LoadGame(&gameData, &GameInit, &engineVariables, window);
    
     
 
+    /*
+    glfwMakeContextCurrent(window);
+    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
+    */
     while(!WindowShouldClose(window))
     {
         DeltaTime();
