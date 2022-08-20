@@ -10,6 +10,8 @@ void EngineCleanUp(struct EngineVariables* engineVariables)
 
 int IntegerToTextureUnit(unsigned int Integer)
 {
+    if (Integer > 15) return -1;
+
     if (Integer == 0) return GL_TEXTURE0;
     if (Integer == 1) return GL_TEXTURE1;
     if (Integer == 2) return GL_TEXTURE2;
@@ -27,6 +29,7 @@ int IntegerToTextureUnit(unsigned int Integer)
     if (Integer == 14) return GL_TEXTURE14;
     if (Integer == 15) return GL_TEXTURE15;
 
+    // Silence warning g++
     else return -1;
 };
 
