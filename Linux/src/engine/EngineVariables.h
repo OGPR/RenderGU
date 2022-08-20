@@ -9,14 +9,14 @@ struct EngineVariables
         unsigned int Indices = 0;
         unsigned int TextureID = 0;
         unsigned int TextureUnit = 0;
-        glm::mat4* ModelMatrix;
-        glm::mat4* ViewMatrix;
-        glm::mat4* ProjectionMatrix;
+        glm::mat4* ModelMatrix = nullptr;
+        glm::mat4* ViewMatrix = nullptr;
+        glm::mat4* ProjectionMatrix = nullptr;
 
     };
 
     unsigned int NumberOfSlots;
-    RenderObjectSlot* RenderObjectSlotArray; 
+    RenderObjectSlot* RenderObjectSlotArray = nullptr; 
 
 
     unsigned int frameNumber = 0;
