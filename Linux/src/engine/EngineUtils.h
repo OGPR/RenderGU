@@ -40,16 +40,16 @@ void LoadGame(struct GameData* gameData,
 {
     (*GameInitFuncPtr)(gameData);
 
-    const unsigned int LoopMax = gameData->shadersToModelAssignment.NumberOfSlots;
+    const unsigned int NumberOfSlots = gameData->shadersToModelAssignment.NumberOfSlots;
 
-    engineVariables->NumberOfSlots = LoopMax;
+    engineVariables->NumberOfSlots = NumberOfSlots;
 
     assert(engineVariables->NumberOfSlots);
     engineVariables->RenderObjectSlotArray =
         (EngineVariables::RenderObjectSlot*)calloc(engineVariables->NumberOfSlots, sizeof(EngineVariables::RenderObjectSlot));
 
 
-    for (int i = 0; i < LoopMax; ++i)
+    for (int i = 0; i < NumberOfSlots; ++i)
     {
         BindVBO(CreateVBO());
         AllocateMemoryVBO(15, gameData->shadersToModelAssignment.SlotArray[i].Model);
