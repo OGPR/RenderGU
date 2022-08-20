@@ -25,11 +25,13 @@
 #include "scenes/Camera3D.h"
 #include "models/cube/model.h"
 #include "Camera.h"
-#include "games/TransitionAndMenuShowcase/Game.h"
+#include "games/BaselineTriangle/Triangle.h"
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
 #include "engine/EngineEndFrame.h"
 #include "engine/EngineTickGame.h"
+#include "engine/EngineUtils.h"
+
 
 int main()
 {
@@ -38,9 +40,13 @@ int main()
 
     // Initialise Engine Variables
     EngineVariables engineVariables;
-
+    
     // Initialise Game Data
     GameData gameData;
+
+    LoadGame(&gameData, &GameInit, &engineVariables);
+   
+    
 
     while(!WindowShouldClose(window))
     {
@@ -50,7 +56,7 @@ int main()
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &gameData, &GameFrame);
+            TickGame(window, &engineVariables, &gameData, &GameFrame);
 
             EngineEndFrame(window, &engineVariables, false);
         }
@@ -58,6 +64,7 @@ int main()
     }
     
     // Exit
+    EngineCleanUp(&engineVariables);
     Terminate();
     return 0;
 }
