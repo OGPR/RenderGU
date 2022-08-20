@@ -4,11 +4,11 @@
 
 struct Slot
 {
-    void* models;
-    void* shaders;
-    void* textures;
+    void* models = nullptr;
+    void* shaders = nullptr;
+    void* textures = nullptr;
 
-    float* Model;
+    float* Model = nullptr;
     unsigned int ModelIndices = 0; 
     const char* VertexShader = nullptr;
     const char* FragmentShader = nullptr;
