@@ -127,41 +127,36 @@ struct GameData
 
     }shaders;
 
-    struct ShadersToModelAssignment
-    {
 
-        Slot slot1, slot2, slot3;
+    RenderSlot renderSlot1, renderSlot2, renderSlot3;
 
-        unsigned int NumberOfSlots = 3;
-        Slot SlotArray[3] = {slot1, slot2, slot3};
-
-
-    }shadersToModelAssignment;
+    unsigned int NumberOfRenderSlots = 3;
+    RenderSlot RenderSlotArray[3] = {renderSlot1, renderSlot2, renderSlot3};
 
 };
 
 void GameInit(GameData* gameData)
 {
-    for (int i = 0; i < gameData->shadersToModelAssignment.NumberOfSlots; ++i)
+    for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
         if (i == 0)
         {
-            gameData->shadersToModelAssignment.SlotArray[i].models = &gameData->models;
-            gameData->shadersToModelAssignment.SlotArray[i].shaders = &gameData->shaders;
-            gameData->shadersToModelAssignment.SlotArray[i].Model = gameData->models.TriangleModel;
-            gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
-            gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader;
-            gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
+            gameData->RenderSlotArray[i].models = &gameData->models;
+            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
+            gameData->RenderSlotArray[i].Model = gameData->models.TriangleModel;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
+            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
-            gameData->shadersToModelAssignment.SlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-            gameData->shadersToModelAssignment.SlotArray[i].ProjectionMatrix = glm::mat4(1.0f);
+            gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
+            gameData->RenderSlotArray[i].ProjectionMatrix = glm::mat4(1.0f);
         }
         
         if(i == 0)
         {
-            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
+            gameData->RenderSlotArray[i].ModelMatrix = glm::translate(
                     ModelMatrix_0,
                     glm::vec3(-1.0f, 0.0f, 0.0f));
         }
@@ -169,38 +164,38 @@ void GameInit(GameData* gameData)
 
         if (i == 2)
         {
-            gameData->shadersToModelAssignment.SlotArray[i].models = &gameData->models;
-            gameData->shadersToModelAssignment.SlotArray[i].shaders = &gameData->shaders;
-            gameData->shadersToModelAssignment.SlotArray[i].Model = gameData->models.TriangleModel;
-            gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
-            gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
-            gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
+            gameData->RenderSlotArray[i].models = &gameData->models;
+            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
+            gameData->RenderSlotArray[i].Model = gameData->models.TriangleModel;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
+            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
 
-            gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex = 0;
+            gameData->RenderSlotArray[i].TextureArrayIndex = 0;
 
-            unsigned int TextureArrayIndex = gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex;
-            gameData->shadersToModelAssignment.SlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
+            unsigned int TextureArrayIndex = gameData->RenderSlotArray[i].TextureArrayIndex;
+            gameData->RenderSlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
 
-            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
+            gameData->RenderSlotArray[i].ModelMatrix = glm::translate(
                     ModelMatrix_0,
                     glm::vec3(0.5f, 0.0f, 0.0f));
         }
 
         if (i == 1)
         {
-            gameData->shadersToModelAssignment.SlotArray[i].models = &gameData->models;
-            gameData->shadersToModelAssignment.SlotArray[i].shaders = &gameData->shaders;
-            gameData->shadersToModelAssignment.SlotArray[i].Model = gameData->models.TriangleModel;
-            gameData->shadersToModelAssignment.SlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
-            gameData->shadersToModelAssignment.SlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
-            gameData->shadersToModelAssignment.SlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
+            gameData->RenderSlotArray[i].models = &gameData->models;
+            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
+            gameData->RenderSlotArray[i].Model = gameData->models.TriangleModel;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
+            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
 
-            gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex = 1;
+            gameData->RenderSlotArray[i].TextureArrayIndex = 1;
 
-            unsigned int TextureArrayIndex = gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex;
-            gameData->shadersToModelAssignment.SlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
+            unsigned int TextureArrayIndex = gameData->RenderSlotArray[i].TextureArrayIndex;
+            gameData->RenderSlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
 
-            gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix = glm::translate(
+            gameData->RenderSlotArray[i].ModelMatrix = glm::translate(
                     ModelMatrix_0,
                     glm::vec3(1.0f, 0.0f, 0.0f));
         }
@@ -212,8 +207,8 @@ void GameInit(GameData* gameData)
 
 void GameFrame(GLFWwindow* window, GameData* gameData)
 {
-    gameData->shadersToModelAssignment.SlotArray[0].Draw = true;
-    gameData->shadersToModelAssignment.SlotArray[1].Draw = true;
-    gameData->shadersToModelAssignment.SlotArray[2].Draw = true;
+    gameData->RenderSlotArray[0].Draw = true;
+    gameData->RenderSlotArray[1].Draw = true;
+    gameData->RenderSlotArray[2].Draw = true;
 
 }

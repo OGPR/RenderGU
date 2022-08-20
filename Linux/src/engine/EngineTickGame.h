@@ -13,11 +13,11 @@ void TickGame(GLFWwindow* window,
     glClear(GL_COLOR_BUFFER_BIT);
 
    
-    const unsigned int LoopMax = gameData->shadersToModelAssignment.NumberOfSlots;
+    const unsigned int LoopMax = gameData->NumberOfRenderSlots;
 
     for (int i = 0; i < LoopMax; ++i)
     {
-        if (gameData->shadersToModelAssignment.SlotArray[i].Draw)
+        if (gameData->RenderSlotArray[i].Draw)
         {
             glUseProgram(engineVariables->RenderObjectSlotArray[i].ShaderProgram);
 
@@ -32,7 +32,7 @@ void TickGame(GLFWwindow* window,
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
-            if (gameData->shadersToModelAssignment.SlotArray[i].Texture)
+            if (gameData->RenderSlotArray[i].Texture)
             {
                 glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureUnit);
             }

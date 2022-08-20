@@ -40,7 +40,7 @@ void LoadGame(struct GameData* gameData,
 {
     (*GameInitFuncPtr)(gameData);
 
-    const unsigned int NumberOfSlots = gameData->shadersToModelAssignment.NumberOfSlots;
+    const unsigned int NumberOfSlots = gameData->NumberOfRenderSlots;
 
     engineVariables->NumberOfSlots = NumberOfSlots;
 
@@ -52,7 +52,7 @@ void LoadGame(struct GameData* gameData,
     for (int i = 0; i < NumberOfSlots; ++i)
     {
         BindVBO(CreateVBO());
-        AllocateMemoryVBO(15, gameData->shadersToModelAssignment.SlotArray[i].Model);
+        AllocateMemoryVBO(15, gameData->RenderSlotArray[i].Model);
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
         SetAttribute(0, 3, 0, (void*)0);
@@ -62,22 +62,22 @@ void LoadGame(struct GameData* gameData,
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
-        engineVariables->RenderObjectSlotArray[i].Indices = gameData->shadersToModelAssignment.SlotArray[i].ModelIndices;
+        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].ModelIndices;
         
         // Compile the shaders
-        const char* vs = gameData->shadersToModelAssignment.SlotArray[i].VertexShader;
-        const char* fs = gameData->shadersToModelAssignment.SlotArray[i].FragmentShader;
+        const char* vs = gameData->RenderSlotArray[i].VertexShader;
+        const char* fs = gameData->RenderSlotArray[i].FragmentShader;
 
         unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
         engineVariables->RenderObjectSlotArray[i].ShaderProgram = shaderProgram;
 
-        engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ModelMatrix;
-        engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ViewMatrix;
-        engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->shadersToModelAssignment.SlotArray[i].ProjectionMatrix;
+        engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
+        engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
+        engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->RenderSlotArray[i].ProjectionMatrix;
 
         ///---START Texture setting ---///
-        const char* TextureRelPathname = gameData->shadersToModelAssignment.SlotArray[i].Texture;
+        const char* TextureRelPathname = gameData->RenderSlotArray[i].Texture;
         if (TextureRelPathname)
         {
 
@@ -92,9 +92,9 @@ void LoadGame(struct GameData* gameData,
             glGenTextures(1,&texture);
 
             engineVariables->RenderObjectSlotArray[i].TextureID = texture; 
-            engineVariables->RenderObjectSlotArray[i].TextureUnit = gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex;
+            engineVariables->RenderObjectSlotArray[i].TextureUnit = gameData->RenderSlotArray[i].TextureArrayIndex;
 
-            int TextureUnit = IntegerToTextureUnit(gameData->shadersToModelAssignment.SlotArray[i].TextureArrayIndex);
+            int TextureUnit = IntegerToTextureUnit(gameData->RenderSlotArray[i].TextureArrayIndex);
 
             if (TextureUnit == -1)
             {

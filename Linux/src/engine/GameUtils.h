@@ -2,7 +2,7 @@
 
 #include "../Utility.h"
 
-struct Slot
+struct RenderSlot
 {
     void* models = nullptr;
     void* shaders = nullptr;
