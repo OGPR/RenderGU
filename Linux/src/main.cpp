@@ -31,6 +31,7 @@
 #include "engine/EngineEndFrame.h"
 #include "engine/EngineTickGame.h"
 #include "engine/EngineUtils.h"
+#include <time.h>
 
 
 int main()
@@ -44,7 +45,12 @@ int main()
     // Initialise Game Data
     GameData gameData;
 
+
+    clock_t ClockBegin = clock();
     LoadGame(&gameData, &GameInit, &engineVariables, window);
+    clock_t ClockEnd = clock();
+    double Time_ms = ((double) (ClockEnd - ClockBegin) / CLOCKS_PER_SEC) * 1000;
+    printf("Time: %f ms\n", Time_ms);
    
     
 
