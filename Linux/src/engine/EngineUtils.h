@@ -55,14 +55,11 @@ void* CompileAndAssignShaders(void* args)
 
     pthread_mutex_lock(&_Args->lock);
 
-    printf("Do we reach here?\n");
     if (!_Args || !_Args->gameData || !_Args->gameData->RenderSlotArray)
     {
         printf("We have a nullptr\n");
         return nullptr;
     }
-
-    printf("_Args->ThreadNumber: %d\n", _Args->ThreadNumber);
 
     const char* vs = _Args->gameData->RenderSlotArray[_Args->ThreadNumber].VertexShader;
     const char* fs = _Args->gameData->RenderSlotArray[_Args->ThreadNumber].FragmentShader;
