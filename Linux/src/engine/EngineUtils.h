@@ -39,7 +39,6 @@ struct Args
     pthread_mutex_t lock;
     unsigned int ThreadNumber = 0;
 
-    unsigned int ShaderProgram = 0;
     struct GameData* gameData = nullptr;
     struct EngineVariables* engineVariables = nullptr;
    
@@ -67,19 +66,8 @@ void* CompileAndAssignShaders(void* args)
     unsigned int VertexShaderCompileID = compileVertexShader(vs);
     unsigned int FragmentShaderCompileID = compileFragmentShader(fs);
 
-    unsigned int ShaderProgram = linkShaders(VertexShaderCompileID, FragmentShaderCompileID);
-
-    _Args->ShaderProgram = ShaderProgram;
-
-
-    /*
-   _Args->ShaderProgram = linkShaders(
-            compileVertexShader(_Args->gameData->RenderSlotArray[_Args->ThreadNumber].VertexShader),  
-            compileFragmentShader(_Args->gameData->RenderSlotArray[_Args->ThreadNumber].FragmentShader));  
-    */
-
-    // TODO we don't need to store ShaderProgram in Args
-    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNumber].ShaderProgram = _Args->ShaderProgram;
+    _Args->engineVariables->RenderObjectSlotArray[_Args->ThreadNumber].ShaderProgram =
+        linkShaders(VertexShaderCompileID, FragmentShaderCompileID);
 
     ++_Args->ThreadNumber;
 

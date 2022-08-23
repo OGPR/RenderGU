@@ -41,9 +41,7 @@ int main(int argc, char** argv)
 
     // Initialise Engine Variables
     EngineVariables engineVariables;
-
     engineVariables.Multithreaded = argc == 2 && !strcmp(argv[1], "-mt");
-    
     
     // Initialise Game Data
     GameData gameData;
@@ -54,13 +52,7 @@ int main(int argc, char** argv)
     clock_t ClockEnd = clock();
     double Time_ms = ((double) (ClockEnd - ClockBegin) / CLOCKS_PER_SEC) * 1000;
     printf("Time: %f ms\n", Time_ms);
-   
-    
 
-    /*
-    glfwMakeContextCurrent(window);
-    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
-    */
     while(!WindowShouldClose(window))
     {
         DeltaTime();
