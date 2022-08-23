@@ -34,13 +34,16 @@
 #include <time.h>
 
 
-int main()
+int main(int argc, char** argv)
 {
     // Create main window
     GLFWwindow* window = Window();
 
     // Initialise Engine Variables
     EngineVariables engineVariables;
+
+    engineVariables.Multithreaded = argc == 2 && !strcmp(argv[1], "-mt");
+    
     
     // Initialise Game Data
     GameData gameData;

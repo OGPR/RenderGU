@@ -104,34 +104,38 @@ void LoadGame(struct GameData* gameData,
         (EngineVariables::RenderObjectSlot*)calloc(engineVariables->NumberOfSlots, sizeof(EngineVariables::RenderObjectSlot));
 
 
-    //--- START Compilation, and assignment of, shaders ---//
-    Args ArgsVar;
-    ArgsVar.gameData = gameData;
-    ArgsVar.engineVariables = engineVariables;
-
-    Args* ArgsVarPtr = &ArgsVar;
-
     pthread_t ThreadArray[NumberOfSlots];
-
-    if(pthread_mutex_init(&ArgsVar.lock, NULL) != 0)
+    Args ArgsVar;
+    if (engineVariables->Multithreaded)
     {
-        printf("Initialisation of mutex used for shader compilation and assignment failed\n");
-        return;
-    }
 
-    for (int i = 0; i < NumberOfSlots; ++i)
-    {
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // This needs to be first
-        ArgsVar.window = glfwCreateWindow(800, 600, "RenderGU", 0, window); 
-        if (pthread_create(&ThreadArray[i], NULL, &CompileAndAssignShaders, (void *) ArgsVarPtr) != 0)
+        //--- START Compilation, and assignment of, shaders ---//
+        ArgsVar.gameData = gameData;
+        ArgsVar.engineVariables = engineVariables;
+
+        Args* ArgsVarPtr = &ArgsVar;
+
+
+        if(pthread_mutex_init(&ArgsVar.lock, NULL) != 0)
         {
-            printf("Thread creation for execution of CompileAndAssignShaders failed\n");
+            printf("Initialisation of mutex used for shader compilation and assignment failed\n");
             return;
         }
 
-    }
+        for (int i = 0; i < NumberOfSlots; ++i)
+        {
+            glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // This needs to be first
+            ArgsVar.window = glfwCreateWindow(800, 600, "RenderGU", 0, window); 
+            if (pthread_create(&ThreadArray[i], NULL, &CompileAndAssignShaders, (void *) ArgsVarPtr) != 0)
+            {
+                printf("Thread creation for execution of CompileAndAssignShaders failed\n");
+                return;
+            }
 
-    //--- END Compilation, and assignment of, shaders ---//
+        }
+
+        //--- END Compilation, and assignment of, shaders ---//
+    }
 
     for (int i = 0; i < NumberOfSlots; ++i)
     {
@@ -149,15 +153,16 @@ void LoadGame(struct GameData* gameData,
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
         engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].ModelIndices;
         
-        // Compile the shaders
-        /*
-        const char* vs = gameData->RenderSlotArray[i].VertexShader;
-        const char* fs = gameData->RenderSlotArray[i].FragmentShader;
+        if (!engineVariables->Multithreaded)
+        {
+            // Compile the shaders
+            const char* vs = gameData->RenderSlotArray[i].VertexShader;
+            const char* fs = gameData->RenderSlotArray[i].FragmentShader;
 
-        unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+            unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
 
-        engineVariables->RenderObjectSlotArray[i].ShaderProgram = shaderProgram;
-        */
+            engineVariables->RenderObjectSlotArray[i].ShaderProgram = shaderProgram;
+        }
 
         engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
@@ -212,12 +217,15 @@ void LoadGame(struct GameData* gameData,
     }
 
     //---START Thread management ---///
-    for (int i = 0; i < NumberOfSlots; ++i)
+    if (engineVariables->Multithreaded)
     {
-        pthread_join(ThreadArray[i], NULL);
-    }
+        for (int i = 0; i < NumberOfSlots; ++i)
+        {
+            pthread_join(ThreadArray[i], NULL);
+        }
 
-    pthread_mutex_destroy(&ArgsVar.lock);
+        pthread_mutex_destroy(&ArgsVar.lock);
+    }
     //---END Thread management ---///
     
 
