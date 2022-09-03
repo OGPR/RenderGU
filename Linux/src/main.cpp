@@ -69,7 +69,7 @@ int main(int argc, char** argv)
     }
     
     // Exit
-    EngineCleanUp(&engineVariables);
+    EngineCleanUp(&engineVariables, &gameData);
     Terminate();
     return 0;
 }

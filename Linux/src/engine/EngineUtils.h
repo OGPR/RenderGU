@@ -2,10 +2,13 @@
 
 #include "../Utility.h"
 
-void EngineCleanUp(struct EngineVariables* engineVariables)
+void EngineCleanUp(struct EngineVariables* engineVariables, struct GameData* gameData)
 {
     free(engineVariables->RenderObjectSlotArray);
     engineVariables->RenderObjectSlotArray = nullptr;
+
+    free(gameData->models.TriangleModel);
+    gameData->models.TriangleModel = nullptr;
 }
 
 int IntegerToTextureUnit(unsigned int Integer)
