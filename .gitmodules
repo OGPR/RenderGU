@@ -1,3 +1,6 @@
 [submodule "Libs"]
 	path = Libs
 	url = git@github.com:OGPR/Common.git
+[submodule "Model-Importer"]
+	path = Model-Importer
+	url = git@github.com:OGPR/Model-Importer.git

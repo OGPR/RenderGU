@@ -2,20 +2,13 @@
 
 #include "../../Utility.h"
 #include "../../engine/GameUtils.h"
+#include "../../Model-Importer/ModelImporter.h"
 
 struct GameData
 {
     struct Models
     {
-        float TriangleModel[15] = 
-        {
-            -1.0f, -1.0f, 0.0f,
-             0.0f,  1.0f, 0.0f,
-             1.0f, -1.0f, 0.0f,
-             1.0f, 0.0f,
-             0.0f, 1.0f,
-             0.0f, 0.0f
-        };
+        float* TriangleModel = nullptr; 
         
         unsigned int TriangleModel_Indices = 3;
 
@@ -137,6 +130,9 @@ struct GameData
 
 void GameInit(GameData* gameData)
 {
+
+    Import_x3d("Triangle.x3d", &gameData->models.TriangleModel);
+    assert(&gameData->models.TriangleModel);
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
