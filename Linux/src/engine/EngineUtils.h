@@ -78,12 +78,15 @@ void* CompileAndAssignShaders(void* args)
 
 }
 // Load game data will include vertex specification, shader compilation
-void LoadGame(struct GameData* gameData,
-        void(*GameInitFuncPtr)(struct GameData*),
+int LoadGame(struct GameData* gameData,
+        int(*GameInitFuncPtr)(struct GameData*),
         struct EngineVariables* engineVariables,
         GLFWwindow* window)
 {
-    (*GameInitFuncPtr)(gameData);
+    int GameInitResult = (*GameInitFuncPtr)(gameData);
+
+    if (GameInitResult != 0)
+        return -1;
 
     const unsigned int NumberOfSlots = gameData->NumberOfRenderSlots;
 
@@ -110,7 +113,7 @@ void LoadGame(struct GameData* gameData,
         if(pthread_mutex_init(&ArgsVar.lock, NULL) != 0)
         {
             printf("Initialisation of mutex used for shader compilation and assignment failed\n");
-            return;
+            return -1;
         }
 
         for (int i = 0; i < NumberOfSlots; ++i)
@@ -120,7 +123,7 @@ void LoadGame(struct GameData* gameData,
             if (pthread_create(&ThreadArray[i], NULL, &CompileAndAssignShaders, (void *) ArgsVarPtr) != 0)
             {
                 printf("Thread creation for execution of CompileAndAssignShaders failed\n");
-                return;
+                return -1;
             }
 
         }
@@ -218,6 +221,8 @@ void LoadGame(struct GameData* gameData,
         pthread_mutex_destroy(&ArgsVar.lock);
     }
     //---END Thread management ---///
+    
+    return 0;
     
 
 

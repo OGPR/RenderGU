@@ -128,10 +128,16 @@ struct GameData
 
 };
 
-void GameInit(GameData* gameData)
+int GameInit(GameData* gameData)
 {
 
-    Import_x3d("Triangle.x3d", &gameData->models.TriangleModel);
+    int ImportModel = Import_x3d("Plane.x3d", &gameData->models.TriangleModel);
+    if (ImportModel != MODEL_IMPORTER_SUCCESS)
+    {
+        printf("%d\n", MODEL_IMPORTER_ERROR_CODE);
+        return -1;
+    }
+
     assert(gameData->models.TriangleModel);
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
@@ -197,6 +203,8 @@ void GameInit(GameData* gameData)
         }
 
     }
+
+    return 0;
 
 }
 

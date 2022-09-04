@@ -48,10 +48,13 @@ int main(int argc, char** argv)
 
 
     clock_t ClockBegin = clock();
-    LoadGame(&gameData, &GameInit, &engineVariables, window);
+    int LoadGameResult = LoadGame(&gameData, &GameInit, &engineVariables, window);
     clock_t ClockEnd = clock();
     double Time_ms = ((double) (ClockEnd - ClockBegin) / CLOCKS_PER_SEC) * 1000;
     printf("Time: %f ms\n", Time_ms);
+
+    if (LoadGameResult !=0)
+        return -1;
 
     while(!WindowShouldClose(window))
     {
