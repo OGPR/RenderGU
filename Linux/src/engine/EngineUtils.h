@@ -9,6 +9,12 @@ void EngineCleanUp(struct EngineVariables* engineVariables, struct GameData* gam
 
     free(gameData->models.TriangleModel);
     gameData->models.TriangleModel = nullptr;
+
+    free(gameData->models.NumberOfVertices);
+    gameData->models.NumberOfVertices = nullptr;
+
+    free(gameData->models.NumberOfTextureCoords);
+    gameData->models.NumberOfTextureCoords = nullptr;
 }
 
 int IntegerToTextureUnit(unsigned int Integer)
@@ -135,13 +141,19 @@ int LoadGame(struct GameData* gameData,
     {
 
         BindVBO(CreateVBO());
-        AllocateMemoryVBO(15, gameData->RenderSlotArray[i].Model);
+        
+        // We are assuming 3D position and 2D texture coords
+        AllocateMemoryVBO(
+                *gameData->models.NumberOfVertices * 3 + *gameData->models.NumberOfTextureCoords * 2,
+                gameData->RenderSlotArray[i].Model);
+
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
         SetAttribute(0, 3, 0, (void*)0);
         
         // TODO do we want to do this only if we have a tex? Could adjust VBO allocation also in that case.
-        SetAttribute(1, 2, 0, (void*)(9 * sizeof(float))); 
+        // We are assuming tightly packed (non-interleaved) vertex attibutes in vertex array
+        SetAttribute(1, 2, 0, (void*)(*gameData->models.NumberOfVertices * 3 * sizeof(float))); 
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;

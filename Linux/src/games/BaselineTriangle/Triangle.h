@@ -9,8 +9,11 @@ struct GameData
     struct Models
     {
         float* TriangleModel = nullptr; 
+        int* NumberOfVertices = nullptr;
+        int* NumberOfTextureCoords = nullptr;
         
         unsigned int TriangleModel_Indices = 3;
+        
 
     }models;
 
@@ -131,7 +134,12 @@ struct GameData
 int GameInit(GameData* gameData)
 {
 
-    int ImportModel = Import_x3d("Plane.x3d", &gameData->models.TriangleModel);
+    int ImportModel = Import_x3d(
+            "Triangle.x3d",
+            &gameData->models.TriangleModel,
+            &gameData->models.NumberOfVertices,
+            &gameData->models.NumberOfTextureCoords);
+
     if (ImportModel != MODEL_IMPORTER_SUCCESS)
     {
         printf("%d\n", MODEL_IMPORTER_ERROR_CODE);
@@ -139,6 +147,9 @@ int GameInit(GameData* gameData)
     }
 
     assert(gameData->models.TriangleModel);
+    assert(gameData->models.NumberOfVertices);
+    assert(gameData->models.NumberOfTextureCoords);
+
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
