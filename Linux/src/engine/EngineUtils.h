@@ -7,8 +7,8 @@ void EngineCleanUp(struct EngineVariables* engineVariables, struct GameData* gam
     free(engineVariables->RenderObjectSlotArray);
     engineVariables->RenderObjectSlotArray = nullptr;
 
-    free(gameData->models.TriangleModel);
-    gameData->models.TriangleModel = nullptr;
+    free(gameData->models.Model);
+    gameData->models.Model = nullptr;
 
     free(gameData->models.NumberOfVertices);
     gameData->models.NumberOfVertices = nullptr;
