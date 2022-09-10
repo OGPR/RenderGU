@@ -12,7 +12,8 @@ struct GameData
         int* NumberOfVertices = nullptr;
         int* NumberOfTextureCoords = nullptr;
         
-        unsigned int Model_Indices = 3;
+        unsigned int* Model_Indices = nullptr;
+        unsigned int* Model_IndexArray = nullptr ;
         
 
     }models;
@@ -138,7 +139,9 @@ int GameInit(GameData* gameData)
             "Triangle.x3d",
             &gameData->models.Model,
             &gameData->models.NumberOfVertices,
-            &gameData->models.NumberOfTextureCoords);
+            &gameData->models.NumberOfTextureCoords,
+            &gameData->models.Model_Indices,
+            &gameData->models.Model_IndexArray);
 
     if (ImportModel != MODEL_IMPORTER_SUCCESS)
     {
@@ -149,6 +152,8 @@ int GameInit(GameData* gameData)
     assert(gameData->models.Model);
     assert(gameData->models.NumberOfVertices);
     assert(gameData->models.NumberOfTextureCoords);
+    assert(gameData->models.Model_Indices);
+    assert(gameData->models.Model_IndexArray);
 
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
@@ -159,7 +164,8 @@ int GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
             gameData->RenderSlotArray[i].Model = gameData->models.Model;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Model_Indices;
+            gameData->RenderSlotArray[i].ModelIndices = *gameData->models.Model_Indices;
+            gameData->RenderSlotArray[i].ModelIndexArray = gameData->models.Model_IndexArray;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
@@ -180,7 +186,8 @@ int GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
             gameData->RenderSlotArray[i].Model = gameData->models.Model;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Model_Indices;
+            gameData->RenderSlotArray[i].ModelIndices = *gameData->models.Model_Indices;
+            gameData->RenderSlotArray[i].ModelIndexArray = gameData->models.Model_IndexArray;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
 
@@ -199,7 +206,8 @@ int GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
             gameData->RenderSlotArray[i].Model = gameData->models.Model;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Model_Indices;
+            gameData->RenderSlotArray[i].ModelIndices = *gameData->models.Model_Indices;
+            gameData->RenderSlotArray[i].ModelIndexArray = gameData->models.Model_IndexArray;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
 

@@ -15,6 +15,12 @@ void EngineCleanUp(struct EngineVariables* engineVariables, struct GameData* gam
 
     free(gameData->models.NumberOfTextureCoords);
     gameData->models.NumberOfTextureCoords = nullptr;
+
+    free(gameData->models.Model_Indices);
+    gameData->models.Model_Indices = nullptr;
+
+    free(gameData->models.Model_IndexArray);
+    gameData->models.Model_IndexArray = nullptr;
 }
 
 int IntegerToTextureUnit(unsigned int Integer)
@@ -139,16 +145,22 @@ int LoadGame(struct GameData* gameData,
 
     for (int i = 0; i < NumberOfSlots; ++i)
     {
+        unsigned int VAO = CreateVAO();
+        BindVAO(VAO);
 
         BindVBO(CreateVBO());
         
         // We are assuming 3D position and 2D texture coords
         AllocateMemoryVBO(
-                *gameData->models.NumberOfVertices * 3 + *gameData->models.NumberOfTextureCoords * 2,
+                *gameData->models.NumberOfVertices * 3  + *gameData->models.NumberOfTextureCoords * 2,
                 gameData->RenderSlotArray[i].Model);
 
-        unsigned int VAO = CreateVAO();
-        BindVAO(VAO);
+        unsigned int EBO;
+        glGenBuffers(1, &EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, *gameData->models.Model_Indices * sizeof(unsigned int), gameData->models.Model_IndexArray, GL_STATIC_DRAW);
+        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].ModelIndices;
+
         SetAttribute(0, 3, 0, (void*)0);
         
         // TODO do we want to do this only if we have a tex? Could adjust VBO allocation also in that case.
@@ -157,7 +169,7 @@ int LoadGame(struct GameData* gameData,
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
-        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].ModelIndices;
+        
         
         if (!engineVariables->Multithreaded)
         {
