@@ -191,6 +191,40 @@ int LoadGame(struct GameData* gameData,
         if (TextureRelPathname)
         {
 
+            // TODO use this at start of loop
+            const int Model_NumTexPoints = *gameData->models.NumberOfTextureCoords * 2;
+            const int Model_NumPosPoints = *gameData->models.NumberOfVertices * 3;
+            const int Model_NumTotalPoints = Model_NumTexPoints + Model_NumPosPoints;
+            const int Model_NumTexCoords = *gameData->models.NumberOfTextureCoords;
+
+            float TempTexPointArray[Model_NumTexPoints];
+            for (int k = Model_NumPosPoints, j = 0; k < Model_NumTotalPoints && j < Model_NumTexPoints; ++k, ++j)
+            {
+                TempTexPointArray[j] = gameData->RenderSlotArray[i].Model[k];
+                printf("TempTexPointArray value at %d is %f\n", j, TempTexPointArray[j]);
+            }
+
+            // TODO populate with ImportModel code
+            // Currently for testing
+            //unsigned int TexCoordIndexArray[3] = {0, 1, 2};
+            unsigned int TexCoordIndexArray[4] = {0, 1, 3, 2};
+            gameData->models.Model_TexIndexArray = TexCoordIndexArray;
+            for (int k = Model_NumPosPoints, j = 0; k < Model_NumTotalPoints && j < Model_NumTexCoords; k+=2, ++j)
+            {
+                printf("Index k is %d\n", k);
+                printf("Index value is %d\n", gameData->models.Model_TexIndexArray[j]);
+                gameData->RenderSlotArray[i].Model[k] = TempTexPointArray[gameData->models.Model_TexIndexArray[j]];
+                gameData->RenderSlotArray[i].Model[k + 1] = TempTexPointArray[gameData->models.Model_TexIndexArray[j] + 1];
+                
+            }
+
+            for (int k = Model_NumPosPoints; k < Model_NumTotalPoints; ++k)
+            {
+                printf("Value of model array at %d is %f\n", k,  gameData->RenderSlotArray[i].Model[k]);
+            }
+
+
+
             int img_width, img_height, img_nChannels;
             unsigned char* img_data = stbi_load(TextureRelPathname,
                     &img_width, &img_height, &img_nChannels,0);

@@ -14,6 +14,7 @@ struct GameData
         
         unsigned int* Model_Indices = nullptr;
         unsigned int* Model_IndexArray = nullptr ;
+        unsigned int* Model_TexIndexArray = nullptr;
         
 
     }models;
@@ -136,12 +137,13 @@ int GameInit(GameData* gameData)
 {
 
     int ImportModel = Import_x3d(
-            "Triangle.x3d",
+            "_Plane.x3d",
             &gameData->models.Model,
             &gameData->models.NumberOfVertices,
             &gameData->models.NumberOfTextureCoords,
             &gameData->models.Model_Indices,
-            &gameData->models.Model_IndexArray);
+            &gameData->models.Model_IndexArray,
+            &gameData->models.Model_TexIndexArray);
 
     if (ImportModel != MODEL_IMPORTER_SUCCESS)
     {
@@ -149,11 +151,19 @@ int GameInit(GameData* gameData)
         return -1;
     }
 
+    // TODO populate with ImportModel code
+    // Currently for testing
+    //unsigned int TexCoordIndexArray[3] = {0, 1, 2};
+    //gameData->models.Model_TexIndexArray = TexCoordIndexArray;
+
     assert(gameData->models.Model);
     assert(gameData->models.NumberOfVertices);
     assert(gameData->models.NumberOfTextureCoords);
     assert(gameData->models.Model_Indices);
     assert(gameData->models.Model_IndexArray);
+    
+    //TODO reinstate
+    //assert(gameData->models.Model_TexIndexArray);
 
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
