@@ -3,11 +3,11 @@
 #include "../../Utility.h"
 #include "../../engine/GameUtils.h"
 
-struct GameData
+struct EngineBasicShapes
 {
-    struct Models
+    struct Triangle
     {
-        float TriangleModel[15] = 
+        float VertexData[15] = 
         {
             -1.0f, -1.0f, 0.0f,
              0.0f,  1.0f, 0.0f,
@@ -16,8 +16,21 @@ struct GameData
              0.0f, 1.0f,
              0.0f, 0.0f
         };
-        
-        unsigned int TriangleModel_Indices = 3;
+
+        unsigned int Indices = 3;
+
+    }triangle;
+    
+};
+
+struct GameData
+{
+    
+    struct Models
+    {
+        EngineBasicShapes engineBasicShapes;
+        float* TriangleModel = engineBasicShapes.triangle.VertexData;
+        float TriangleModel_Indices = engineBasicShapes.triangle.Indices;
 
     }models;
 
