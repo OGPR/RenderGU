@@ -141,6 +141,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].ModelTextureCoordOffset = gameData->models.Triangle.TextureCoordOffset;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
@@ -163,6 +164,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].ModelTextureCoordOffset = gameData->models.Triangle.TextureCoordOffset;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
 
@@ -183,6 +185,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].ModelTextureCoordOffset = gameData->models.Triangle.TextureCoordOffset;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
 

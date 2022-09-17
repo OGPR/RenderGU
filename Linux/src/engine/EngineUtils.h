@@ -129,7 +129,7 @@ void LoadGame(struct GameData* gameData,
     {
 
         BindVBO(CreateVBO());
-        AllocateMemoryVBO(15, gameData->RenderSlotArray[i].Model);
+        AllocateMemoryVBO(gameData->RenderSlotArray[i].VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model);
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
         SetAttribute(0, 3, 0, (void*)0);

@@ -11,6 +11,7 @@ struct RenderSlot
     float* Model = nullptr;
     unsigned int ModelIndices = 0; 
     unsigned int ModelTextureCoordOffset = 0;
+    unsigned int VBOMemoryAllocationSize = 0;
     const char* VertexShader = nullptr;
     const char* FragmentShader = nullptr;
     const char* Texture = nullptr;
