@@ -17,6 +17,8 @@ struct EngineBasicShapes
         unsigned int VertexDataSize = 15;
         unsigned int Indices = 3;
         unsigned int TextureCoordOffset = 9 * sizeof(float);
+
+        unsigned int NumPosPoints = 9;
     };
     
 };

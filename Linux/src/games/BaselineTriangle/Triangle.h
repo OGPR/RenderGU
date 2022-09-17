@@ -141,7 +141,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].ModelTextureCoordOffset = gameData->models.Triangle.TextureCoordOffset;
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.NumPosPoints;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
