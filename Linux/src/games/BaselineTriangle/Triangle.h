@@ -19,7 +19,7 @@ struct EngineBasicShapes
 
         unsigned int Indices = 3;
 
-    }triangle;
+    };
     
 };
 
@@ -28,9 +28,7 @@ struct GameData
     
     struct Models
     {
-        EngineBasicShapes engineBasicShapes;
-        float* TriangleModel = engineBasicShapes.triangle.VertexData;
-        float TriangleModel_Indices = engineBasicShapes.triangle.Indices;
+        EngineBasicShapes::Triangle Triangle;
 
     }models;
 
@@ -158,8 +156,8 @@ void GameInit(GameData* gameData)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.TriangleModel;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
@@ -179,8 +177,8 @@ void GameInit(GameData* gameData)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.TriangleModel;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
 
@@ -198,8 +196,8 @@ void GameInit(GameData* gameData)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.TriangleModel;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.TriangleModel_Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
 
