@@ -135,7 +135,7 @@ void LoadGame(struct GameData* gameData,
         SetAttribute(0, 3, 0, (void*)0);
         
         // TODO do we want to do this only if we have a tex? Could adjust VBO allocation also in that case.
-        SetAttribute(1, 2, 0, (void*)(9 * sizeof(float))); 
+        SetAttribute(1, 2, 0, (void*)(gameData->RenderSlotArray[i].ModelTextureCoordOffset)); 
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
