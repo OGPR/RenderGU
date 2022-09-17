@@ -135,7 +135,21 @@ void LoadGame(struct GameData* gameData,
         SetAttribute(0, 3, 0, (void*)0);
         
         // TODO do we want to do this only if we have a tex? 
-        SetAttribute(1, 2, 0, (void*)(gameData->RenderSlotArray[i].ModelTextureCoordOffset)); 
+        SetAttribute(1, 2, 0, (void*)(gameData->RenderSlotArray[i].ModelTextureCoordOffset));
+
+        if (gameData->RenderSlotArray[i].IndexArray)
+        {
+            engineVariables->RenderObjectSlotArray[i].IndexedDraw = true;
+
+            unsigned int EBO;
+            glGenBuffers(1, &EBO);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            glBufferData(
+                    GL_ELEMENT_ARRAY_BUFFER,
+                    gameData->RenderSlotArray[i].EBOMemoryAllocationSize,
+                    gameData->RenderSlotArray[i].IndexArray,
+                    GL_STATIC_DRAW);
+        }
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;

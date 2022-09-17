@@ -38,7 +38,11 @@ void TickGame(GLFWwindow* window,
             }
 
             glBindVertexArray(engineVariables->RenderObjectSlotArray[i].VAO);
-            glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
+
+            if (engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+                glDrawElements(GL_TRIANGLES,engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0);
+            else
+                glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
         }
 
     }
