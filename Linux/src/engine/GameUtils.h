@@ -2,6 +2,8 @@
 
 #include "../Utility.h"
 
+struct Attribute;
+
 struct RenderSlot
 {
     void* models = nullptr;
@@ -9,8 +11,11 @@ struct RenderSlot
     void* textures = nullptr;
 
     float* Model = nullptr;
-    unsigned int ModelIndices = 0; 
-    unsigned int ModelTextureCoordOffset = 0;
+    unsigned int ModelIndices = 0;
+
+    Attribute* AttributeArray = nullptr;
+    unsigned int NumAttributes = 0;
+
     unsigned int VBOMemoryAllocationSize = 0;
     unsigned int* IndexArray = nullptr;
     unsigned int EBOMemoryAllocationSize = 0;
@@ -26,4 +31,11 @@ struct RenderSlot
     glm::mat4 ProjectionMatrix; 
 
     bool Draw = false; 
+};
+
+struct Attribute
+{
+    unsigned int Size = 0;
+    GLsizei Stride = 0;
+    const void* Offset = 0;
 };

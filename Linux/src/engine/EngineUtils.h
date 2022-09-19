@@ -132,10 +132,15 @@ void LoadGame(struct GameData* gameData,
         AllocateMemoryVBO(gameData->RenderSlotArray[i].VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model);
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
-        SetAttribute(0, 3, 0, (void*)0);
-        
-        // TODO do we want to do this only if we have a tex? 
-        SetAttribute(1, 2, 0, (void*)(gameData->RenderSlotArray[i].ModelTextureCoordOffset));
+
+        const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
+        for (unsigned int j = 0; j < NumAttributes;++j)
+        {
+            SetAttribute(j,
+                    gameData->RenderSlotArray[i].AttributeArray[j].Size,
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride,
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset);
+        }
 
         if (gameData->RenderSlotArray[i].IndexArray)
         {
