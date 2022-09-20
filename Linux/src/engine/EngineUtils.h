@@ -134,6 +134,8 @@ void LoadGame(struct GameData* gameData,
         BindVAO(VAO);
 
         const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
+
+        assert(gameData->RenderSlotArray[i].AttributeArray);
         for (unsigned int j = 0; j < NumAttributes;++j)
         {
             SetAttribute(j,
@@ -141,6 +143,10 @@ void LoadGame(struct GameData* gameData,
                     gameData->RenderSlotArray[i].AttributeArray[j].Stride,
                     gameData->RenderSlotArray[i].AttributeArray[j].Offset);
         }
+
+        free(gameData->RenderSlotArray[i].AttributeArray);
+        gameData->RenderSlotArray[i].AttributeArray = nullptr;
+
 
         if (gameData->RenderSlotArray[i].IndexArray)
         {
