@@ -126,6 +126,11 @@ struct GameData
     unsigned int NumberOfRenderSlots = 3;
     RenderSlot RenderSlotArray[3] = {renderSlot1, renderSlot2, renderSlot3};
 
+    // Initial values
+    float RotDeg_1 = 0.0f;
+    float RotDeg_2 = 0.0f;
+    float RotDeg_3 = 0.0f;
+
 };
 
 void GameInit(GameData* gameData)
@@ -168,7 +173,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
             glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
-            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(40.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1), glm::vec3(0.0f, 1.0f, 0.0f));
             ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
 
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
@@ -280,6 +285,21 @@ void GameInit(GameData* gameData)
 
 void GameFrame(GLFWwindow* window, GameData* gameData)
 {
+    glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
+    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1 += 10 * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
+    gameData->RenderSlotArray[0].ModelMatrix = ModelMatrix_0; 
+
+    ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
+    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 10 * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
+    gameData->RenderSlotArray[2].ModelMatrix = ModelMatrix_0; 
+
+    ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -5.0f));
+    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 += 12 * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
+    gameData->RenderSlotArray[1].ModelMatrix = ModelMatrix_0; 
+
     gameData->RenderSlotArray[0].Draw = true;
     gameData->RenderSlotArray[1].Draw = true;
     gameData->RenderSlotArray[2].Draw = true;
