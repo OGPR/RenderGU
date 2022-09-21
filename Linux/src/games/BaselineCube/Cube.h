@@ -158,8 +158,8 @@ void GameInit(GameData* gameData)
             }
 
             gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexArrayPosOnlySize;
-            //gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            //gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
@@ -203,8 +203,8 @@ void GameInit(GameData* gameData)
             }
 
             gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
-            //gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            //gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
@@ -254,8 +254,8 @@ void GameInit(GameData* gameData)
             }
 
             gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
-            //gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            //gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;

@@ -51,7 +51,7 @@ struct EngineBasicShapes
 
     struct Cube
     {
-        float VertexData[5*6*6] = 
+        float VertexData[5*4*6] = 
         {
             /* The vertex annotations are given wrt to the face orientation.
              * For example the bottom face will have the notion of back and front vertices
@@ -62,76 +62,75 @@ struct EngineBasicShapes
 
             /// Back Face
 
-            // Tri 1
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom left
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
              0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // Bottom right
-
-            // Tri 2
              0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom right
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Top Left
 
             /// Front face
 
-            // Tri 1
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
              0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Bottom right
              0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // Top right
-
-            // Tri 2
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // Top right
             -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // Top left
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
 
             /// Left face
 
-            // Tri 1
             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top right
             -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top left
             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom left
-
-            // Tri 2
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom left
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom right
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top right
 
              /// Right face
 
-            // Tri 1
              0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top left
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom right
              0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
-
-             // Tri 2
              0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom right
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top left
              0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
 
             // Bottom face
 
-             // Tri 1
              -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back left
              0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // Back right
              0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Front right
-
-             // Tri 2
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Front right
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Front left
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back left
 
             /// Top face
 
-            // Tri 1
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Back left
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Front right
              0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Back right
-
-            // Tri 2
              0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Front right
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Back left
             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, // Front left
         };
+
+        unsigned int IndexArray[6*6] = 
+        {
+            // Back Face
+            0, 1, 2,
+            0, 3, 2,
+
+            // Front Face
+            4, 5, 6,
+            4, 7, 6,
+
+            // Left face
+            8, 9, 10,
+            8, 11, 10,
+
+            // Right face
+            12, 13, 14,
+            12, 15, 14,
+
+            // Bottom face
+            16, 17, 18,
+            16, 19, 18,
+
+            // Top face
+            20, 21, 22,
+            20, 23, 22
+        };
+
+        unsigned int IndexArraySize = 6 * 6 * sizeof(unsigned int);
 
         unsigned int VertexDataSize = 5*6*6;
 
