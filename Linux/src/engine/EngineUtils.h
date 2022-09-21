@@ -181,6 +181,8 @@ void LoadGame(struct GameData* gameData,
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
         engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->RenderSlotArray[i].ProjectionMatrix;
 
+        engineVariables->RenderObjectSlotArray[i].DepthTest = gameData->RenderSlotArray[i].DepthTest;
+
         ///---START Texture setting ---///
         const char* TextureRelPathname = gameData->RenderSlotArray[i].Texture;
         if (TextureRelPathname)

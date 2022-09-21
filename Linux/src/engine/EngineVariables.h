@@ -15,6 +15,7 @@ struct EngineVariables
 
         bool IndexedDraw = false;
 
+        bool DepthTest = false;
     };
 
     unsigned int NumberOfSlots;

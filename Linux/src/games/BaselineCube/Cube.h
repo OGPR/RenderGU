@@ -132,6 +132,7 @@ void GameInit(GameData* gameData)
 {
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
+        gameData->RenderSlotArray[i].DepthTest = true;
 
         if (i == 0)
         {

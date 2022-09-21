@@ -31,6 +31,8 @@ struct RenderSlot
     glm::mat4 ProjectionMatrix; 
 
     bool Draw = false; 
+
+    bool DepthTest = false;
 };
 
 struct Attribute

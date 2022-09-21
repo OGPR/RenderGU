@@ -11,7 +11,6 @@ void TickGame(GLFWwindow* window,
     (*GameTickFuncPtr)(window, gameData); 
 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
 
    
     const unsigned int LoopMax = gameData->NumberOfRenderSlots;
@@ -20,6 +19,9 @@ void TickGame(GLFWwindow* window,
     {
         if (gameData->RenderSlotArray[i].Draw)
         {
+            if (engineVariables->RenderObjectSlotArray[i].DepthTest)
+                glEnable(GL_DEPTH_TEST);
+
             glUseProgram(engineVariables->RenderObjectSlotArray[i].ShaderProgram);
 
             unsigned int ShaderProgram = engineVariables->RenderObjectSlotArray[i].ShaderProgram;
