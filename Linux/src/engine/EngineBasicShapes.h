@@ -1,4 +1,5 @@
 #pragma once
+#include "EngineModelDataInterface.h" 
 
 struct EngineBasicShapes
 {
@@ -51,6 +52,20 @@ struct EngineBasicShapes
 
     struct Cube
     {
+        Cube()
+        {
+            modelData.VertexData = VertexData;;
+            modelData.IndexArray = IndexArray; 
+            modelData.IndexArraySize = IndexArraySize;
+            modelData.VertexDataSize = VertexDataSize;
+            modelData.Indices = Indices;
+            modelData.VertexArrayPosOnlySize = VertexArrayPosOnlySize;
+            modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+        }
+
+        ModelData modelData;
+
         float VertexData[5*4*6] = 
         {
             /* The vertex annotations are given wrt to the face orientation.
@@ -137,6 +152,11 @@ struct EngineBasicShapes
         unsigned int Indices = 5*6*6;
 
         unsigned int VertexArrayPosOnlySize = 5*6*6;
+
+        // TODO I am using my AllocateMemoryVBO func which does the size of calc:
+        // Choose a consistent way with all buffers
+        unsigned int VBOMemoryAllocationSize = 5 * 4 *6;
+        unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
 
     };
     

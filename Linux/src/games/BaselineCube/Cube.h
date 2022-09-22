@@ -142,8 +142,7 @@ void GameInit(GameData* gameData)
         if (i == 0)
         {
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 1;
             
@@ -159,10 +158,6 @@ void GameInit(GameData* gameData)
                     gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
                 }
             }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexArrayPosOnlySize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
@@ -180,8 +175,7 @@ void GameInit(GameData* gameData)
         if (i == 2)
         {
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
             //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
@@ -203,9 +197,6 @@ void GameInit(GameData* gameData)
                 }
             }
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
@@ -228,8 +219,7 @@ void GameInit(GameData* gameData)
         if (i == 1)
         {
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
             //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
@@ -252,9 +242,6 @@ void GameInit(GameData* gameData)
                 }
             }
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;

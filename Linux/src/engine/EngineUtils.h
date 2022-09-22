@@ -133,7 +133,7 @@ void LoadGame(struct GameData* gameData,
     {
 
         BindVBO(CreateVBO());
-        AllocateMemoryVBO(gameData->RenderSlotArray[i].VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model);
+        AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
 
@@ -152,7 +152,7 @@ void LoadGame(struct GameData* gameData,
         gameData->RenderSlotArray[i].AttributeArray = nullptr;
 
 
-        if (gameData->RenderSlotArray[i].IndexArray)
+        if (gameData->RenderSlotArray[i].Model.IndexArray)
         {
             engineVariables->RenderObjectSlotArray[i].IndexedDraw = true;
 
@@ -161,14 +161,14 @@ void LoadGame(struct GameData* gameData,
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(
                     GL_ELEMENT_ARRAY_BUFFER,
-                    gameData->RenderSlotArray[i].EBOMemoryAllocationSize,
-                    gameData->RenderSlotArray[i].IndexArray,
+                    gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
+                    gameData->RenderSlotArray[i].Model.IndexArray,
                     GL_STATIC_DRAW);
         }
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
-        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].ModelIndices;
+        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].Model.Indices;
         
         if (!engineVariables->Multithreaded)
         {

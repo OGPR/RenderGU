@@ -1,21 +1,16 @@
 #pragma once
 
 #include "../Utility.h"
+#include "EngineModelDataInterface.h" 
 
 struct Attribute;
 
 struct RenderSlot
 {
-    float* Model = nullptr;
-    unsigned int ModelIndices = 0;
+    ModelData Model;
 
     Attribute* AttributeArray = nullptr;
     unsigned int NumAttributes = 0;
-
-    unsigned int VBOMemoryAllocationSize = 0;
-    unsigned int* IndexArray = nullptr;
-    unsigned int EBOMemoryAllocationSize = 0;
-
 
     const char* VertexShader = nullptr;
     const char* FragmentShader = nullptr;
