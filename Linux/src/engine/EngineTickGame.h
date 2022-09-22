@@ -6,9 +6,10 @@
 void TickGame(GLFWwindow* window,
         EngineVariables* engineVariables,
         struct GameData* gameData,
-        void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*))
+        float DeltaTime,
+        void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime))
 {
-    (*GameTickFuncPtr)(window, gameData); 
+    (*GameTickFuncPtr)(window, gameData, DeltaTime); 
 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 

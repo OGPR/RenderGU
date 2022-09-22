@@ -4,11 +4,10 @@
 
 static float currFrameTime;
 static float lastFrameTime = 0.f;
-static float deltaTime;
 
-void DeltaTime()
+void UpdateDeltaTime(float* DeltaTime)
 {
     currFrameTime = glfwGetTime();
-    deltaTime = currFrameTime - lastFrameTime;
+    *DeltaTime = currFrameTime - lastFrameTime;
     lastFrameTime = currFrameTime;   
 }

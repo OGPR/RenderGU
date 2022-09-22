@@ -283,20 +283,20 @@ void GameInit(GameData* gameData)
 }
 
 
-void GameFrame(GLFWwindow* window, GameData* gameData)
+void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
     glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
-    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1 += 10 * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1 += 10 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
     ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
     gameData->RenderSlotArray[0].ModelMatrix = ModelMatrix_0; 
 
     ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
-    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 10 * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 10 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
     ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
     gameData->RenderSlotArray[2].ModelMatrix = ModelMatrix_0; 
 
     ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -5.0f));
-    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 += 12 * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 += 12 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
     ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
     gameData->RenderSlotArray[1].ModelMatrix = ModelMatrix_0; 
 

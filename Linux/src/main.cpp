@@ -55,17 +55,20 @@ int main(int argc, char** argv)
     double Time_ms = ((double) (ClockEnd - ClockBegin) / CLOCKS_PER_SEC) * 1000;
     printf("Time: %f ms\n", Time_ms);
 
+    // Engine delta time
+    float DeltaTime = 0;
+
     while(!WindowShouldClose(window))
     {
-        DeltaTime();
+        UpdateDeltaTime(&DeltaTime);
 
         EngineInputProcessing(window, &engineVariables);
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &engineVariables, &gameData, &GameFrame);
+            TickGame(window, &engineVariables, &gameData, DeltaTime, &GameFrame);
 
-            EngineEndFrame(window, &engineVariables, false);
+            EngineEndFrame(window, &engineVariables, false, DeltaTime);
         }
 
     }
