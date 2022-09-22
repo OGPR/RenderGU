@@ -62,9 +62,27 @@ struct EngineBasicShapes
             modelData.VertexArrayPosOnlySize = VertexArrayPosOnlySize;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+
+            modelData.AttributeArray = AttributeArray;
+
         }
 
         ModelData modelData;
+
+        Attribute AttributeArray[2] =
+        {
+            {
+                3,
+                5*sizeof(float),
+                0
+            },
+
+            {
+                2,
+                5*sizeof(float),
+                (void*)(3 * sizeof(float)) 
+            }
+        };
 
         float VertexData[5*4*6] = 
         {

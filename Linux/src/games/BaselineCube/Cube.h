@@ -145,19 +145,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 1;
-            
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
-            }
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
@@ -178,25 +165,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0; 
-                }
-                if (j == 1)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(3 * sizeof(float));
-                }
-            }
-
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
@@ -222,25 +190,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
-
-                if (j == 1)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(3 * sizeof(float));
-                }
-            }
 
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;

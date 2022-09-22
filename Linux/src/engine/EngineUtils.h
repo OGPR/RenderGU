@@ -139,17 +139,15 @@ void LoadGame(struct GameData* gameData,
 
         const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
 
-        assert(gameData->RenderSlotArray[i].AttributeArray);
+        assert(gameData->RenderSlotArray[i].Model.AttributeArray);
         for (unsigned int j = 0; j < NumAttributes;++j)
         {
             SetAttribute(j,
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size,
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride,
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset);
+                    gameData->RenderSlotArray[i].Model.AttributeArray[j].Size,
+                    gameData->RenderSlotArray[i].Model.AttributeArray[j].Stride,
+                    gameData->RenderSlotArray[i].Model.AttributeArray[j].Offset);
         }
 
-        free(gameData->RenderSlotArray[i].AttributeArray);
-        gameData->RenderSlotArray[i].AttributeArray = nullptr;
 
 
         if (gameData->RenderSlotArray[i].Model.IndexArray)

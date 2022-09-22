@@ -3,13 +3,10 @@
 #include "../Utility.h"
 #include "EngineModelDataInterface.h" 
 
-struct Attribute;
-
 struct RenderSlot
 {
     ModelData Model;
 
-    Attribute* AttributeArray = nullptr;
     unsigned int NumAttributes = 0;
 
     const char* VertexShader = nullptr;
@@ -26,9 +23,3 @@ struct RenderSlot
     bool DepthTest = false;
 };
 
-struct Attribute
-{
-    unsigned int Size = 0;
-    GLsizei Stride = 0;
-    const void* Offset = 0;
-};
