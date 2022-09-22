@@ -73,6 +73,10 @@ void* CompileAndAssignShaders(void* args)
 
     pthread_mutex_unlock(&_Args->lock);
 
+    // Silence control-reaches-end-of-non-void-func warning g++
+    // TODO could use return value at call site
+    return nullptr;
+
 }
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData,
@@ -110,7 +114,7 @@ void LoadGame(struct GameData* gameData,
             return;
         }
 
-        for (int i = 0; i < NumberOfSlots; ++i)
+        for (unsigned int i = 0; i < NumberOfSlots; ++i)
         {
             glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // This needs to be first
             ArgsVar.window = glfwCreateWindow(800, 600, "RenderGU", 0, window); 
@@ -125,7 +129,7 @@ void LoadGame(struct GameData* gameData,
         //--- END Compilation, and assignment of, shaders ---//
     }
 
-    for (int i = 0; i < NumberOfSlots; ++i)
+    for (unsigned int i = 0; i < NumberOfSlots; ++i)
     {
 
         BindVBO(CreateVBO());
@@ -234,7 +238,7 @@ void LoadGame(struct GameData* gameData,
     //---START Thread management ---///
     if (engineVariables->Multithreaded)
     {
-        for (int i = 0; i < NumberOfSlots; ++i)
+        for (unsigned int i = 0; i < NumberOfSlots; ++i)
         {
             pthread_join(ThreadArray[i], NULL);
         }

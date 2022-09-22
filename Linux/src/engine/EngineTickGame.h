@@ -16,7 +16,7 @@ void TickGame(GLFWwindow* window,
    
     const unsigned int LoopMax = gameData->NumberOfRenderSlots;
 
-    for (int i = 0; i < LoopMax; ++i)
+    for (unsigned int i = 0; i < LoopMax; ++i)
     {
         if (gameData->RenderSlotArray[i].Draw)
         {

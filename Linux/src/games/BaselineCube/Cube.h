@@ -135,7 +135,7 @@ struct GameData
 
 void GameInit(GameData* gameData)
 {
-    for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
+    for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
         gameData->RenderSlotArray[i].DepthTest = true;
 

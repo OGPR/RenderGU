@@ -4,7 +4,7 @@ project(RenderGU)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_BUILD_TYPE Debug)
-#set(CMAKE_CXX_FLAGS " -Wall -Werror")
+set(CMAKE_CXX_FLAGS " -Wall -Werror")
 
 include_directories(src)
 include_directories(../Libs/Libs/glm)
