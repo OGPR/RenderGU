@@ -6,9 +6,6 @@ struct Attribute;
 
 struct RenderSlot
 {
-    void* shaders = nullptr;
-    void* textures = nullptr;
-
     float* Model = nullptr;
     unsigned int ModelIndices = 0;
 

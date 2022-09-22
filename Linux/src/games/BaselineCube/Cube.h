@@ -141,7 +141,6 @@ void GameInit(GameData* gameData)
 
         if (i == 0)
         {
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
             gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
@@ -180,7 +179,6 @@ void GameInit(GameData* gameData)
         
         if (i == 2)
         {
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
             gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
@@ -229,7 +227,6 @@ void GameInit(GameData* gameData)
 
         if (i == 1)
         {
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
             gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
             gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
