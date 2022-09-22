@@ -10,7 +10,7 @@ struct GameData
     
     struct Models
     {
-        EngineBasicShapes::Triangle Triangle;
+        EngineBasicShapes::Cube Cube;
 
     }models;
 
@@ -132,14 +132,15 @@ void GameInit(GameData* gameData)
 {
     for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
-        glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+        gameData->RenderSlotArray[i].DepthTest = true;
 
         if (i == 0)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
+
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
 
             gameData->RenderSlotArray[i].NumAttributes = 1;
             
@@ -151,34 +152,35 @@ void GameInit(GameData* gameData)
                 if (j == 0)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
                     gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
                 }
             }
 
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexArrayPosOnlySize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.NumPosPoints;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
             gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::mat4(1.0f);
+            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
+
+            glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(40.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
+
+            gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
         }
         
-        if(i == 0)
-        {
-            gameData->RenderSlotArray[i].ModelMatrix = glm::translate(
-                    ModelMatrix_0,
-                    glm::vec3(-1.0f, 0.0f, 0.0f));
-        }
-
-
         if (i == 2)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
+
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
             //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
@@ -189,19 +191,21 @@ void GameInit(GameData* gameData)
                 if (j == 0)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0; 
                 }
-
                 if (j == 1)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(9 * sizeof(float));
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(3 * sizeof(float));
                 }
             }
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
+
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
 
@@ -210,17 +214,23 @@ void GameInit(GameData* gameData)
             unsigned int TextureArrayIndex = gameData->RenderSlotArray[i].TextureArrayIndex;
             gameData->RenderSlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
 
-            gameData->RenderSlotArray[i].ModelMatrix = glm::translate(
-                    ModelMatrix_0,
-                    glm::vec3(0.5f, 0.0f, 0.0f));
+            glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(40.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
+
+            gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
+
+            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
+
         }
 
         if (i == 1)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
+
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
             //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
@@ -231,19 +241,22 @@ void GameInit(GameData* gameData)
                 if (j == 0)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
                     gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
                 }
 
                 if (j == 1)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(9 * sizeof(float));
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(3 * sizeof(float));
                 }
             }
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
+
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
 
@@ -252,13 +265,16 @@ void GameInit(GameData* gameData)
             unsigned int TextureArrayIndex = gameData->RenderSlotArray[i].TextureArrayIndex;
             gameData->RenderSlotArray[i].Texture = gameData->textures.TextureArray[TextureArrayIndex]; 
 
-            gameData->RenderSlotArray[i].ModelMatrix = glm::translate(
-                    ModelMatrix_0,
-                    glm::vec3(1.0f, 0.0f, 0.0f));
+            glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -5.0f));
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(40.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
+
+            gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
+
+            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
         }
 
     }
-
 }
 
 

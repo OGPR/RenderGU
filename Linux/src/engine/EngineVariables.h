@@ -13,6 +13,9 @@ struct EngineVariables
         glm::mat4* ViewMatrix = nullptr;
         glm::mat4* ProjectionMatrix = nullptr;
 
+        bool IndexedDraw = false;
+
+        bool DepthTest = false;
     };
 
     unsigned int NumberOfSlots;

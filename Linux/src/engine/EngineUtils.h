@@ -129,13 +129,38 @@ void LoadGame(struct GameData* gameData,
     {
 
         BindVBO(CreateVBO());
-        AllocateMemoryVBO(15, gameData->RenderSlotArray[i].Model);
+        AllocateMemoryVBO(gameData->RenderSlotArray[i].VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model);
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
-        SetAttribute(0, 3, 0, (void*)0);
-        
-        // TODO do we want to do this only if we have a tex? Could adjust VBO allocation also in that case.
-        SetAttribute(1, 2, 0, (void*)(9 * sizeof(float))); 
+
+        const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
+
+        assert(gameData->RenderSlotArray[i].AttributeArray);
+        for (unsigned int j = 0; j < NumAttributes;++j)
+        {
+            SetAttribute(j,
+                    gameData->RenderSlotArray[i].AttributeArray[j].Size,
+                    gameData->RenderSlotArray[i].AttributeArray[j].Stride,
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset);
+        }
+
+        free(gameData->RenderSlotArray[i].AttributeArray);
+        gameData->RenderSlotArray[i].AttributeArray = nullptr;
+
+
+        if (gameData->RenderSlotArray[i].IndexArray)
+        {
+            engineVariables->RenderObjectSlotArray[i].IndexedDraw = true;
+
+            unsigned int EBO;
+            glGenBuffers(1, &EBO);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            glBufferData(
+                    GL_ELEMENT_ARRAY_BUFFER,
+                    gameData->RenderSlotArray[i].EBOMemoryAllocationSize,
+                    gameData->RenderSlotArray[i].IndexArray,
+                    GL_STATIC_DRAW);
+        }
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
@@ -155,6 +180,8 @@ void LoadGame(struct GameData* gameData,
         engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
         engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->RenderSlotArray[i].ProjectionMatrix;
+
+        engineVariables->RenderObjectSlotArray[i].DepthTest = gameData->RenderSlotArray[i].DepthTest;
 
         ///---START Texture setting ---///
         const char* TextureRelPathname = gameData->RenderSlotArray[i].Texture;

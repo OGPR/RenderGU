@@ -10,7 +10,7 @@ struct GameData
     
     struct Models
     {
-        EngineBasicShapes::Triangle Triangle;
+        EngineBasicShapes::Plane Plane;
 
     }models;
 
@@ -138,8 +138,9 @@ void GameInit(GameData* gameData)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
+
+            gameData->RenderSlotArray[i].Model = gameData->models.Plane.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Plane.Indices;
 
             gameData->RenderSlotArray[i].NumAttributes = 1;
             
@@ -156,8 +157,10 @@ void GameInit(GameData* gameData)
                 }
             }
 
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Plane.VertexArrayPosOnlySize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Plane.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Plane.IndexArraySize;
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.NumPosPoints;
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
@@ -177,8 +180,9 @@ void GameInit(GameData* gameData)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
+
+            gameData->RenderSlotArray[i].Model = gameData->models.Plane.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Plane.Indices;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
             //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
@@ -197,11 +201,14 @@ void GameInit(GameData* gameData)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
                     gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(9 * sizeof(float));
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(12 * sizeof(float));
                 }
             }
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Plane.VertexDataSize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Plane.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Plane.IndexArraySize;
+
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
 
@@ -219,8 +226,9 @@ void GameInit(GameData* gameData)
         {
             gameData->RenderSlotArray[i].models = &gameData->models;
             gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-            gameData->RenderSlotArray[i].Model = gameData->models.Triangle.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Triangle.Indices;
+
+            gameData->RenderSlotArray[i].Model = gameData->models.Plane.VertexData;
+            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Plane.Indices;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
             //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
@@ -239,11 +247,14 @@ void GameInit(GameData* gameData)
                 {
                     gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
                     gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(9 * sizeof(float));
+                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(12 * sizeof(float));
                 }
             }
 
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Triangle.VertexDataSize;
+            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Plane.VertexDataSize;
+            gameData->RenderSlotArray[i].IndexArray = gameData->models.Plane.IndexArray;
+            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Plane.IndexArraySize;
+
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
 

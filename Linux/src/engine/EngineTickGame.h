@@ -10,7 +10,7 @@ void TickGame(GLFWwindow* window,
 {
     (*GameTickFuncPtr)(window, gameData); 
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
    
     const unsigned int LoopMax = gameData->NumberOfRenderSlots;
@@ -19,6 +19,9 @@ void TickGame(GLFWwindow* window,
     {
         if (gameData->RenderSlotArray[i].Draw)
         {
+            if (engineVariables->RenderObjectSlotArray[i].DepthTest)
+                glEnable(GL_DEPTH_TEST);
+
             glUseProgram(engineVariables->RenderObjectSlotArray[i].ShaderProgram);
 
             unsigned int ShaderProgram = engineVariables->RenderObjectSlotArray[i].ShaderProgram;
@@ -38,7 +41,11 @@ void TickGame(GLFWwindow* window,
             }
 
             glBindVertexArray(engineVariables->RenderObjectSlotArray[i].VAO);
-            glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
+
+            if (engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+                glDrawElements(GL_TRIANGLES,engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0);
+            else
+                glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
         }
 
     }
