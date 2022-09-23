@@ -133,23 +133,46 @@ struct GameData
 
 };
 
+#define Game_SetDepthTest(RenderSlotIndex, DepthTestState) \
+do {gameData->RenderSlotArray[RenderSlotIndex].DepthTest = DepthTestState;} \
+while(0)
+
+#define Game_SetModel(RenderSlotIndex, InModel) \
+do {gameData->RenderSlotArray[RenderSlotIndex].Model = gameData->models.InModel.modelData;} \
+while(0)
+
+#define Game_SetAttributes(RenderSlotIndex, Attributes) \
+do {gameData->RenderSlotArray[RenderSlotIndex].NumAttributes = Attributes;} \
+while(0)
+
+#define Game_SetVertexShader(RenderSlotIndex, Shader) \
+do {gameData->RenderSlotArray[RenderSlotIndex].VertexShader = gameData->shaders.Shader;} \
+while(0)
+
+#define Game_SetFragmentShader(RenderSlotIndex, Shader) \
+do {gameData->RenderSlotArray[RenderSlotIndex].FragmentShader = gameData->shaders.Shader;} \
+while(0)
+
+#define Game_SetViewMatrix(RenderSlotIndex, InViewMatrix) \
+do {gameData->RenderSlotArray[RenderSlotIndex].ViewMatrix = InViewMatrix;} \
+while(0)
+
 void GameInit(GameData* gameData)
 {
     for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
-        gameData->RenderSlotArray[i].DepthTest = true;
+        Game_SetDepthTest(i, true);
 
         if (i == 0)
         {
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
+            Game_SetModel(i, Cube);
+            Game_SetAttributes(i, 1);
 
-            gameData->RenderSlotArray[i].NumAttributes = 1;
+            Game_SetVertexShader(i, VertexShader);
+            Game_SetFragmentShader(i, FragmentShader);
 
-            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
-            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
-
-            gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
+            Game_SetViewMatrix(1, glm::mat4(1.0f));  
             gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
             glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
