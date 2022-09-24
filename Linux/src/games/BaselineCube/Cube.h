@@ -135,81 +135,42 @@ struct GameData
 
 void GameInit(GameData* gameData)
 {
-    for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
+    for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
-        gameData->RenderSlotArray[i].DepthTest = true;
 
         if (i == 0)
         {
-            gameData->RenderSlotArray[i].models = &gameData->models;
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
-
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
-
-            gameData->RenderSlotArray[i].NumAttributes = 1;
-            
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
-            }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexArrayPosOnlySize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
-
-            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
-            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
-
-            gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
+            glm::mat4 ViewMatrix_0 = glm::mat4(1.0f);  
+            glm::mat4 ProjectionMatrix_0 = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
             glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
             ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1), glm::vec3(0.0f, 1.0f, 0.0f));
             ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
 
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
+
+            gameData->RenderSlotArray[i] = 
+            {
+                gameData->models.Cube.modelData,
+                1,
+                gameData->shaders.VertexShader,
+                gameData->shaders.FragmentShader,
+                nullptr,
+                0,
+                ModelMatrix_0,
+                ViewMatrix_0,
+                ProjectionMatrix_0,
+                false,
+                true
+            };
         }
         
         if (i == 2)
         {
-            gameData->RenderSlotArray[i].models = &gameData->models;
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0; 
-                }
-                if (j == 1)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(3 * sizeof(float));
-                }
-            }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
@@ -231,36 +192,11 @@ void GameInit(GameData* gameData)
 
         if (i == 1)
         {
-            gameData->RenderSlotArray[i].models = &gameData->models;
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Cube.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Cube.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Cube.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
 
-                if (j == 1)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 5 * sizeof(float);
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(3 * sizeof(float));
-                }
-            }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Cube.VertexDataSize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Cube.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Cube.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;

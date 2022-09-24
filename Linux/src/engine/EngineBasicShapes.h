@@ -1,9 +1,39 @@
 #pragma once
+#include "EngineModelDataInterface.h" 
 
 struct EngineBasicShapes
 {
     struct Triangle
     {
+        Triangle()
+        {
+            modelData.VertexData = VertexData;;
+            modelData.VertexDataSize = VertexDataSize;
+            modelData.Indices = Indices;
+            modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
+
+            modelData.AttributeArray = AttributeArray;
+
+        }
+
+        ModelData modelData;
+
+        Attribute AttributeArray[2] =
+        {
+            {
+                3,
+                0,
+                0
+            },
+
+            {
+                2,
+                0,
+                (void*)(9 * sizeof(float)) 
+            }
+        };
+
         float VertexData[15] = 
         {
             -1.0f, -1.0f, 0.0f,
@@ -17,11 +47,44 @@ struct EngineBasicShapes
         unsigned int VertexDataSize = 15;
         unsigned int Indices = 3;
 
-        unsigned int NumPosPoints = 9;
+        unsigned int VBOMemoryAllocationSize = 15 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = 9 * sizeof(float);
     };
 
     struct Plane
     {
+        Plane()
+        {
+            modelData.VertexData = VertexData;;
+            modelData.IndexArray = IndexArray; 
+            modelData.IndexArraySize = IndexArraySize;
+            modelData.VertexDataSize = VertexDataSize;
+            modelData.Indices = Indices;
+            modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
+            modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+
+            modelData.AttributeArray = AttributeArray;
+
+        }
+
+        ModelData modelData;
+
+        Attribute AttributeArray[2] =
+        {
+            {
+                3,
+                0,
+                0
+            },
+
+            {
+                2,
+                0,
+                (void*)(12 * sizeof(float)) 
+            }
+        };
+
         float VertexData[20] = 
         {
             -1.0f, -1.0f, 0.0f,
@@ -39,18 +102,52 @@ struct EngineBasicShapes
             0, 1, 3,
             0, 2, 3
         };
+
         unsigned int VertexDataSize = 20 * sizeof(float);
         unsigned int IndexArraySize = 6 * sizeof(unsigned int);
 
         unsigned int Indices = 6;
-        unsigned int TextureCoordOffset = 12 * sizeof(float);
 
-        unsigned int VertexArrayPosOnlySize = 12 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize = 20 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = 12 * sizeof(float);
+        unsigned int EBOMemoryAllocationSize = 6 * sizeof(unsigned int) ;
 
     };
 
     struct Cube
     {
+        Cube()
+        {
+            modelData.VertexData = VertexData;;
+            modelData.IndexArray = IndexArray; 
+            modelData.IndexArraySize = IndexArraySize;
+            modelData.VertexDataSize = VertexDataSize;
+            modelData.Indices = Indices;
+            modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
+            modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+
+            modelData.AttributeArray = AttributeArray;
+
+        }
+
+        ModelData modelData;
+
+        Attribute AttributeArray[2] =
+        {
+            {
+                3,
+                5*sizeof(float),
+                0
+            },
+
+            {
+                2,
+                5*sizeof(float),
+                (void*)(3 * sizeof(float)) 
+            }
+        };
+
         float VertexData[5*4*6] = 
         {
             /* The vertex annotations are given wrt to the face orientation.
@@ -136,7 +233,10 @@ struct EngineBasicShapes
 
         unsigned int Indices = 5*6*6;
 
-        unsigned int VertexArrayPosOnlySize = 5*6*6;
+
+        unsigned int VBOMemoryAllocationSize = 5 * 4 *6 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = 3 * 4 * 6 * sizeof(float);
+        unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
 
     };
     

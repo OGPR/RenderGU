@@ -1,25 +1,13 @@
 #pragma once
 
 #include "../Utility.h"
-
-struct Attribute;
+#include "EngineModelDataInterface.h" 
 
 struct RenderSlot
 {
-    void* models = nullptr;
-    void* shaders = nullptr;
-    void* textures = nullptr;
+    ModelData Model;
 
-    float* Model = nullptr;
-    unsigned int ModelIndices = 0;
-
-    Attribute* AttributeArray = nullptr;
     unsigned int NumAttributes = 0;
-
-    unsigned int VBOMemoryAllocationSize = 0;
-    unsigned int* IndexArray = nullptr;
-    unsigned int EBOMemoryAllocationSize = 0;
-
 
     const char* VertexShader = nullptr;
     const char* FragmentShader = nullptr;
@@ -35,9 +23,3 @@ struct RenderSlot
     bool DepthTest = false;
 };
 
-struct Attribute
-{
-    unsigned int Size = 0;
-    GLsizei Stride = 0;
-    const void* Offset = 0;
-};

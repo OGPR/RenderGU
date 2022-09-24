@@ -73,6 +73,10 @@ void* CompileAndAssignShaders(void* args)
 
     pthread_mutex_unlock(&_Args->lock);
 
+    // Silence control-reaches-end-of-non-void-func warning g++
+    // TODO could use return value at call site
+    return nullptr;
+
 }
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData,
@@ -110,7 +114,7 @@ void LoadGame(struct GameData* gameData,
             return;
         }
 
-        for (int i = 0; i < NumberOfSlots; ++i)
+        for (unsigned int i = 0; i < NumberOfSlots; ++i)
         {
             glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // This needs to be first
             ArgsVar.window = glfwCreateWindow(800, 600, "RenderGU", 0, window); 
@@ -125,30 +129,43 @@ void LoadGame(struct GameData* gameData,
         //--- END Compilation, and assignment of, shaders ---//
     }
 
-    for (int i = 0; i < NumberOfSlots; ++i)
+    for (unsigned int i = 0; i < NumberOfSlots; ++i)
     {
 
         BindVBO(CreateVBO());
-        AllocateMemoryVBO(gameData->RenderSlotArray[i].VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model);
+
+        // Only allocate what is needed
+         
+        //TODO handle this for dev/release build 
+        // Will crash if these are zero
+        assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
+        assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
+
+        if (!gameData->RenderSlotArray[i].Texture)
+            AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly, gameData->RenderSlotArray[i].Model.VertexData);
+        else
+            AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
+
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
 
         const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
 
-        assert(gameData->RenderSlotArray[i].AttributeArray);
+        //TODO handle this for dev/release build 
+        assert(NumAttributes); // Won't have anything rendered if NumAttributes is zero
+
+        assert(gameData->RenderSlotArray[i].Model.AttributeArray);
         for (unsigned int j = 0; j < NumAttributes;++j)
         {
             SetAttribute(j,
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size,
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride,
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset);
+                    gameData->RenderSlotArray[i].Model.AttributeArray[j].Size,
+                    gameData->RenderSlotArray[i].Model.AttributeArray[j].Stride,
+                    gameData->RenderSlotArray[i].Model.AttributeArray[j].Offset);
         }
 
-        free(gameData->RenderSlotArray[i].AttributeArray);
-        gameData->RenderSlotArray[i].AttributeArray = nullptr;
 
 
-        if (gameData->RenderSlotArray[i].IndexArray)
+        if (gameData->RenderSlotArray[i].Model.IndexArray)
         {
             engineVariables->RenderObjectSlotArray[i].IndexedDraw = true;
 
@@ -157,14 +174,14 @@ void LoadGame(struct GameData* gameData,
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(
                     GL_ELEMENT_ARRAY_BUFFER,
-                    gameData->RenderSlotArray[i].EBOMemoryAllocationSize,
-                    gameData->RenderSlotArray[i].IndexArray,
+                    gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
+                    gameData->RenderSlotArray[i].Model.IndexArray,
                     GL_STATIC_DRAW);
         }
 
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
-        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].ModelIndices;
+        engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].Model.Indices;
         
         if (!engineVariables->Multithreaded)
         {
@@ -234,7 +251,7 @@ void LoadGame(struct GameData* gameData,
     //---START Thread management ---///
     if (engineVariables->Multithreaded)
     {
-        for (int i = 0; i < NumberOfSlots; ++i)
+        for (unsigned int i = 0; i < NumberOfSlots; ++i)
         {
             pthread_join(ThreadArray[i], NULL);
         }
