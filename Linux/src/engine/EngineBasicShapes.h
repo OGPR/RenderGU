@@ -5,6 +5,35 @@ struct EngineBasicShapes
 {
     struct Triangle
     {
+        Triangle()
+        {
+            modelData.VertexData = VertexData;;
+            modelData.VertexDataSize = VertexDataSize;
+            modelData.Indices = Indices;
+            modelData.VertexArrayPosOnlySize = NumPosPoints;
+            modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+
+            modelData.AttributeArray = AttributeArray;
+
+        }
+
+        ModelData modelData;
+
+        Attribute AttributeArray[2] =
+        {
+            {
+                3,
+                0,
+                0
+            },
+
+            {
+                2,
+                0,
+                (void*)(9 * sizeof(float)) 
+            }
+        };
+
         float VertexData[15] = 
         {
             -1.0f, -1.0f, 0.0f,
@@ -19,6 +48,10 @@ struct EngineBasicShapes
         unsigned int Indices = 3;
 
         unsigned int NumPosPoints = 9;
+        //
+        // TODO I am using my AllocateMemoryVBO func which does the size of calc:
+        // Choose a consistent way with all buffers
+        unsigned int VBOMemoryAllocationSize = 15;
     };
 
     struct Plane
