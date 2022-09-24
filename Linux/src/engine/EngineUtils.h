@@ -139,6 +139,9 @@ void LoadGame(struct GameData* gameData,
 
         const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
 
+        //TODO handle this for dev/release build 
+        assert(NumAttributes); // Won't have anything rendered if NumAttributes is zero
+
         assert(gameData->RenderSlotArray[i].Model.AttributeArray);
         for (unsigned int j = 0; j < NumAttributes;++j)
         {

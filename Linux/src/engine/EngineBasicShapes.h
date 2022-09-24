@@ -23,6 +23,38 @@ struct EngineBasicShapes
 
     struct Plane
     {
+        Plane()
+        {
+            modelData.VertexData = VertexData;;
+            modelData.IndexArray = IndexArray; 
+            modelData.IndexArraySize = IndexArraySize;
+            modelData.VertexDataSize = VertexDataSize;
+            modelData.Indices = Indices;
+            modelData.VertexArrayPosOnlySize = VertexArrayPosOnlySize;
+            modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+
+            modelData.AttributeArray = AttributeArray;
+
+        }
+
+        ModelData modelData;
+
+        Attribute AttributeArray[2] =
+        {
+            {
+                3,
+                0,
+                0
+            },
+
+            {
+                2,
+                0,
+                (void*)(12 * sizeof(float)) 
+            }
+        };
+
         float VertexData[20] = 
         {
             -1.0f, -1.0f, 0.0f,
@@ -40,13 +72,18 @@ struct EngineBasicShapes
             0, 1, 3,
             0, 2, 3
         };
+
         unsigned int VertexDataSize = 20 * sizeof(float);
         unsigned int IndexArraySize = 6 * sizeof(unsigned int);
 
         unsigned int Indices = 6;
-        unsigned int TextureCoordOffset = 12 * sizeof(float);
 
         unsigned int VertexArrayPosOnlySize = 12 * sizeof(float);
+        //
+        // TODO I am using my AllocateMemoryVBO func which does the size of calc:
+        // Choose a consistent way with all buffers
+        unsigned int VBOMemoryAllocationSize = 20;
+        unsigned int EBOMemoryAllocationSize = 6 * sizeof(unsigned int) ;
 
     };
 

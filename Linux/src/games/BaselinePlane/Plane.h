@@ -130,37 +130,17 @@ struct GameData
 
 void GameInit(GameData* gameData)
 {
-    for (int i = 0; i < gameData->NumberOfRenderSlots; ++i)
+    for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
         if (i == 0)
         {
-            gameData->RenderSlotArray[i].models = &gameData->models;
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Plane.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Plane.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Plane.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 1;
             
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
-            }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Plane.VertexArrayPosOnlySize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Plane.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Plane.IndexArraySize;
-
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
@@ -178,36 +158,10 @@ void GameInit(GameData* gameData)
 
         if (i == 2)
         {
-            gameData->RenderSlotArray[i].models = &gameData->models;
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Plane.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Plane.Indices;
+            gameData->RenderSlotArray[i].Model = gameData->models.Plane.modelData;
 
             gameData->RenderSlotArray[i].NumAttributes = 2;
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
-
-                if (j == 1)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(12 * sizeof(float));
-                }
-            }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Plane.VertexDataSize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Plane.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Plane.IndexArraySize;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex;
@@ -224,39 +178,13 @@ void GameInit(GameData* gameData)
 
         if (i == 1)
         {
-            gameData->RenderSlotArray[i].models = &gameData->models;
-            gameData->RenderSlotArray[i].shaders = &gameData->shaders;
 
-            gameData->RenderSlotArray[i].Model = gameData->models.Plane.VertexData;
-            gameData->RenderSlotArray[i].ModelIndices = gameData->models.Plane.Indices;
-
-            gameData->RenderSlotArray[i].NumAttributes = 2;
-            //TODO Consider not having this dynamic like this - could have Attribute array as part of EngineBasicShapes
-            gameData->RenderSlotArray[i].AttributeArray = (Attribute*)calloc(gameData->RenderSlotArray[i].NumAttributes, sizeof(Attribute));
-            assert(gameData->RenderSlotArray[i].AttributeArray);
-            for (unsigned int j = 0; j < gameData->RenderSlotArray[i].NumAttributes; ++j) 
-            {
-                if (j == 0)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 3;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = 0;
-                }
-
-                if (j == 1)
-                {
-                    gameData->RenderSlotArray[i].AttributeArray[j].Size = 2;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Stride = 0;
-                    gameData->RenderSlotArray[i].AttributeArray[j].Offset = (void *)(12 * sizeof(float));
-                }
-            }
-
-            gameData->RenderSlotArray[i].VBOMemoryAllocationSize = gameData->models.Plane.VertexDataSize;
-            gameData->RenderSlotArray[i].IndexArray = gameData->models.Plane.IndexArray;
-            gameData->RenderSlotArray[i].EBOMemoryAllocationSize = gameData->models.Plane.IndexArraySize;
+            gameData->RenderSlotArray[i].Model = gameData->models.Plane.modelData;
 
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Tex2;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Tex2;
+
+            gameData->RenderSlotArray[i].NumAttributes = 2;
 
             gameData->RenderSlotArray[i].TextureArrayIndex = 1;
 
@@ -273,7 +201,7 @@ void GameInit(GameData* gameData)
 }
 
 
-void GameFrame(GLFWwindow* window, GameData* gameData)
+void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
     gameData->RenderSlotArray[0].Draw = true;
     gameData->RenderSlotArray[1].Draw = true;
