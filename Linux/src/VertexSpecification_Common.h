@@ -80,9 +80,9 @@ void BindVBO(unsigned int VBO)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 }
 
-void AllocateMemoryVBO(unsigned int numberOfEntries, float* vertexArray)
+void AllocateMemoryVBO(unsigned int BufferSize, float* vertexArray)
 {
-    glBufferData(GL_ARRAY_BUFFER, numberOfEntries * sizeof(float), vertexArray, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, BufferSize, vertexArray, GL_STATIC_DRAW);
 }
 
 unsigned int CreateVAO()

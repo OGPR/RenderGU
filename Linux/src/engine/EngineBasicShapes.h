@@ -48,10 +48,7 @@ struct EngineBasicShapes
         unsigned int Indices = 3;
 
         unsigned int NumPosPoints = 9;
-        //
-        // TODO I am using my AllocateMemoryVBO func which does the size of calc:
-        // Choose a consistent way with all buffers
-        unsigned int VBOMemoryAllocationSize = 15;
+        unsigned int VBOMemoryAllocationSize = 15 * sizeof(float);
     };
 
     struct Plane
@@ -113,9 +110,7 @@ struct EngineBasicShapes
 
         unsigned int VertexArrayPosOnlySize = 12 * sizeof(float);
         //
-        // TODO I am using my AllocateMemoryVBO func which does the size of calc:
-        // Choose a consistent way with all buffers
-        unsigned int VBOMemoryAllocationSize = 20;
+        unsigned int VBOMemoryAllocationSize = 20 * sizeof(float);
         unsigned int EBOMemoryAllocationSize = 6 * sizeof(unsigned int) ;
 
     };
@@ -241,9 +236,7 @@ struct EngineBasicShapes
 
         unsigned int VertexArrayPosOnlySize = 5*6*6;
 
-        // TODO I am using my AllocateMemoryVBO func which does the size of calc:
-        // Choose a consistent way with all buffers
-        unsigned int VBOMemoryAllocationSize = 5 * 4 *6;
+        unsigned int VBOMemoryAllocationSize = 5 * 4 *6 * sizeof(float);
         unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
 
     };
