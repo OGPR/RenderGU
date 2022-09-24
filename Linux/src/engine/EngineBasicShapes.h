@@ -10,8 +10,8 @@ struct EngineBasicShapes
             modelData.VertexData = VertexData;;
             modelData.VertexDataSize = VertexDataSize;
             modelData.Indices = Indices;
-            modelData.VertexArrayPosOnlySize = NumPosPoints;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
 
             modelData.AttributeArray = AttributeArray;
 
@@ -47,8 +47,8 @@ struct EngineBasicShapes
         unsigned int VertexDataSize = 15;
         unsigned int Indices = 3;
 
-        unsigned int NumPosPoints = 9;
         unsigned int VBOMemoryAllocationSize = 15 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = 9 * sizeof(float);
     };
 
     struct Plane
@@ -60,8 +60,8 @@ struct EngineBasicShapes
             modelData.IndexArraySize = IndexArraySize;
             modelData.VertexDataSize = VertexDataSize;
             modelData.Indices = Indices;
-            modelData.VertexArrayPosOnlySize = VertexArrayPosOnlySize;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
 
             modelData.AttributeArray = AttributeArray;
@@ -108,9 +108,8 @@ struct EngineBasicShapes
 
         unsigned int Indices = 6;
 
-        unsigned int VertexArrayPosOnlySize = 12 * sizeof(float);
-        //
         unsigned int VBOMemoryAllocationSize = 20 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = 12 * sizeof(float);
         unsigned int EBOMemoryAllocationSize = 6 * sizeof(unsigned int) ;
 
     };
@@ -124,8 +123,8 @@ struct EngineBasicShapes
             modelData.IndexArraySize = IndexArraySize;
             modelData.VertexDataSize = VertexDataSize;
             modelData.Indices = Indices;
-            modelData.VertexArrayPosOnlySize = VertexArrayPosOnlySize;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
+            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
 
             modelData.AttributeArray = AttributeArray;
@@ -234,9 +233,9 @@ struct EngineBasicShapes
 
         unsigned int Indices = 5*6*6;
 
-        unsigned int VertexArrayPosOnlySize = 5*6*6;
 
         unsigned int VBOMemoryAllocationSize = 5 * 4 *6 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = 3 * 4 * 6 * sizeof(float);
         unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
 
     };
