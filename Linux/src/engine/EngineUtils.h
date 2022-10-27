@@ -96,6 +96,7 @@ void LoadGame(struct GameData* gameData,
         (EngineVariables::RenderObjectSlot*)calloc(engineVariables->NumberOfSlots, sizeof(EngineVariables::RenderObjectSlot));
 
 
+    /*
     pthread_t ThreadArray[NumberOfSlots];
     Args ArgsVar;
     if (engineVariables->Multithreaded)
@@ -128,6 +129,7 @@ void LoadGame(struct GameData* gameData,
 
         //--- END Compilation, and assignment of, shaders ---//
     }
+    */
 
     for (unsigned int i = 0; i < NumberOfSlots; ++i)
     {
@@ -189,7 +191,7 @@ void LoadGame(struct GameData* gameData,
             const char* vs = gameData->RenderSlotArray[i].VertexShader;
             const char* fs = gameData->RenderSlotArray[i].FragmentShader;
 
-            unsigned int shaderProgram = linkShaders(compileVertexShader(vs), compileFragmentShader(fs));
+            unsigned int shaderProgram = linkShaders(createVertexShader(vs), createFragmentShader(fs));
 
             engineVariables->RenderObjectSlotArray[i].ShaderProgram = shaderProgram;
         }
@@ -248,6 +250,7 @@ void LoadGame(struct GameData* gameData,
 
     }
 
+    /*
     //---START Thread management ---///
     if (engineVariables->Multithreaded)
     {
@@ -259,6 +262,7 @@ void LoadGame(struct GameData* gameData,
         pthread_mutex_destroy(&ArgsVar.lock);
     }
     //---END Thread management ---///
+    */
     
 
 

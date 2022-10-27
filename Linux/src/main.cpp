@@ -5,13 +5,6 @@
 // Copyright   : Your copyright notice
 // Description :
 //============================================================================
-
-
-//macro to write shader programs inline
-#ifndef GLSL 
-#define GLSL(version,A) "#version " #version "\n" #A
-#endif
-
 #include "Window.h"
 #include "Utility.h"
 #include "CompileShaders.h"
@@ -21,12 +14,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "scenes/BarycentricTriangle.h"
-#include "scenes/Camera3D.h"
+//#include "scenes/BarycentricTriangle.h"
+//#include "scenes/Camera3D.h"
 #include "models/cube/model.h"
 #include "Camera.h"
-//#include "games/BaselineTriangle/Triangle.h"
-#include "games/BaselinePlane/Plane.h"
+#include "games/BaselineTriangle/Triangle.h"
+//#include "games/BaselinePlane/Plane.h"
 //#include "games/BaselineCube/Cube.h"
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
