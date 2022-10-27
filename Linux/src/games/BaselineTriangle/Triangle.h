@@ -28,95 +28,19 @@ struct GameData
 
     struct Shaders
     {
-            const char* VertexShader = 
-            GLSL(330 core,
-            layout(location = 0) in vec3 inPos;
+        const char* VertexShader = "src/games/BaselineTriangle/shaders/set1/bin/VertexShader.vert.spv"; 
 
-            uniform mat4 ModelMatrix;
-            uniform mat4 ViewMatrix;
-            uniform mat4 ProjectionMatrix;
+        const char* FragmentShader = "src/games/BaselineTriangle/shaders/set1/bin/FragmentShader.frag.spv";
 
-            void main()
-            {
-                gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPos, 1.0f);
-            }
-            );
+        // Tex coord passthrough VS
+        const char* VertexShader_Tex = "src/games/BaselineTriangle/shaders/set2/bin/VertexShader_Tex.vert.spv";
 
-            const char* FragmentShader = 
-            GLSL(330 core,
-            out vec4 FragColor;
+        const char* FragmentShader_Tex = "src/games/BaselineTriangle/shaders/set2/bin/FragmentShader_Tex.frag.spv"; 
+        
+        // Tex coord passthrough VS
+        const char* VertexShader_Tex2 = "src/games/BaselineTriangle/shaders/set3/bin/VertexShader_Tex2.vert.spv"; 
 
-            void main()
-            {
-                FragColor = vec4(0.1f, 0.2f, 0.3f, 1.0f);
-            }
-            );
-
-            // Tex coord passthrough VS
-            const char* VertexShader_Tex = 
-            GLSL(330 core,
-            layout(location = 0) in vec3 inPos;
-            layout(location = 1) in vec2 inTexCoord;
-
-            out vec2 TexCoord;
-
-            uniform mat4 ModelMatrix;
-            uniform mat4 ViewMatrix;
-            uniform mat4 ProjectionMatrix;
-
-            void main()
-            {
-                gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPos, 1.0f);
-                TexCoord = inTexCoord;
-
-            }
-            );
-
-            const char* FragmentShader_Tex = 
-            GLSL(330 core,
-            out vec4 FragColor;
-            in vec2 TexCoord;
-
-            uniform sampler2D Texture;
-
-            void main()
-            {
-                FragColor = texture(Texture, TexCoord);
-            }
-            );
-            
-            // Tex coord passthrough VS
-            const char* VertexShader_Tex2 = 
-            GLSL(330 core,
-            layout(location = 0) in vec3 inPos;
-            layout(location = 1) in vec2 inTexCoord;
-
-            out vec2 TexCoord;
-
-            uniform mat4 ModelMatrix;
-            uniform mat4 ViewMatrix;
-            uniform mat4 ProjectionMatrix;
-
-            void main()
-            {
-                gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPos, 1.0f);
-                TexCoord = inTexCoord;
-
-            }
-            );
-
-            const char* FragmentShader_Tex2 = 
-            GLSL(330 core,
-            out vec4 FragColor;
-            in vec2 TexCoord;
-
-            uniform sampler2D Texture;
-
-            void main()
-            {
-                FragColor = texture(Texture, TexCoord);
-            }
-            );
+        const char* FragmentShader_Tex2 = "src/games/BaselineTriangle/shaders/set3/bin/FragmentShader_Tex2.frag.spv";
 
     }shaders;
 
