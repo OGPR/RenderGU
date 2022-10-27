@@ -15,8 +15,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "Camera.h"
-//#include "games/BaselineTriangle/Triangle.h"
-#include "games/BaselinePlane/Plane.h"
+#include "games/BaselineTriangle/Triangle.h"
+//#include "games/BaselinePlane/Plane.h"
 //#include "games/BaselineCube/Cube.h"
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"

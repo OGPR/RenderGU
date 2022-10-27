@@ -393,3 +393,6 @@ build/
 
 #vim
 *.swp
+
+#RenderGU resources
+Linux/resources/
