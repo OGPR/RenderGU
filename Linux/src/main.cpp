@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
     // Initialise Engine Variables
     EngineVariables engineVariables;
-    engineVariables.Multithreaded = argc == 2 && !strcmp(argv[1], "-mt");
+    engineVariables.GLSLCompile = argc == 2 && !strcmp(argv[1], "-gl");
     
     // Initialise Game Data
     GameData gameData;

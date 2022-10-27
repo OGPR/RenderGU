@@ -26,5 +26,5 @@ struct EngineVariables
     bool pause = false;
     bool space_pressed = false;
 
-    bool Multithreaded = false;
+    bool GLSLCompile = false;
 };
