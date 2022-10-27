@@ -3,6 +3,10 @@
 #include "../Utility.h"
 #include "EngineModelDataInterface.h" 
 
+#ifndef GLSL
+#define GLSL(version,A) "#version " #version "\n" #A
+#endif
+
 struct RenderSlot
 {
     ModelData Model;
