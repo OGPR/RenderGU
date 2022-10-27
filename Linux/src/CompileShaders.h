@@ -34,7 +34,6 @@ unsigned int createVertexShader(const char* vertexShaderSPIRVBinary)
         printf("We are looking in %s\n", cwd);
     }
 
-
     
     return VertexShader;
 }
@@ -57,7 +56,14 @@ unsigned int createFragmentShader(const char* fragmentShaderSPIRVBinary)
     GLint Status;
     glGetShaderiv(FragmentShader, GL_COMPILE_STATUS, &Status);
     if (Status == GL_FALSE)
-        printf("Loading fragment shader failed!");
+    {
+        char cwd[PATH_MAX];
+        if( !getcwd(cwd, sizeof(cwd)))
+            printf("getcwd error!\n");
+
+        printf("Loading %s failed!\n", fragmentShaderSPIRVBinary);
+        printf("We are looking in %s\n", cwd);
+    }
     
     return FragmentShader;
 }
