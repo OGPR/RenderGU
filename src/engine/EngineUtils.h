@@ -173,7 +173,14 @@ void LoadGame(struct GameData* gameData,
                     &img_width, &img_height, &img_nChannels,0);
 
             if (!img_data)
-                    printf("Failed to load texture...%s\n", TextureRelPathname);
+            {
+                char cwd[PATH_MAX];
+                if (!getcwd(cwd, sizeof(cwd)))
+                    printf("\ngetcwd error\n");
+
+                printf("Failed to load texture...%s\n", TextureRelPathname);
+                printf("We are currently in %s\n", cwd);
+            }
 
             unsigned int texture;
             glGenTextures(1,&texture);
