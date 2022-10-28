@@ -235,7 +235,7 @@ struct EngineBasicShapes
 
 
         unsigned int VBOMemoryAllocationSize = 5 * 4 *6 * sizeof(float);
-        unsigned int VBOMemoryAllocationSize_PosOnly = 3 * 4 * 6 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = (5 * 4 * 5 + 5 * 3 + 3) * sizeof(float);
         unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
 
     };
