@@ -131,6 +131,12 @@ struct GameData
     float RotDeg_2 = 0.0f;
     float RotDeg_3 = 0.0f;
 
+    float RotDeg_2_Snapshot = 0.0f;
+    float RotDeg_3_Snapshot = 0.0f;
+
+    bool EndRotate_0 = false;
+    bool EndRotate_2 = false;
+
 };
 
 void GameInit(GameData* gameData)
@@ -213,6 +219,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
 
             gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
+            
         }
 
     }
@@ -221,20 +228,95 @@ void GameInit(GameData* gameData)
 
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
-    glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
-    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1 += 10 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    //--- Slot 0 ---//
+
+    glm::mat4 ModelMatrix_0= glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
+    
+    if (gameData->RotDeg_1 > -360.f)
+    {
+        ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1 -= 40 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    else if (gameData->RotDeg_1 > -720.f)
+    {
+        ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1 -= 40 * DeltaTime), glm::vec3(1.0f, 0.0f, 0.0f));
+    }
+    else if (!gameData->EndRotate_0)
+    {
+        gameData->EndRotate_0 = true;
+
+        // Capture current RotDeg_2
+        gameData->RotDeg_2_Snapshot = gameData->RotDeg_2;
+    }
+
     ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
     gameData->RenderSlotArray[0].ModelMatrix = ModelMatrix_0; 
 
+    //--- Slot 0 ---//
+
+    //--- Slot 2 ---//
     ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
-    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 10 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    if(!gameData->EndRotate_0)
+    {
+        ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 10 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    else
+    {
+        assert(gameData->RotDeg_2_Snapshot < 0);
+
+        if (gameData->RotDeg_2 > gameData->RotDeg_2_Snapshot - 360.f)
+        {
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 40 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+        else if (gameData->RotDeg_2 > gameData->RotDeg_2_Snapshot - 720.f)
+        {
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2 -= 40 * DeltaTime), glm::vec3(1.0f, 0.0f, 0.0f));
+        }
+        else if (!gameData->EndRotate_2)
+        {
+            gameData->EndRotate_2 = true;
+
+            // Capture current RotDeg_3
+            gameData->RotDeg_3_Snapshot = gameData->RotDeg_3;
+        }
+        else
+        {
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_2), glm::vec3(1.0f, 0.0f, 0.0f));
+        }
+    }
+
     ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
     gameData->RenderSlotArray[2].ModelMatrix = ModelMatrix_0; 
+    //--- Slot 2 ---//
 
+    //--- Slot 1 ---//
     ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -5.0f));
-    ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 += 12 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    if (!gameData->EndRotate_2)
+    {
+        ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 -= 10 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    else
+    {
+        assert(gameData->RotDeg_3_Snapshot < 0);
+
+        if(gameData->RotDeg_3 > gameData->RotDeg_3_Snapshot - 360.f)
+        {
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 -= 40 * DeltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+        else if(gameData->RotDeg_3 > gameData->RotDeg_3_Snapshot - 720.f)
+        {
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3 -= 40 * DeltaTime), glm::vec3(1.0f, 0.0f, 0.0f));
+        }
+        else
+        {
+            ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_3), glm::vec3(1.0f, 0.0f, 0.0f));
+        }
+        
+    }
     ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.8f, 0.8f, 0.8f));
     gameData->RenderSlotArray[1].ModelMatrix = ModelMatrix_0; 
+    //--- Slot 1 ---//
 
     gameData->RenderSlotArray[0].Draw = true;
     gameData->RenderSlotArray[1].Draw = true;
