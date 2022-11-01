@@ -174,12 +174,15 @@ void LoadGame(struct GameData* gameData,
 
             if (!img_data)
             {
+                // TODO fix for MSVC
+#if !_MSC_VER
                 char cwd[PATH_MAX];
                 if (!getcwd(cwd, sizeof(cwd)))
                     printf("\ngetcwd error\n");
 
                 printf("Failed to load texture...%s\n", TextureRelPathname);
                 printf("We are currently in %s\n", cwd);
+#endif
             }
 
             unsigned int texture;
