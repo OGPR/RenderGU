@@ -47,6 +47,9 @@ void TickGame(GLFWwindow* window,
                 glDrawElements(GL_TRIANGLES,engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0);
             else
                 glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
+
+            if (engineVariables->RenderObjectSlotArray[i].DepthTest)
+                glDisable(GL_DEPTH_TEST);
         }
 
     }
