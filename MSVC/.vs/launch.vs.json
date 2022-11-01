@@ -7,7 +7,6 @@
       "project": "CMakeLists.txt",
       "projectTarget": "RenderGU.exe",
       "name": "RenderGU.exe -gl",
-      "currentDir": "${workspaceRoot}",
       "args": ["-gl"]
     }
   ]
