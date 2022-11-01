@@ -19,8 +19,8 @@ struct GameData
         
         const char* TextureArray [2] =
         {
-            "resources/container.jpg",
-            "resources/wall.jpg",
+            "../../../resources/container.jpg",
+            "../../../resources/wall.jpg",
         };
 
     }textures;
@@ -28,19 +28,19 @@ struct GameData
 
     struct Shaders
     {
-        const char* VertexShader = "../src/games/BaselineTriangle/shaders/set1/bin/VertexShader.vert.spv"; 
+        const char* VertexShader = "../../../SPIRV_Bin/VertexShader.vert.spv"; 
 
-        const char* FragmentShader = "../src/games/BaselineTriangle/shaders/set1/bin/FragmentShader.frag.spv";
+        const char* FragmentShader = "../../../SPIRV_Bin/FragmentShader.frag.spv";
 
         // Tex coord passthrough VS
-        const char* VertexShader_Tex = "../src/games/BaselineTriangle/shaders/set2/bin/VertexShader_Tex.vert.spv";
+        const char* VertexShader_Tex = "../../../SPIRV_Bin/VertexShader_Tex.vert.spv";
 
-        const char* FragmentShader_Tex = "../src/games/BaselineTriangle/shaders/set2/bin/FragmentShader_Tex.frag.spv"; 
+        const char* FragmentShader_Tex = "../../../SPIRV_Bin/FragmentShader_Tex.frag.spv"; 
         
         // Tex coord passthrough VS
-        const char* VertexShader_Tex2 = "../src/games/BaselineTriangle/shaders/set3/bin/VertexShader_Tex2.vert.spv"; 
+        const char* VertexShader_Tex2 = "../../../SPIRV_Bin/VertexShader_Tex2.vert.spv"; 
 
-        const char* FragmentShader_Tex2 = "../src/games/BaselineTriangle/shaders/set3/bin/FragmentShader_Tex2.frag.spv";
+        const char* FragmentShader_Tex2 = "../../../SPIRV_Bin/FragmentShader_Tex2.frag.spv";
 
     }shaders;
 

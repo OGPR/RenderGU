@@ -12,11 +12,9 @@ echo "The shaders being compiled are:"
 echo ""
 for f in ./*.glsl
 do
-    var=$(awk -F'[/.]' '{print $3 "." $4}' <<< "$f")
-    var2=$(awk -F'[/.]' '{print $4}' <<< "$f")  	
-	
-	echo "VAR2 is $var2"
-    glslc.exe -fshader-stage=$var2 $var.glsl -o ../bin/$var.spv 
+    var=$(awk -F'[/.]' '{print $3 "." $4}' <<< "$f")  
+    ../../../../../engine/SPIRV_Compile/glslangValidator.exe -G -o ../bin_win/$var.spv $var.glsl
+    cp ../bin_win/$var.spv ../../../../../../MSVC/SPIRV_Bin
 done
 echo ""
 
