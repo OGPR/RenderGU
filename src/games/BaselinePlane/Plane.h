@@ -19,8 +19,8 @@ struct GameData
         
         const char* TextureArray [2] =
         {
-            "resources/container.jpg",
-            "resources/wall.jpg",
+            "../../../resources/container.jpg",
+            "../../../resources/wall.jpg",
         };
 
     }textures;
