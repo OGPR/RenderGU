@@ -16,6 +16,17 @@ struct EngineVariables
         bool IndexedDraw = false;
 
         bool DepthTest = false;
+
+		struct Uniforms
+		{
+            struct _Vec3
+            {
+                const char* Name = nullptr;
+                glm::vec3 Value;
+
+            }Vec3;
+
+		}uniforms;
     };
 
     unsigned int NumberOfSlots;
@@ -27,4 +38,5 @@ struct EngineVariables
     bool space_pressed = false;
 
     bool GLSLCompile = false;
+
 };

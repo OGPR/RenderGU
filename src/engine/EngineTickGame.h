@@ -36,6 +36,15 @@ void TickGame(GLFWwindow* window,
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
+            if (engineVariables->RenderObjectSlotArray[i].uniforms.Vec3.Name)
+            {
+				glUniform3fv(glGetUniformLocation(
+					ShaderProgram,
+					engineVariables->RenderObjectSlotArray[i].uniforms.Vec3.Name),
+					1,
+					&engineVariables->RenderObjectSlotArray[i].uniforms.Vec3.Value[0]);
+            }
+
             if (gameData->RenderSlotArray[i].Texture)
             {
                 glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureUnit);

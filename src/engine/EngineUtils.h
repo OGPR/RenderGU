@@ -219,6 +219,11 @@ void LoadGame(struct GameData* gameData,
         }
         ///---END Texture setting ---///
 
+        ///---START Uniform assignment from game data ---///
+		engineVariables->RenderObjectSlotArray[i].uniforms.Vec3.Name = gameData->RenderSlotArray[i].uniforms.Vec3.Name;
+		engineVariables->RenderObjectSlotArray[i].uniforms.Vec3.Value = gameData->RenderSlotArray[i].uniforms.Vec3.Value;
+        ///---END Uniform assignment from game data ---///
+
     }
 
 }

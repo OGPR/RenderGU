@@ -25,5 +25,15 @@ struct RenderSlot
     bool Draw = false; 
 
     bool DepthTest = false;
+
+    struct Uniforms
+    {
+        struct _Vec3
+        {
+            const char* Name = nullptr;
+            glm::vec3 Value;
+        }Vec3;
+    }uniforms;
+
 };
 
