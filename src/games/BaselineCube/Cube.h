@@ -193,6 +193,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
 
             gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
+            gameData->RenderSlotArray[i].DepthTest = true;
 
         }
 
@@ -219,7 +220,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
 
             gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
-            
+            gameData->RenderSlotArray[i].DepthTest = true;
         }
 
     }
