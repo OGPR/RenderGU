@@ -1,3 +1,4 @@
 #!/bin/bash
 
-./bin/RenderGU.bin
+cd bin/out/config # to enter working dir first
+./RenderGU.bin $1

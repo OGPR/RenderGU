@@ -14,6 +14,7 @@ for f in ./*.glsl
 do
     var=$(awk -F'[/.]' '{print $3 "." $4}' <<< "$f")  
     ../../../../../engine/SPIRV_Compile/glslangValidator -G -o ../bin/$var.spv $var.glsl
+    cp ../bin/$var.spv ../../../../../../Linux/SPIRV_Bin
 done
 echo ""
 

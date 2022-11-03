@@ -4,7 +4,9 @@
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
+#if !_MSC_VER
 #include <unistd.h>
+#endif
 #include <limits.h>
 
 unsigned int createVertexShader(const char* vertexShaderSPIRVBinary)
@@ -26,12 +28,15 @@ unsigned int createVertexShader(const char* vertexShaderSPIRVBinary)
     glGetShaderiv(VertexShader, GL_COMPILE_STATUS, &Status);
     if (Status == GL_FALSE)
     {
+        //TODO Allow this for MSVC
+#if !_MSC_VER
         char cwd[PATH_MAX];
         if( !getcwd(cwd, sizeof(cwd)))
             printf("getcwd error!\n");
 
         printf("Loading %s failed!\n", vertexShaderSPIRVBinary);
         printf("We are looking in %s\n", cwd);
+#endif
     }
 
     
@@ -57,12 +62,15 @@ unsigned int createFragmentShader(const char* fragmentShaderSPIRVBinary)
     glGetShaderiv(FragmentShader, GL_COMPILE_STATUS, &Status);
     if (Status == GL_FALSE)
     {
+        //TODO Allow this for MSVC
+#if !_MSC_VER
         char cwd[PATH_MAX];
         if( !getcwd(cwd, sizeof(cwd)))
             printf("getcwd error!\n");
 
         printf("Loading %s failed!\n", fragmentShaderSPIRVBinary);
         printf("We are looking in %s\n", cwd);
+#endif
     }
     
     return FragmentShader;
