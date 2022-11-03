@@ -38,19 +38,18 @@ void GameInit(GameData* gameData)
     {
         if (i == 0)
         {
-			ModelMatrix_0 = glm::translate(ModelMatrix_0, glm::vec3(30.8f, 30.8f, -100.0f));
-			ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.5f, 0.5f, 0.5f));
+            ModelMatrix_0 = glm::translate(ModelMatrix_0, glm::vec3(30.8f, 30.8f, -100.0f));
+            ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.5f, 0.5f, 0.5f));
 
-			gameData->RenderSlotArray[i].Model = gameData->models.LightSource.modelData;
-			gameData->RenderSlotArray[i].NumAttributes = 1;
-			gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
-			gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
-			gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-			gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
-			gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0;
-			gameData->RenderSlotArray[i].DepthTest = true;
-            gameData->RenderSlotArray[i].uniforms.Vec3.Name = "LightColor"; 
-            gameData->RenderSlotArray[i].uniforms.Vec3.Value = glm::vec3(1.0f, 1.0f, 1.0f);
+            gameData->RenderSlotArray[i].Model = gameData->models.LightSource.modelData;
+            gameData->RenderSlotArray[i].NumAttributes = 1;
+            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
+            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
+            gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);
+            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
+            gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0;
+            gameData->RenderSlotArray[i].DepthTest = true;
+            gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
         }
 
         if (i == 1)
@@ -66,9 +65,8 @@ void GameInit(GameData* gameData)
 			gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
 			gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_1;
 			gameData->RenderSlotArray[i].DepthTest = true;
-            gameData->RenderSlotArray[i].uniforms.Vec3.Name = "LightColor"; 
-            gameData->RenderSlotArray[i].uniforms.Vec3.Value = glm::vec3(1.0f, 1.0f, 1.0f);
-
+            gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
+            gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
         }
     }
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <utility>
+#include <vector>
+
 struct EngineVariables
 {
     struct RenderObjectSlot
@@ -19,14 +22,11 @@ struct EngineVariables
 
 		struct Uniforms
 		{
-            struct _Vec3
-            {
-                const char* Name = nullptr;
-                glm::vec3 Value;
-
-            }Vec3;
+            std::vector<std::pair<const char*, glm::vec3>> Vec3;
 
 		}uniforms;
+
+
     };
 
     unsigned int NumberOfSlots;

@@ -6,6 +6,8 @@
 #ifndef GLSL
 #define GLSL(version,A) "#version " #version "\n" #A
 #endif
+#include <utility>
+#include <vector>
 
 struct RenderSlot
 {
@@ -28,12 +30,8 @@ struct RenderSlot
 
     struct Uniforms
     {
-        struct _Vec3
-        {
-            const char* Name = nullptr;
-            glm::vec3 Value;
-        }Vec3;
-    }uniforms;
+		std::vector<std::pair<const char*, glm::vec3>> Vec3;
 
+    }uniforms;
 };
 
