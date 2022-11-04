@@ -28,6 +28,9 @@ struct GameData
     RenderSlot renderSlot1, renderSlot2;
     unsigned int NumberOfRenderSlots = 2;
     RenderSlot RenderSlotArray[2] = { renderSlot1, renderSlot2 };
+    //glm::vec3 LightPosition = glm::vec3(30.8f, 30.8f, -100.0f);
+    glm::vec3 LightPosition = glm::vec3(1.0f, 0.0f, -5.0f);
+
 };
 
 void GameInit(GameData* gameData)
@@ -38,7 +41,7 @@ void GameInit(GameData* gameData)
     {
         if (i == 0)
         {
-            ModelMatrix_0 = glm::translate(ModelMatrix_0, glm::vec3(30.8f, 30.8f, -100.0f));
+            ModelMatrix_0 = glm::translate(ModelMatrix_0, gameData->LightPosition);
             ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.5f, 0.5f, 0.5f));
 
             gameData->RenderSlotArray[i].Model = gameData->models.LightSource.modelData;
@@ -54,7 +57,7 @@ void GameInit(GameData* gameData)
 
         if (i == 1)
         {
-			ModelMatrix_1 = glm::translate(ModelMatrix_1, glm::vec3(-0.0f, -0.2f, -2.0f));
+			ModelMatrix_1 = glm::translate(ModelMatrix_1, glm::vec3(-0.0f, -0.2f, -6.0f));
 			ModelMatrix_1 = glm::scale(ModelMatrix_1, glm::vec3(0.5f, 0.5f, 0.5f));
 
 			gameData->RenderSlotArray[i].Model = gameData->models.Object.modelData;
@@ -68,6 +71,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.3f });
+            gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightPosition", gameData->LightPosition });
         }
     }
 }
