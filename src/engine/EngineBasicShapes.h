@@ -133,22 +133,32 @@ struct EngineBasicShapes
 
         ModelData modelData;
 
-        Attribute AttributeArray[2] =
+        Attribute AttributeArray[3] =
         {
+            // Pos
             {
                 3,
-                5*sizeof(float),
+                8*sizeof(float),
                 0
             },
 
+            // Tex
             {
                 2,
-                5*sizeof(float),
+                8*sizeof(float),
                 (void*)(3 * sizeof(float)) 
+            },
+
+            // Normal
+            {
+                3,
+                8*sizeof(float),
+                (void*)(5 * sizeof(float)) 
             }
+
         };
 
-        float VertexData[5*4*6] = 
+        float VertexData[8*4*6] = 
         {
             /* The vertex annotations are given wrt to the face orientation.
              * For example the bottom face will have the notion of back and front vertices
@@ -159,45 +169,45 @@ struct EngineBasicShapes
 
             /// Back Face
 
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom left
-             0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // Bottom right
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Top Left
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f, // Bottom left
+             0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,// Bottom right
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,// Top right
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,// Top Left
 
             /// Front face
 
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Bottom right
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // Top right
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // Top left
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,// Bottom left
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,// Bottom right
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,// Top right
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,// Top left
 
             /// Left face
 
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top right
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top left
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom left
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom right
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f, 0.0f, 0.0f,// Top right
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, -1.0f, 0.0f, 0.0f,// Top left
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f, 0.0f, 0.0f,// Bottom left
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,// Bottom right
 
              /// Right face
 
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Top left
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Top right
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Bottom right
-             0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Bottom left
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f,// Top left
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f,// Top right
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f,// Bottom right
+             0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// Bottom left
 
             // Bottom face
 
-             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back left
-             0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // Back right
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // Front right
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Front left
+             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f,// Back left
+             0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f,// Back right
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,// Front right
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f, 0.0f,// Front left
 
             /// Top face
 
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // Back left
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // Back right
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // Front right
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, // Front left
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f,// Back left
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f,// Back right
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f,// Front right
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f,// Front left
         };
 
         unsigned int IndexArray[6*6] = 
@@ -234,8 +244,8 @@ struct EngineBasicShapes
         unsigned int Indices = 5*6*6;
 
 
-        unsigned int VBOMemoryAllocationSize = 5 * 4 *6 * sizeof(float);
-        unsigned int VBOMemoryAllocationSize_PosOnly = (5 * 4 * 5 + 5 * 3 + 3) * sizeof(float);
+        unsigned int VBOMemoryAllocationSize = 8 * 4 *6 * sizeof(float);
+        unsigned int VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize;
         unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
 
     };
