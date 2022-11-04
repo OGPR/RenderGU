@@ -67,6 +67,7 @@ void GameInit(GameData* gameData)
 			gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
+            gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.3f });
         }
     }
 }

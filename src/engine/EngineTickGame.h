@@ -54,6 +54,22 @@ void TickGame(GLFWwindow* window,
                 }
             }
 
+            for (const auto& UniformPair : engineVariables->RenderObjectSlotArray[i].uniforms.Float)
+            {
+                if (glGetUniformLocation(ShaderProgram, UniformPair.first) != -1)
+                {
+                    glUniform1f(glGetUniformLocation(
+                        ShaderProgram,
+                        UniformPair.first),
+                        UniformPair.second);
+                }
+                else 
+                {
+                    std::cout << UniformPair.first << " shader uniform name not present" << std::endl;
+                    std::cout << "RenderGU is currently processing render slot " << i << " during tick" << std::endl;
+                }
+            }
+
             if (gameData->RenderSlotArray[i].Texture)
             {
                 glUniform1i(glGetUniformLocation(ShaderProgram, "Texture"), engineVariables->RenderObjectSlotArray[i].TextureUnit);
