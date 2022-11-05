@@ -3,6 +3,7 @@
 #include "../../Utility.h"
 #include "../../engine/GameUtils.h"
 #include "../../engine/EngineBasicShapes.h"
+#include "../../Camera.h"
 
 
 struct GameData
@@ -31,6 +32,8 @@ struct GameData
     //glm::vec3 LightPosition = glm::vec3(30.8f, 30.8f, -100.0f);
     glm::vec3 LightPosition = glm::vec3(1.0f, 0.0f, -5.0f);
 
+    CameraVariables cameraVariables;
+
 };
 
 void GameInit(GameData* gameData)
@@ -57,7 +60,7 @@ void GameInit(GameData* gameData)
 
         if (i == 1)
         {
-			ModelMatrix_1 = glm::translate(ModelMatrix_1, glm::vec3(-0.0f, -0.2f, -6.0f));
+			ModelMatrix_1 = glm::translate(ModelMatrix_1, glm::vec3(-0.0f, -0.2f, -3.0f));
 			ModelMatrix_1 = glm::scale(ModelMatrix_1, glm::vec3(0.5f, 0.5f, 0.5f));
 
 			gameData->RenderSlotArray[i].Model = gameData->models.Object.modelData;
@@ -70,7 +73,7 @@ void GameInit(GameData* gameData)
 			gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
-            gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.3f });
+            gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.9f });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightPosition", gameData->LightPosition });
         }
     }
@@ -79,6 +82,17 @@ void GameInit(GameData* gameData)
 
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
+	processInputCamera(window, &gameData->cameraVariables, DeltaTime);
+
+	auto viewMat = glm::mat4(1.f);
+	viewMat = glm::lookAt(
+			gameData->cameraVariables.cameraPos,
+			gameData->cameraVariables.cameraPos + gameData->cameraVariables.cameraLookDirection,
+			gameData->cameraVariables.cameraUp);
+
+    gameData->RenderSlotArray[0].ViewMatrix = viewMat;
+    gameData->RenderSlotArray[1].ViewMatrix = viewMat;
+
     gameData->RenderSlotArray[0].Draw = true;
     gameData->RenderSlotArray[1].Draw = true;
 }
