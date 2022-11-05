@@ -30,7 +30,7 @@ struct GameData
     unsigned int NumberOfRenderSlots = 2;
     RenderSlot RenderSlotArray[2] = { renderSlot1, renderSlot2 };
     //glm::vec3 LightPosition = glm::vec3(30.8f, 30.8f, -100.0f);
-    glm::vec3 LightPosition = glm::vec3(1.0f, 0.0f, -5.0f);
+    glm::vec3 LightPosition = glm::vec3(1.0f, 0.3f, -5.0f);
 
     CameraVariables cameraVariables;
 
@@ -45,7 +45,7 @@ void GameInit(GameData* gameData)
         if (i == 0)
         {
             ModelMatrix_0 = glm::translate(ModelMatrix_0, gameData->LightPosition);
-            ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.5f, 0.5f, 0.5f));
+            ModelMatrix_0 = glm::scale(ModelMatrix_0, glm::vec3(0.1f, 0.1f, 0.1f));
 
             gameData->RenderSlotArray[i].Model = gameData->models.LightSource.modelData;
             gameData->RenderSlotArray[i].NumAttributes = 1;
@@ -64,7 +64,7 @@ void GameInit(GameData* gameData)
 			ModelMatrix_1 = glm::scale(ModelMatrix_1, glm::vec3(0.5f, 0.5f, 0.5f));
 
 			gameData->RenderSlotArray[i].Model = gameData->models.Object.modelData;
-			gameData->RenderSlotArray[i].NumAttributes = 1;
+			gameData->RenderSlotArray[i].NumAttributes = 3;
 			gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Object;
 			gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Object;
 			gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
@@ -73,7 +73,7 @@ void GameInit(GameData* gameData)
 			gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
-            gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.9f });
+            gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.15f });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightPosition", gameData->LightPosition });
         }
     }

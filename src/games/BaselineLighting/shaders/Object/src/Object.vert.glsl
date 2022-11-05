@@ -1,7 +1,7 @@
 #version 460
 
 layout(location = 0) in vec3 inPos;
-layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec3 inNormal; // Note with current engine design this has to be 2. TODO - think about handling this differently
 
 layout(location = 10) out vec3 Normal;
 layout(location = 20) out vec3 VertexPosWS;

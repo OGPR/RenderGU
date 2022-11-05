@@ -14,7 +14,12 @@ void main()
     vec3 FragmentToLightDir = normalize(LightPosition - VertexPosWS);
     vec3 UnitVertexNormal = normalize(Normal);
 
-    float DiffuseComponent = max(dot(UnitVertexNormal, LightPosition), 0.0f);
+    float DiffuseComponent = max(dot(UnitVertexNormal, FragmentToLightDir), 0.0f);
+    //FragColor = vec4(vec3(DiffuseComponent), 1.0f);
+
+    // TODO - explore these visualisation
+    //FragColor = vec4(VertexPosWS, 1.0f);
+    //FragColor = vec4(FragmentToLightDir, 1.0f);
 
     FragColor = vec4((DiffuseComponent + AmbientLightStrength) * LightColor * ObjectColor, 1.0f);
 }
