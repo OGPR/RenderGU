@@ -30,14 +30,19 @@ struct GameData
     unsigned int NumberOfRenderSlots = 2;
     RenderSlot RenderSlotArray[2] = { renderSlot1, renderSlot2 };
     //glm::vec3 LightPosition = glm::vec3(30.8f, 30.8f, -100.0f);
-    glm::vec3 LightPosition = glm::vec3(1.0f, 0.3f, -5.0f);
+    glm::vec3 LightPosition = glm::vec3(1.0f, 0.3f, -4.0f);
 
     CameraVariables cameraVariables;
+
+    unsigned int EyePosUniformVecIndex = 3;
 
 };
 
 void GameInit(GameData* gameData)
 {
+    gameData->cameraVariables.cameraPosHome = glm::vec3(gameData->cameraVariables.cameraPosHome.x, 0.5f, -1.0f);
+    gameData->cameraVariables.cameraPos = gameData->cameraVariables.cameraPosHome;
+
     glm::mat4 ModelMatrix_0(glm::mat4(1.0f));
     glm::mat4 ModelMatrix_1(glm::mat4(1.0f));
     for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
@@ -75,6 +80,7 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.15f });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightPosition", gameData->LightPosition });
+			gameData->RenderSlotArray[1].uniforms.Vec3.push_back({ "EyePosition", gameData->cameraVariables.cameraPos });
         }
     }
 }
@@ -92,6 +98,8 @@ void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 
     gameData->RenderSlotArray[0].ViewMatrix = viewMat;
     gameData->RenderSlotArray[1].ViewMatrix = viewMat;
+
+    gameData->RenderSlotArray[1].uniforms.Vec3[gameData->EyePosUniformVecIndex].second = gameData->cameraVariables.cameraPos;
 
     gameData->RenderSlotArray[0].Draw = true;
     gameData->RenderSlotArray[1].Draw = true;

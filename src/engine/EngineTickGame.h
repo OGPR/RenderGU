@@ -37,7 +37,7 @@ void TickGame(GLFWwindow* window,
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
-            for (const auto& UniformPair : engineVariables->RenderObjectSlotArray[i].uniforms.Vec3)
+            for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Vec3)
             {
                 if (glGetUniformLocation(ShaderProgram, UniformPair.first) != -1)
                 {
@@ -54,7 +54,7 @@ void TickGame(GLFWwindow* window,
                 }
             }
 
-            for (const auto& UniformPair : engineVariables->RenderObjectSlotArray[i].uniforms.Float)
+            for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Float)
             {
                 if (glGetUniformLocation(ShaderProgram, UniformPair.first) != -1)
                 {
