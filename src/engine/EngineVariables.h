@@ -20,12 +20,12 @@ struct EngineVariables
 
         bool DepthTest = false;
 
-		struct Uniforms
-		{
+        struct Uniforms
+        {
             std::vector<std::pair<const char*, glm::vec3>>* Vec3;
             std::vector<std::pair<const char*, float>>* Float;
 
-		}uniforms;
+        }uniforms;
 
 
     };

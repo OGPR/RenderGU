@@ -65,22 +65,22 @@ void GameInit(GameData* gameData)
 
         if (i == 1)
         {
-			ModelMatrix_1 = glm::translate(ModelMatrix_1, glm::vec3(-0.0f, -0.2f, -3.0f));
-			ModelMatrix_1 = glm::scale(ModelMatrix_1, glm::vec3(0.5f, 0.5f, 0.5f));
+            ModelMatrix_1 = glm::translate(ModelMatrix_1, glm::vec3(-0.0f, -0.2f, -3.0f));
+            ModelMatrix_1 = glm::scale(ModelMatrix_1, glm::vec3(0.5f, 0.5f, 0.5f));
 
-			gameData->RenderSlotArray[i].Model = gameData->models.Object.modelData;
-			gameData->RenderSlotArray[i].NumAttributes = 3;
-			gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Object;
-			gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Object;
-			gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-			gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
-			gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_1;
-			gameData->RenderSlotArray[i].DepthTest = true;
+            gameData->RenderSlotArray[i].Model = gameData->models.Object.modelData;
+            gameData->RenderSlotArray[i].NumAttributes = 3;
+            gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Object;
+            gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Object;
+            gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
+            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
+            gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_1;
+            gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "ObjectColor", glm::vec3(0.0f, 0.0f, 1.0f) });
             gameData->RenderSlotArray[i].uniforms.Float.push_back({ "AmbientLightStrength", 0.15f });
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightPosition", gameData->LightPosition });
-			gameData->RenderSlotArray[1].uniforms.Vec3.push_back({ "EyePosition", gameData->cameraVariables.cameraPos });
+            gameData->RenderSlotArray[1].uniforms.Vec3.push_back({ "EyePosition", gameData->cameraVariables.cameraPos });
         }
     }
 }
@@ -88,13 +88,13 @@ void GameInit(GameData* gameData)
 
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
-	processInputCamera(window, &gameData->cameraVariables, DeltaTime);
+    processInputCamera(window, &gameData->cameraVariables, DeltaTime);
 
-	auto viewMat = glm::mat4(1.f);
-	viewMat = glm::lookAt(
-			gameData->cameraVariables.cameraPos,
-			gameData->cameraVariables.cameraPos + gameData->cameraVariables.cameraLookDirection,
-			gameData->cameraVariables.cameraUp);
+    auto viewMat = glm::mat4(1.f);
+    viewMat = glm::lookAt(
+            gameData->cameraVariables.cameraPos,
+            gameData->cameraVariables.cameraPos + gameData->cameraVariables.cameraLookDirection,
+            gameData->cameraVariables.cameraUp);
 
     gameData->RenderSlotArray[0].ViewMatrix = viewMat;
     gameData->RenderSlotArray[1].ViewMatrix = viewMat;
