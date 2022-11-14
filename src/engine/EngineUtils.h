@@ -219,6 +219,13 @@ void LoadGame(struct GameData* gameData,
         }
         ///---END Texture setting ---///
 
+        ///---START Uniform assignment from game data ---///
+
+        engineVariables->RenderObjectSlotArray[i].uniforms.Vec3 = &gameData->RenderSlotArray[i].uniforms.Vec3;
+        engineVariables->RenderObjectSlotArray[i].uniforms.Float = &gameData->RenderSlotArray[i].uniforms.Float;
+        ///---END Uniform assignment from game data ---///
+
+
     }
 
 }

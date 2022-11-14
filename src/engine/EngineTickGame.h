@@ -2,6 +2,7 @@
 
 #include "../Utility.h"
 #include "EngineVariables.h"
+#include <iostream>
 
 void TickGame(GLFWwindow* window,
         EngineVariables* engineVariables,
@@ -35,6 +36,39 @@ void TickGame(GLFWwindow* window,
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+
+            for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Vec3)
+            {
+                if (glGetUniformLocation(ShaderProgram, UniformPair.first) != -1)
+                {
+					glUniform3fv(glGetUniformLocation(
+						ShaderProgram,
+						UniformPair.first),
+						1,
+						&UniformPair.second[0]);
+                }
+                else 
+                {
+                    std::cout << UniformPair.first << " shader uniform name not present" << std::endl;
+                    std::cout << "RenderGU is currently processing render slot " << i << " during tick" << std::endl;
+                }
+            }
+
+            for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Float)
+            {
+                if (glGetUniformLocation(ShaderProgram, UniformPair.first) != -1)
+                {
+                    glUniform1f(glGetUniformLocation(
+                        ShaderProgram,
+                        UniformPair.first),
+                        UniformPair.second);
+                }
+                else 
+                {
+                    std::cout << UniformPair.first << " shader uniform name not present" << std::endl;
+                    std::cout << "RenderGU is currently processing render slot " << i << " during tick" << std::endl;
+                }
+            }
 
             if (gameData->RenderSlotArray[i].Texture)
             {

@@ -6,6 +6,8 @@
 #ifndef GLSL
 #define GLSL(version,A) "#version " #version "\n" #A
 #endif
+#include <utility>
+#include <vector>
 
 struct RenderSlot
 {
@@ -25,5 +27,12 @@ struct RenderSlot
     bool Draw = false; 
 
     bool DepthTest = false;
+
+    struct Uniforms
+    {
+        std::vector<std::pair<const char*, glm::vec3>> Vec3;
+        std::vector<std::pair<const char*, float>> Float;
+
+    }uniforms;
 };
 

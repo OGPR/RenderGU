@@ -1,5 +1,8 @@
 #pragma once
 
+#include <utility>
+#include <vector>
+
 struct EngineVariables
 {
     struct RenderObjectSlot
@@ -16,6 +19,15 @@ struct EngineVariables
         bool IndexedDraw = false;
 
         bool DepthTest = false;
+
+        struct Uniforms
+        {
+            std::vector<std::pair<const char*, glm::vec3>>* Vec3;
+            std::vector<std::pair<const char*, float>>* Float;
+
+        }uniforms;
+
+
     };
 
     unsigned int NumberOfSlots;
@@ -27,4 +39,5 @@ struct EngineVariables
     bool space_pressed = false;
 
     bool GLSLCompile = false;
+
 };
