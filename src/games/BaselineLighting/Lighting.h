@@ -57,7 +57,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
             gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0;
             gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
@@ -73,7 +72,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Object;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Object;
             gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_1;
             gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
@@ -86,13 +84,10 @@ void GameInit(GameData* gameData)
 }
 
 
-void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime, int* WindowWidth, int* WindowHeight)
+void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
     processInputCamera(window, &gameData->cameraVariables, DeltaTime);
 
-    processWindowPos(window, WindowWidth, WindowHeight);
-    gameData->RenderSlotArray[0].ProjectionMatrix = glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
-    gameData->RenderSlotArray[1].ProjectionMatrix = glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
     auto viewMat = glm::mat4(1.f);
     viewMat = glm::lookAt(
