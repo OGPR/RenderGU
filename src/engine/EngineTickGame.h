@@ -34,8 +34,8 @@ void TickGame(GLFWwindow* window,
             glm::mat4 ViewMatrix = *engineVariables->RenderObjectSlotArray[i].ViewMatrix;
 
             processWindowPos(window, WindowWidth, WindowHeight);
-            float OrthWidth = *WindowWidth / 800.0f;
-            float OrthHeight = *WindowHeight / 600.f;
+            float OrthWidth = *WindowWidth / float(gameData->windowSpecification.WindowWidth);
+            float OrthHeight = *WindowHeight / float(gameData->windowSpecification.WindowHeight);
             glm::mat4 ProjectionMatrix = engineVariables->RenderObjectSlotArray[i]._2D ?
                     glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
                     glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
