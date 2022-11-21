@@ -226,8 +226,3 @@ void processInputCamera(GLFWwindow *window,
 
 
 }
-
-void processWindowPos(GLFWwindow* window, int* Width, int* Height)
-{
-    glfwGetWindowSize(window, Width, Height);
-}

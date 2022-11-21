@@ -107,4 +107,8 @@ void framebuffer_size_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
+void processWindowPos(GLFWwindow* window, int* Width, int* Height)
+{
+    glfwGetWindowSize(window, Width, Height);
+}
 
