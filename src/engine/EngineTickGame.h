@@ -36,9 +36,15 @@ void TickGame(GLFWwindow* window,
             processWindowPos(window, WindowWidth, WindowHeight);
             float OrthWidth = *WindowWidth / float(gameData->windowSpecification.WindowWidth);
             float OrthHeight = *WindowHeight / float(gameData->windowSpecification.WindowHeight);
+
+            float CurrPerspRatio = float(*WindowWidth) / float(*WindowHeight);
+            float OrigPerspRatio = float(gameData->windowSpecification.WindowWidth) / float(gameData->windowSpecification.WindowHeight);
+
+            float PerspAngleMultiple = CurrPerspRatio / OrigPerspRatio;
+
             glm::mat4 ProjectionMatrix = engineVariables->RenderObjectSlotArray[i]._2D ?
                     glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
-                    glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
+                    glm::perspective(glm::radians(45.f * 1/ PerspAngleMultiple), CurrPerspRatio , 0.1f, 100.f);
 
             // TODO check/handle Unifrom existence
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
