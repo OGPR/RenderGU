@@ -34,6 +34,9 @@ int main(int argc, char** argv)
     // Create main window
     GLFWwindow* window = Window();
 
+    // Set callbacks
+    SetFramebufferSizeCallback(window, framebuffer_size_callback);
+
     // Initialise Engine Variables
     EngineVariables engineVariables;
     engineVariables.GLSLCompile = argc == 2 && !strcmp(argv[1], "-gl");
@@ -51,6 +54,10 @@ int main(int argc, char** argv)
     // Engine delta time
     float DeltaTime = 0;
 
+    // WindowPos variables
+    int WindowWidth, WindowHeight;
+    glfwGetWindowSize(window, &WindowWidth, &WindowHeight);
+
     while(!WindowShouldClose(window))
     {
         UpdateDeltaTime(&DeltaTime);
@@ -59,7 +66,7 @@ int main(int argc, char** argv)
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &engineVariables, &gameData, DeltaTime, &GameFrame);
+            TickGame(window, &engineVariables, &gameData, DeltaTime, &WindowWidth, &WindowHeight, &GameFrame);
 
             EngineEndFrame(window, &engineVariables, false, DeltaTime);
         }

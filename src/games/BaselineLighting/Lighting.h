@@ -86,9 +86,13 @@ void GameInit(GameData* gameData)
 }
 
 
-void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
+void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime, int* WindowWidth, int* WindowHeight)
 {
     processInputCamera(window, &gameData->cameraVariables, DeltaTime);
+
+    processWindowPos(window, WindowWidth, WindowHeight);
+    gameData->RenderSlotArray[0].ProjectionMatrix = glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
+    gameData->RenderSlotArray[1].ProjectionMatrix = glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
     auto viewMat = glm::mat4(1.f);
     viewMat = glm::lookAt(
