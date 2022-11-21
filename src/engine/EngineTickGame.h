@@ -34,8 +34,10 @@ void TickGame(GLFWwindow* window,
             glm::mat4 ViewMatrix = *engineVariables->RenderObjectSlotArray[i].ViewMatrix;
 
             processWindowPos(window, WindowWidth, WindowHeight);
+            float OrthWidth = *WindowWidth / 800.0f;
+            float OrthHeight = *WindowHeight / 600.f;
             glm::mat4 ProjectionMatrix = engineVariables->RenderObjectSlotArray[i]._2D ?
-                    glm::mat4(1.0f)                                                    :
+                    glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
                     glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
             // TODO check/handle Unifrom existence

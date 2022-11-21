@@ -16,9 +16,9 @@
 #include "stb_image.h"
 #include "Camera.h"
 
-//#include "games/BaselineTriangle/Triangle.h"
+#include "games/BaselineTriangle/Triangle.h"
 //#include "games/BaselinePlane/Plane.h"
-#include "games/BaselineCube/Cube.h"
+//#include "games/BaselineCube/Cube.h"
 //#include "games/BaselineLighting/Lighting.h"
 
 #include "engine/EngineVariables.h"
@@ -70,7 +70,6 @@ int main(int argc, char** argv)
 
             EngineEndFrame(window, &engineVariables, false, DeltaTime);
         }
-
     }
     
     // Exit
