@@ -8,9 +8,11 @@ void TickGame(GLFWwindow* window,
         EngineVariables* engineVariables,
         struct GameData* gameData,
         float DeltaTime,
+        int* WindowWidth,
+        int* WindowHeight,
         void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime))
 {
-    (*GameTickFuncPtr)(window, gameData, DeltaTime); 
+    (*GameTickFuncPtr)(window, gameData, DeltaTime);
 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -30,9 +32,15 @@ void TickGame(GLFWwindow* window,
 
             glm::mat4 ModelMatrix = *engineVariables->RenderObjectSlotArray[i].ModelMatrix;
             glm::mat4 ViewMatrix = *engineVariables->RenderObjectSlotArray[i].ViewMatrix;
-            glm::mat4 ProjectionMatrix = *engineVariables->RenderObjectSlotArray[i].ProjectionMatrix;
 
-            // TODO check/handle Unifrom existence 
+            processWindowPos(window, WindowWidth, WindowHeight);
+            float OrthWidth = *WindowWidth / float(gameData->windowSpecification.WindowWidth);
+            float OrthHeight = *WindowHeight / float(gameData->windowSpecification.WindowHeight);
+            glm::mat4 ProjectionMatrix = engineVariables->RenderObjectSlotArray[i]._2D ?
+                    glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
+                    glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
+
+            // TODO check/handle Unifrom existence
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));

@@ -8,7 +8,15 @@
 
 struct GameData
 {
-    
+    struct WindowSpecification
+    {
+        int WindowWidth = 800;
+        int WindowHeight = 600;
+        const char* WindowTitle = "Baseline Lighting";
+        int WindowXPos = 800;
+        int WindowYPos = 280;
+    } windowSpecification;
+
     struct Models
     {
         EngineBasicShapes::Cube LightSource;
@@ -57,7 +65,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
             gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0;
             gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
@@ -73,7 +80,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader_Object;
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader_Object;
             gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f / 600.f, 0.1f, 100.f);
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_1;
             gameData->RenderSlotArray[i].DepthTest = true;
             gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "LightColor", glm::vec3(1.0f, 1.0f, 1.0f) });
@@ -89,6 +95,7 @@ void GameInit(GameData* gameData)
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
     processInputCamera(window, &gameData->cameraVariables, DeltaTime);
+
 
     auto viewMat = glm::mat4(1.f);
     viewMat = glm::lookAt(

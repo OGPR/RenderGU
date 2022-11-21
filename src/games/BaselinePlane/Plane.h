@@ -7,7 +7,15 @@
 
 struct GameData
 {
-    
+    struct WindowSpecification
+    {
+        int WindowWidth = 800;
+        int WindowHeight = 600;
+        const char* WindowTitle = "Baseline Plane";
+        int WindowXPos = 800;
+        int WindowYPos = 280;
+    } windowSpecification;
+
     struct Models
     {
         EngineBasicShapes::Plane Plane;
@@ -132,6 +140,7 @@ void GameInit(GameData* gameData)
 {
     for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
     {
+        gameData->RenderSlotArray[i]._2D = true;
         glm::mat4 ModelMatrix_0 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
         if (i == 0)
@@ -145,7 +154,6 @@ void GameInit(GameData* gameData)
             gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
 
             gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);  
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::mat4(1.0f);
         }
         
         if(i == 0)

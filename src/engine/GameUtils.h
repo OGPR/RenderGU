@@ -22,11 +22,12 @@ struct RenderSlot
 
     glm::mat4 ModelMatrix;
     glm::mat4 ViewMatrix;
-    glm::mat4 ProjectionMatrix; 
 
     bool Draw = false; 
 
     bool DepthTest = false;
+
+    bool _2D = false;
 
     struct Uniforms
     {

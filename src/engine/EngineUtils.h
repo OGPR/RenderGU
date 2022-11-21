@@ -159,9 +159,10 @@ void LoadGame(struct GameData* gameData,
 
         engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
-        engineVariables->RenderObjectSlotArray[i].ProjectionMatrix = &gameData->RenderSlotArray[i].ProjectionMatrix;
 
         engineVariables->RenderObjectSlotArray[i].DepthTest = gameData->RenderSlotArray[i].DepthTest;
+
+        engineVariables->RenderObjectSlotArray[i]._2D = gameData->RenderSlotArray[i]._2D;
 
         ///---START Texture setting ---///
         const char* TextureRelPathname = gameData->RenderSlotArray[i].Texture;

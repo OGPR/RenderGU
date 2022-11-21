@@ -14,11 +14,12 @@ struct EngineVariables
         unsigned int TextureUnit = 0;
         glm::mat4* ModelMatrix = nullptr;
         glm::mat4* ViewMatrix = nullptr;
-        glm::mat4* ProjectionMatrix = nullptr;
 
         bool IndexedDraw = false;
 
         bool DepthTest = false;
+
+        bool _2D = false;
 
         struct Uniforms
         {
