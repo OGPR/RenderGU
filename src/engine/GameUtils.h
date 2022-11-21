@@ -27,6 +27,8 @@ struct RenderSlot
 
     bool DepthTest = false;
 
+    bool _2D = false;
+
     struct Uniforms
     {
         std::vector<std::pair<const char*, glm::vec3>> Vec3;

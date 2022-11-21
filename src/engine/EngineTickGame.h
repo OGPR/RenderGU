@@ -34,7 +34,9 @@ void TickGame(GLFWwindow* window,
             glm::mat4 ViewMatrix = *engineVariables->RenderObjectSlotArray[i].ViewMatrix;
 
             processWindowPos(window, WindowWidth, WindowHeight);
-            glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
+            glm::mat4 ProjectionMatrix = engineVariables->RenderObjectSlotArray[i]._2D ?
+                    glm::mat4(1.0f)                                                    :
+                    glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
             // TODO check/handle Unifrom existence
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
