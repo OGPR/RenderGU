@@ -147,7 +147,6 @@ void GameInit(GameData* gameData)
         if (i == 0)
         {
             glm::mat4 ViewMatrix_0 = glm::mat4(1.0f);  
-            glm::mat4 ProjectionMatrix_0 = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
 
             glm::mat4 ModelMatrix_0 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -5.0f));
             ModelMatrix_0 = glm::rotate(ModelMatrix_0, glm::radians(gameData->RotDeg_1), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -165,7 +164,6 @@ void GameInit(GameData* gameData)
                 0,
                 ModelMatrix_0,
                 ViewMatrix_0,
-                ProjectionMatrix_0,
                 false,
                 true
             };
@@ -192,7 +190,6 @@ void GameInit(GameData* gameData)
 
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
 
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
             gameData->RenderSlotArray[i].DepthTest = true;
 
         }
@@ -219,7 +216,6 @@ void GameInit(GameData* gameData)
 
             gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0; 
 
-            gameData->RenderSlotArray[i].ProjectionMatrix = glm::perspective(glm::radians(45.f), 800.f/600.f, 0.1f, 100.f);
             gameData->RenderSlotArray[i].DepthTest = true;
         }
 
