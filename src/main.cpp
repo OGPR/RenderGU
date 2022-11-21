@@ -31,8 +31,16 @@
 
 int main(int argc, char** argv)
 {
+    // Initialise Game Data (must be done before window creation to get window specs)
+    GameData gameData;
+
     // Create main window
-    GLFWwindow* window = Window();
+    GLFWwindow* window = Window(
+            gameData.windowSpecification.WindowWidth,
+            gameData.windowSpecification.WindowHeight,
+            gameData.windowSpecification.WindowTitle,
+            gameData.windowSpecification.WindowXPos,
+            gameData.windowSpecification.WindowYPos);
 
     // Set callbacks
     SetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -41,8 +49,6 @@ int main(int argc, char** argv)
     EngineVariables engineVariables;
     engineVariables.GLSLCompile = argc == 2 && !strcmp(argv[1], "-gl");
     
-    // Initialise Game Data
-    GameData gameData;
 
 
     clock_t ClockBegin = clock();

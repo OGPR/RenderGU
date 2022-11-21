@@ -15,15 +15,19 @@ struct Viewport
     GLsizei Height = 0;
 };
 
-GLFWwindow* Window()
+GLFWwindow* Window(int WindowWidth,
+                   int WindowHeight,
+                   const char* WindowTitle,
+                   int WindowXPos = 2000,
+                   int WindowYPos = 250)
 {
     Init();
     WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     WindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = CreateWindow(800, 600, "RenderGU", NULL, NULL);
-    glfwSetWindowPos(window, 2000, 250);
+    GLFWwindow* window = CreateWindow(WindowWidth, WindowHeight, WindowTitle, NULL, NULL);
+    glfwSetWindowPos(window, WindowXPos, WindowYPos);
     if (!window)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -47,8 +51,8 @@ GLFWwindow* Window()
     Viewport viewport;
     viewport.LowerLeftX = 0;
     viewport.LowerLeftY = 0;
-    viewport.Width = /*0.9 */ 800;
-    viewport.Height = /*0.9 */ 600;
+    viewport.Width = WindowWidth;
+    viewport.Height = WindowHeight;
 
     glViewport(viewport.LowerLeftX, viewport.LowerLeftY, viewport.Width, viewport.Height);
 

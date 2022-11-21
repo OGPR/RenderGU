@@ -7,6 +7,14 @@
 
 struct GameData
 {
+    struct WindowSpecification
+    {
+        int WindowWidth = 800;
+        int WindowHeight = 600;
+        const char* WindowTitle = "Baseline Triangle";
+        int WindowXPos = 800;
+        int WindowYPos = 280;
+    } windowSpecification;
     
     struct Models
     {
