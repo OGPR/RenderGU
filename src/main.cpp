@@ -17,8 +17,8 @@
 #include "Camera.h"
 
 //#include "games/BaselineTriangle/Triangle.h"
-#include "games/BaselinePlane/Plane.h"
-//#include "games/BaselineCube/Cube.h"
+//#include "games/BaselinePlane/Plane.h"
+#include "games/BaselineCube/Cube.h"
 //#include "games/BaselineLighting/Lighting.h"
 
 #include "engine/EngineVariables.h"
