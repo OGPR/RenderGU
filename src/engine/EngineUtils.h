@@ -53,19 +53,24 @@ void LoadGame(struct GameData* gameData,
 
     for (unsigned int i = 0; i < NumberOfSlots; ++i)
     {
-        BindVBO(CreateVBO());
+        // TODO - i == 0 is temp, remove/update
+        if (i == 0)
+        {
+            BindVBO(CreateVBO());
 
-        // Only allocate what is needed
-         
-        //TODO handle this for dev/release build 
-        // Will crash if these are zero
-        assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
-        assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
+            // Only allocate what is needed
 
-        if (!gameData->RenderSlotArray[i].Texture)
-            AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly, gameData->RenderSlotArray[i].Model.VertexData);
-        else
-            AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
+            //TODO handle this for dev/release build
+            // Will crash if these are zero
+            assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
+            assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
+
+            if (!gameData->RenderSlotArray[i].Texture)
+                AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly, gameData->RenderSlotArray[i].Model.VertexData);
+            else
+                AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
+
+        }
 
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
