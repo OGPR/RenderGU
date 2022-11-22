@@ -71,6 +71,23 @@ void LoadGame(struct GameData* gameData,
                 AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
 
         }
+        if (i == NumberOfSlots - 2)
+        {
+            BindVBO(CreateVBO());
+
+            // Only allocate what is needed
+
+            //TODO handle this for dev/release build
+            // Will crash if these are zero
+            assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
+            assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
+
+            if (!gameData->RenderSlotArray[i].Texture)
+                AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly, gameData->RenderSlotArray[i].Model.VertexData);
+            else
+                AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
+
+        }
 
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
@@ -103,6 +120,7 @@ void LoadGame(struct GameData* gameData,
                     gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
                     gameData->RenderSlotArray[i].Model.IndexArray,
                     GL_STATIC_DRAW);
+
         }
 
 
