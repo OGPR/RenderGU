@@ -34,6 +34,10 @@ int IntegerToTextureUnit(unsigned int Integer)
 };
 
 
+// TODO move these (to some local struct)
+// FOR EBO + VBO optimisation
+unsigned int EBO;
+
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData,
         void(*GameInitFuncPtr)(struct GameData*),
@@ -112,15 +116,20 @@ void LoadGame(struct GameData* gameData,
         {
             engineVariables->RenderObjectSlotArray[i].IndexedDraw = true;
 
-            unsigned int EBO;
-            glGenBuffers(1, &EBO);
+            if (i == NumberOfSlots - 2)
+            {
+                glGenBuffers(1, &EBO);
+            }
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-            glBufferData(
-                    GL_ELEMENT_ARRAY_BUFFER,
-                    gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
-                    gameData->RenderSlotArray[i].Model.IndexArray,
-                    GL_STATIC_DRAW);
 
+            if (i == NumberOfSlots - 2)
+            {
+                glBufferData(
+                        GL_ELEMENT_ARRAY_BUFFER,
+                        gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
+                        gameData->RenderSlotArray[i].Model.IndexArray,
+                        GL_STATIC_DRAW);
+            }
         }
 
 
