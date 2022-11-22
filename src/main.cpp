@@ -19,7 +19,8 @@
 //#include "games/BaselineTriangle/Triangle.h"
 //#include "games/BaselinePlane/Plane.h"
 //#include "games/BaselineCube/Cube.h"
-#include "games/BaselineLighting/Lighting.h"
+//#include "games/BaselineLighting/Lighting.h"
+#include "test/Transformations/2D.h"
 
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
@@ -63,6 +64,7 @@ int main(int argc, char** argv)
     // WindowPos variables
     int WindowWidth, WindowHeight;
     glfwGetWindowSize(window, &WindowWidth, &WindowHeight);
+    glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     while(!WindowShouldClose(window))
     {
