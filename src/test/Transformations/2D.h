@@ -34,6 +34,21 @@ struct GameData
 
 };
 
+glm::mat4 RGU_Translate(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
+{
+    return glm::translate(Matrix, glm::vec3(X, Y, Z));
+}
+
+glm::mat4 RGU_Scale(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
+{
+    return glm::scale(Matrix, glm::vec3(X, Y, Z));
+}
+
+glm::mat4 RGU_Rotate(glm::mat4 Matrix, float RotDeg, float X ,float Y ,float Z = 0)
+{
+    return glm::rotate(Matrix, glm::radians(RotDeg), glm::vec3(X, Y, Z));
+}
+
 void GameInit(GameData* gameData)
 {
     gameData->RenderSlotArray->_2D = true;
@@ -46,7 +61,11 @@ void GameInit(GameData* gameData)
     gameData->RenderSlotArray->ViewMatrix = glm::mat4(1.0f);
     gameData->RenderSlotArray->uniforms.Vec3.push_back({ "Color", glm::vec3(0.97f, 0.51f, 0.47f) });
 
+    ModelMatrix_0 = RGU_Scale(ModelMatrix_0, 0.5f, 0.5f);
+    ModelMatrix_0 = RGU_Rotate(ModelMatrix_0, 90.0f, 0.0f, 0.0f, 1.0f);
+
     gameData->RenderSlotArray->ModelMatrix = ModelMatrix_0;
+
 }
 
 

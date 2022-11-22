@@ -64,6 +64,7 @@ int main(int argc, char** argv)
     // WindowPos variables
     int WindowWidth, WindowHeight;
     glfwGetWindowSize(window, &WindowWidth, &WindowHeight);
+    glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     while(!WindowShouldClose(window))
     {
