@@ -28,31 +28,9 @@ struct GameData
         const char* FragmentShader = "../../../SPIRV_Bin/2DTransformationTest.frag.spv";
     }shaders;
 
-
-    RenderSlot renderSlot1;
-    RenderSlot renderSlot2;
-    RenderSlot renderSlot3;
-    RenderSlot renderSlot4;
-    RenderSlot renderSlot5;
-    RenderSlot renderSlot6;
-    RenderSlot renderSlot7;
-    RenderSlot renderSlot8;
-    RenderSlot renderSlot9;
-    RenderSlot renderSlot10;
-
-    unsigned int NumberOfRenderSlots = 10;
-    RenderSlot RenderSlotArray[10] =
+    unsigned int NumberOfRenderSlots = 5000;
+    RenderSlot RenderSlotArray[5000] =
     {
-        renderSlot1,
-        renderSlot2,
-        renderSlot3,
-        renderSlot4,
-        renderSlot5,
-        renderSlot6,
-        renderSlot7,
-        renderSlot8,
-        renderSlot9,
-        renderSlot10
     };
 
     std::vector<float> XTrans
@@ -99,7 +77,7 @@ void GameInit(GameData* gameData)
         gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);
         gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "Color", glm::vec3(0.97f, 0.51f, 0.47f) });
 
-        ModelMatrix_0 = RGU_Translate(ModelMatrix_0, gameData->XTrans[i], -0.9f);
+        ModelMatrix_0 = RGU_Translate(ModelMatrix_0, gameData->XTrans[i % 10], -0.9f);
         ModelMatrix_0 = RGU_Scale(ModelMatrix_0, 0.1f, 0.1f);
 
         gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0;
