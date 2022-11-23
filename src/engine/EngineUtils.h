@@ -74,11 +74,7 @@ void LoadGame(struct GameData* gameData,
             assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
             assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
 
-            if (!gameData->RenderSlotArray[i].Texture)
-                AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly, gameData->RenderSlotArray[i].Model.VertexData);
-            else
-                AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
-
+            AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
         }
 
 
