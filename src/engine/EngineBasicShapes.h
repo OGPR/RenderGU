@@ -13,8 +13,9 @@ struct EngineBasicShapes
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
             modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
 
-            modelData.AttributeArray = AttributeArray;
+            modelData.Name = "EngineBasicShapes::Triangle";
 
+            modelData.AttributeArray = AttributeArray;
         }
 
         ModelData modelData;
@@ -49,6 +50,8 @@ struct EngineBasicShapes
 
         unsigned int VBOMemoryAllocationSize = 15 * sizeof(float);
         unsigned int VBOMemoryAllocationSize_PosOnly = 9 * sizeof(float);
+
+        static bool VBOMemoryAllocated;
     };
 
     struct Plane
@@ -63,6 +66,8 @@ struct EngineBasicShapes
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
             modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+
+            modelData.Name = "EngineBasicShapes::Plane";
 
             modelData.AttributeArray = AttributeArray;
 
@@ -126,6 +131,8 @@ struct EngineBasicShapes
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
             modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
+
+            modelData.Name = "EngineBasicShapes::Cube";
 
             modelData.AttributeArray = AttributeArray;
 
