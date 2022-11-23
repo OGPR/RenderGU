@@ -35,10 +35,8 @@ int IntegerToTextureUnit(unsigned int Integer)
 };
 
 
-// TODO move these (to some local struct)
 // FOR EBO + VBO optimisation
 unsigned int EBO;
-
 std::set<const char*> ModelNameSetVBO;
 std::set<const char*> ModelNameSetEBO;
 
@@ -66,8 +64,6 @@ void LoadGame(struct GameData* gameData,
         {
             ModelNameSetVBO.insert((gameData->RenderSlotArray[i].Model.Name));
             BindVBO(CreateVBO());
-
-            // Only allocate what is needed
 
             //TODO handle this for dev/release build
             // Will crash if these are zero
