@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include "../Utility.h"
 
 void EngineCleanUp(struct EngineVariables* engineVariables)
@@ -34,6 +35,11 @@ int IntegerToTextureUnit(unsigned int Integer)
 };
 
 
+// FOR EBO + VBO optimisation
+unsigned int EBO;
+std::set<const char*> ModelNameSetVBO;
+std::set<const char*> ModelNameSetEBO;
+
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData,
         void(*GameInitFuncPtr)(struct GameData*),
@@ -53,19 +59,19 @@ void LoadGame(struct GameData* gameData,
 
     for (unsigned int i = 0; i < NumberOfSlots; ++i)
     {
-        BindVBO(CreateVBO());
+        assert(gameData->RenderSlotArray[i].Model.Name);
+        if(ModelNameSetVBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetVBO))
+        {
+            ModelNameSetVBO.insert((gameData->RenderSlotArray[i].Model.Name));
+            BindVBO(CreateVBO());
 
-        // Only allocate what is needed
-         
-        //TODO handle this for dev/release build 
-        // Will crash if these are zero
-        assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
-        assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
+            //TODO handle this for dev/release build
+            // Will crash if these are zero
+            assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
 
-        if (!gameData->RenderSlotArray[i].Texture)
-            AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly, gameData->RenderSlotArray[i].Model.VertexData);
-        else
             AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
+        }
+
 
         unsigned int VAO = CreateVAO();
         BindVAO(VAO);
@@ -90,14 +96,27 @@ void LoadGame(struct GameData* gameData,
         {
             engineVariables->RenderObjectSlotArray[i].IndexedDraw = true;
 
-            unsigned int EBO;
-            glGenBuffers(1, &EBO);
+            if (ModelNameSetEBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetEBO))
+            {
+                // Don't populate the ModelNameSetEBO just yet...
+                glGenBuffers(1, &EBO);
+            }
+
+            // We always need to bind an EBO to a currently bound VAO
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-            glBufferData(
-                    GL_ELEMENT_ARRAY_BUFFER,
-                    gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
-                    gameData->RenderSlotArray[i].Model.IndexArray,
-                    GL_STATIC_DRAW);
+
+            if (ModelNameSetEBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetEBO))
+            {
+                // Now we can populate the ModelNameSetEBO
+                ModelNameSetEBO.insert(gameData->RenderSlotArray[i].Model.Name);
+
+                glBufferData(
+                        GL_ELEMENT_ARRAY_BUFFER,
+                        gameData->RenderSlotArray[i].Model.EBOMemoryAllocationSize,
+                        gameData->RenderSlotArray[i].Model.IndexArray,
+                        GL_STATIC_DRAW);
+
+            }
         }
 
 

@@ -7,14 +7,11 @@ struct EngineBasicShapes
     {
         Triangle()
         {
-            modelData.VertexData = VertexData;;
-            modelData.VertexDataSize = VertexDataSize;
+            modelData.VertexData = VertexData;
             modelData.Indices = Indices;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
-            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
-
+            modelData.Name = "EngineBasicShapes::Triangle";
             modelData.AttributeArray = AttributeArray;
-
         }
 
         ModelData modelData;
@@ -44,26 +41,20 @@ struct EngineBasicShapes
              0.0f, 0.0f
         };
 
-        unsigned int VertexDataSize = 15;
         unsigned int Indices = 3;
-
         unsigned int VBOMemoryAllocationSize = 15 * sizeof(float);
-        unsigned int VBOMemoryAllocationSize_PosOnly = 9 * sizeof(float);
     };
 
     struct Plane
     {
         Plane()
         {
-            modelData.VertexData = VertexData;;
+            modelData.VertexData = VertexData;
             modelData.IndexArray = IndexArray; 
-            modelData.IndexArraySize = IndexArraySize;
-            modelData.VertexDataSize = VertexDataSize;
             modelData.Indices = Indices;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
-            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
-
+            modelData.Name = "EngineBasicShapes::Plane";
             modelData.AttributeArray = AttributeArray;
 
         }
@@ -103,32 +94,22 @@ struct EngineBasicShapes
             0, 2, 3
         };
 
-        unsigned int VertexDataSize = 20 * sizeof(float);
-        unsigned int IndexArraySize = 6 * sizeof(unsigned int);
-
         unsigned int Indices = 6;
-
         unsigned int VBOMemoryAllocationSize = 20 * sizeof(float);
-        unsigned int VBOMemoryAllocationSize_PosOnly = 12 * sizeof(float);
         unsigned int EBOMemoryAllocationSize = 6 * sizeof(unsigned int) ;
-
     };
 
     struct Cube
     {
         Cube()
         {
-            modelData.VertexData = VertexData;;
+            modelData.VertexData = VertexData;
             modelData.IndexArray = IndexArray; 
-            modelData.IndexArraySize = IndexArraySize;
-            modelData.VertexDataSize = VertexDataSize;
             modelData.Indices = Indices;
             modelData.VBOMemoryAllocationSize = VBOMemoryAllocationSize;
-            modelData.VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize_PosOnly;
             modelData.EBOMemoryAllocationSize = EBOMemoryAllocationSize;
-
+            modelData.Name = "EngineBasicShapes::Cube";
             modelData.AttributeArray = AttributeArray;
-
         }
 
         ModelData modelData;
@@ -237,17 +218,8 @@ struct EngineBasicShapes
             20, 23, 22
         };
 
-        unsigned int IndexArraySize = 6 * 6 * sizeof(unsigned int);
-
-        unsigned int VertexDataSize = 5*6*6;
-
         unsigned int Indices = 5*6*6;
-
-
         unsigned int VBOMemoryAllocationSize = 8 * 4 *6 * sizeof(float);
-        unsigned int VBOMemoryAllocationSize_PosOnly = VBOMemoryAllocationSize;
         unsigned int EBOMemoryAllocationSize = 6 * 6 * sizeof(unsigned int) ;
-
     };
-    
 };
