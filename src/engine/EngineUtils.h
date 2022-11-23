@@ -71,7 +71,6 @@ void LoadGame(struct GameData* gameData,
 
             //TODO handle this for dev/release build
             // Will crash if these are zero
-            assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize_PosOnly);
             assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
 
             AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
