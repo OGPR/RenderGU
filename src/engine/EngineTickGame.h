@@ -45,17 +45,18 @@ void TickGame(GLFWwindow* window,
 
             // TODO check/handle Unifrom existence
             GLint LocModelMatUniform = glGetUniformLocation(ShaderProgram, "ModelMatrix");
-            if (!SlotErrorReported[i] && LocModelMatUniform == -1)
+            if (LocModelMatUniform != -1)
+            {
+                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+            }
+            else if (!SlotErrorReported[i])
             {
                 SlotErrorReported[i] = true;
                 std::cout << "\nRenderGU requires a shader uniform named \"Model Matrix\"" << std::endl;
                 std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
                 std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
             }
-            else if (LocModelMatUniform != -1)
-            {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
-            }
+
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
