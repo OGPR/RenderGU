@@ -77,7 +77,21 @@ void TickGame(GLFWwindow* window,
                 std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
 
             }
-            glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+
+            // Projection Matrix Uniform
+            GLint LocProjMatUniform = glGetUniformLocation(ShaderProgram, "ProjectionMatrix");
+            if (LocProjMatUniform != -1)
+            {
+                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+            }
+            else if (!SlotErrorReported[i][2])
+            {
+                SlotErrorReported[i][2] = true;
+                std::cout << "\nRenderGU requires a shader uniform named \"Projection Matrix\"" << std::endl;
+                std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
+                std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
+
+            }
 
             /// --- END Transform matrix uniform setting --- ///
 
