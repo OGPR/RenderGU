@@ -3,6 +3,7 @@
 #include "../Utility.h"
 #include "EngineVariables.h"
 #include <iostream>
+#include <vector>
 
 void TickGame(GLFWwindow* window,
         EngineVariables* engineVariables,
@@ -10,7 +11,8 @@ void TickGame(GLFWwindow* window,
         float DeltaTime,
         int* WindowWidth,
         int* WindowHeight,
-        void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime))
+        void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime),
+        std::vector<bool> &SlotErrorReported)
 {
     (*GameTickFuncPtr)(window, gameData, DeltaTime);
 
@@ -18,6 +20,7 @@ void TickGame(GLFWwindow* window,
 
    
     const unsigned int LoopMax = gameData->NumberOfRenderSlots;
+    assert(SlotErrorReported.size() == LoopMax);
 
     for (unsigned int i = 0; i < LoopMax; ++i)
     {
@@ -41,7 +44,18 @@ void TickGame(GLFWwindow* window,
                     glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
             // TODO check/handle Unifrom existence
-            glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+            GLint LocModelMatUniform = glGetUniformLocation(ShaderProgram, "ModelMatrix");
+            if (!SlotErrorReported[i] && LocModelMatUniform == -1)
+            {
+                SlotErrorReported[i] = true;
+                std::cout << "\nRenderGU requires a shader uniform named \"Model Matrix\"" << std::endl;
+                std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
+                std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
+            }
+            else if (LocModelMatUniform != -1)
+            {
+                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+            }
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 

@@ -29,6 +29,7 @@
 #include "engine/EngineTickGame.h"
 #include "engine/EngineUtils.h"
 #include <time.h>
+#include <vector>
 
 
 int main(int argc, char** argv)
@@ -67,6 +68,7 @@ int main(int argc, char** argv)
     glfwGetWindowSize(window, &WindowWidth, &WindowHeight);
     glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
+    std::vector<bool> SlotErrorReported(gameData.NumberOfRenderSlots, false);
     while(!WindowShouldClose(window))
     {
         UpdateDeltaTime(&DeltaTime);
@@ -75,7 +77,7 @@ int main(int argc, char** argv)
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &engineVariables, &gameData, DeltaTime, &WindowWidth, &WindowHeight, &GameFrame);
+            TickGame(window, &engineVariables, &gameData, DeltaTime, &WindowWidth, &WindowHeight, &GameFrame, SlotErrorReported);
 
             EngineEndFrame(window, &engineVariables, false, DeltaTime);
         }
