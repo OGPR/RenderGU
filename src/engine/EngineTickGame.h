@@ -5,6 +5,13 @@
 #include <iostream>
 #include <vector>
 
+static void HandleUniformNameError(const char* UniformName, const char* ShaderFile, unsigned int SlotNumber)
+{
+    std::cout << "\nRenderGU requires a shader uniform named \"" << UniformName << "\"" << std::endl;
+    std::cout << "See shader " << ShaderFile << std::endl;
+    std::cout << "RenderGU is currently processing render slot " << SlotNumber << " during tick\n" << std::endl;
+
+}
 void TickGame(GLFWwindow* window,
         EngineVariables* engineVariables,
         struct GameData* gameData,
@@ -62,9 +69,7 @@ void TickGame(GLFWwindow* window,
             else if (!SlotErrorReported[i][0])
             {
                 SlotErrorReported[i][0] = true;
-                std::cout << "\nRenderGU requires a shader uniform named \"" << ModelMatUniformName << "\"" << std::endl;
-                std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
-                std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
+                HandleUniformNameError(ModelMatUniformName, gameData->RenderSlotArray[i].VertexShader, i);
             }
 
             // View Matrix Uniform
@@ -76,9 +81,7 @@ void TickGame(GLFWwindow* window,
             else if (!SlotErrorReported[i][1])
             {
                 SlotErrorReported[i][1] = true;
-                std::cout << "\nRenderGU requires a shader uniform named \"" << ViewMatUniformName << "\"" << std::endl;
-                std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
-                std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
+                HandleUniformNameError(ViewMatUniformName, gameData->RenderSlotArray[i].VertexShader, i);
             }
 
             // Projection Matrix Uniform
@@ -90,9 +93,7 @@ void TickGame(GLFWwindow* window,
             else if (!SlotErrorReported[i][2])
             {
                 SlotErrorReported[i][2] = true;
-                std::cout << "\nRenderGU requires a shader uniform named \"" << ProjMatUniformName << "\"" << std::endl;
-                std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
-                std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
+                HandleUniformNameError(ProjMatUniformName, gameData->RenderSlotArray[i].VertexShader, i);
             }
 
             /// --- END Transform matrix uniform setting --- ///
