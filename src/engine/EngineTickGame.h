@@ -54,7 +54,7 @@ void TickGame(GLFWwindow* window,
                                        ProjectionMatrix,
                                        engineVariables->transformMatrixUniformNames.ModelMatrixUniformName,
                                        engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
-                                       engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
+                                       engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName,
                                        SlotErrorReported,
                                        i,
                                        gameData);
