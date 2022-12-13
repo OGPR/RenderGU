@@ -41,4 +41,10 @@ struct EngineVariables
 
     bool GLSLCompile = false;
 
+    struct TransformMatrixUniformNames
+    {
+        const char* ModelMatrixUniformName = "ModelMatrix";
+        const char* ViewMatrixUniformName = "ViewMatrix";
+        const char* ProjectionMatrixUniformName = "ProjectionMatrix";
+    }transformMatrixUniformNames;
 };

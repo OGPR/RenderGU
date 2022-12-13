@@ -2,15 +2,18 @@
 
 #include "../Utility.h"
 #include "EngineVariables.h"
+#include "EngineUtils.h"
 #include <iostream>
+#include <vector>
 
 void TickGame(GLFWwindow* window,
-        EngineVariables* engineVariables,
-        struct GameData* gameData,
-        float DeltaTime,
-        int* WindowWidth,
-        int* WindowHeight,
-        void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime))
+              EngineVariables* engineVariables,
+              struct GameData* gameData,
+              float DeltaTime,
+              int* WindowWidth,
+              int* WindowHeight,
+              void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime),
+              std::vector<std::vector<bool>> &SlotErrorReported)
 {
     (*GameTickFuncPtr)(window, gameData, DeltaTime);
 
@@ -18,6 +21,11 @@ void TickGame(GLFWwindow* window,
 
    
     const unsigned int LoopMax = gameData->NumberOfRenderSlots;
+    assert(SlotErrorReported.size() == LoopMax);
+    for (auto& Elem : SlotErrorReported)
+    {
+        assert(Elem.size() == 3);
+    }
 
     for (unsigned int i = 0; i < LoopMax; ++i)
     {
@@ -40,10 +48,16 @@ void TickGame(GLFWwindow* window,
                     glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
                     glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
-            // TODO check/handle Unifrom existence
-            glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
-            glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-            glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+            SetTransformMatrixUniforms(ShaderProgram,
+                                       ModelMatrix,
+                                       ViewMatrix,
+                                       ProjectionMatrix,
+                                       engineVariables->transformMatrixUniformNames.ModelMatrixUniformName,
+                                       engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
+                                       engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName,
+                                       SlotErrorReported,
+                                       i,
+                                       gameData);
 
             for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Vec3)
             {

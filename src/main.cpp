@@ -29,6 +29,7 @@
 #include "engine/EngineTickGame.h"
 #include "engine/EngineUtils.h"
 #include <time.h>
+#include <vector>
 
 
 int main(int argc, char** argv)
@@ -67,6 +68,15 @@ int main(int argc, char** argv)
     glfwGetWindowSize(window, &WindowWidth, &WindowHeight);
     glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
+    ///--- START Set up error handling containers --- ///
+
+    // TODO For now, hardcoded to 3, as that is what we have in the engine
+    // (Model, View, Proj). Update (or generalise, e.g pass in number of engine uniforms) in future if/as required
+    std::vector<bool> EngineUniformErrorReported(3, false);
+    std::vector<std::vector<bool>> SlotErrorReported(gameData.NumberOfRenderSlots, EngineUniformErrorReported);
+
+    ///--- END Set up error handling containers --- ///
+
     while(!WindowShouldClose(window))
     {
         UpdateDeltaTime(&DeltaTime);
@@ -75,7 +85,7 @@ int main(int argc, char** argv)
 
         if (!engineVariables.pause)
         {
-            TickGame(window, &engineVariables, &gameData, DeltaTime, &WindowWidth, &WindowHeight, &GameFrame);
+            TickGame(window, &engineVariables, &gameData, DeltaTime, &WindowWidth, &WindowHeight, &GameFrame, SlotErrorReported);
 
             EngineEndFrame(window, &engineVariables, false, DeltaTime);
         }
