@@ -47,7 +47,4 @@ struct EngineVariables
         const char* ViewMatrixUniformName = "ViewMatrix";
         const char* ProjectionMatrixUniformName = "ProjectionMatrix";
     }transformMatrixUniformNames;
-
-
-
 };
