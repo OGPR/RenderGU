@@ -13,7 +13,7 @@ void TickGame(GLFWwindow* window,
               int* WindowWidth,
               int* WindowHeight,
               void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime),
-        std::vector<std::vector<bool>> &SlotErrorReported)
+              std::vector<std::vector<bool>> &SlotErrorReported)
 {
     (*GameTickFuncPtr)(window, gameData, DeltaTime);
 
