@@ -49,48 +49,50 @@ void TickGame(GLFWwindow* window,
 
             /// --- START Transform matrix uniform setting --- ///
 
+            const char* ModelMatUniformName = engineVariables->transformMatrixUniformNames.ModelMatrixUniformName;
+            const char* ViewMatUniformName = engineVariables->transformMatrixUniformNames.ViewMatrixUniformName;
+            const char* ProjMatUniformName = engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName;
+
             // Model Matrix Uniform
-            GLint LocModelMatUniform = glGetUniformLocation(ShaderProgram, "ModelMatrix");
+            GLint LocModelMatUniform = glGetUniformLocation(ShaderProgram, ModelMatUniformName);
             if (LocModelMatUniform != -1)
             {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ModelMatUniformName), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
             }
             else if (!SlotErrorReported[i][0])
             {
                 SlotErrorReported[i][0] = true;
-                std::cout << "\nRenderGU requires a shader uniform named \"Model Matrix\"" << std::endl;
+                std::cout << "\nRenderGU requires a shader uniform named \"" << ModelMatUniformName << "\"" << std::endl;
                 std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
                 std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
             }
 
             // View Matrix Uniform
-            GLint LocViewMatUniform = glGetUniformLocation(ShaderProgram, "ViewMatrix");
+            GLint LocViewMatUniform = glGetUniformLocation(ShaderProgram, ViewMatUniformName);
             if (LocViewMatUniform != -1)
             {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ViewMatUniformName), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
             }
             else if (!SlotErrorReported[i][1])
             {
                 SlotErrorReported[i][1] = true;
-                std::cout << "\nRenderGU requires a shader uniform named \"View Matrix\"" << std::endl;
+                std::cout << "\nRenderGU requires a shader uniform named \"" << ViewMatUniformName << "\"" << std::endl;
                 std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
                 std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
-
             }
 
             // Projection Matrix Uniform
-            GLint LocProjMatUniform = glGetUniformLocation(ShaderProgram, "ProjectionMatrix");
+            GLint LocProjMatUniform = glGetUniformLocation(ShaderProgram, ProjMatUniformName);
             if (LocProjMatUniform != -1)
             {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ProjMatUniformName), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
             }
             else if (!SlotErrorReported[i][2])
             {
                 SlotErrorReported[i][2] = true;
-                std::cout << "\nRenderGU requires a shader uniform named \"Projection Matrix\"" << std::endl;
+                std::cout << "\nRenderGU requires a shader uniform named \"" << ProjMatUniformName << "\"" << std::endl;
                 std::cout << "See shader " << gameData->RenderSlotArray[i].VertexShader << std::endl;
                 std::cout << "RenderGU is currently processing render slot " << i << " during tick\n" << std::endl;
-
             }
 
             /// --- END Transform matrix uniform setting --- ///
