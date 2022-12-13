@@ -12,13 +12,62 @@ static void HandleUniformNameError(const char* UniformName, const char* ShaderFi
     std::cout << "RenderGU is currently processing render slot " << SlotNumber << " during tick\n" << std::endl;
 
 }
+
+static void SetTransformMatrixUniforms(unsigned int ShaderProgram,
+                                       glm::mat4& ModelMatrix,
+                                       glm::mat4& ViewMatrix,
+                                       glm::mat4& ProjectionMatrix,
+                                       const char* ModelMatUniformName,
+                                       const char* ViewMatUniformName,
+                                       const char* ProjMatUniformName,
+                                       std::vector<std::vector<bool>>& SlotErrorReported,
+                                       unsigned int SlotNumber,
+                                       struct GameData* gameData)
+{
+    // Model Matrix Uniform
+    GLint LocModelMatUniform = glGetUniformLocation(ShaderProgram, ModelMatUniformName);
+    if (LocModelMatUniform != -1)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ModelMatUniformName), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+    }
+    else if (!SlotErrorReported[SlotNumber][0])
+    {
+        SlotErrorReported[SlotNumber][0] = true;
+        HandleUniformNameError(ModelMatUniformName, gameData->RenderSlotArray[SlotNumber].VertexShader, SlotNumber);
+    }
+
+    // View Matrix Uniform
+    GLint LocViewMatUniform = glGetUniformLocation(ShaderProgram, ViewMatUniformName);
+    if (LocViewMatUniform != -1)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ViewMatUniformName), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+    }
+    else if (!SlotErrorReported[SlotNumber][1])
+    {
+        SlotErrorReported[SlotNumber][1] = true;
+        HandleUniformNameError(ViewMatUniformName, gameData->RenderSlotArray[SlotNumber].VertexShader, SlotNumber);
+    }
+
+    // Projection Matrix Uniform
+    GLint LocProjMatUniform = glGetUniformLocation(ShaderProgram, ProjMatUniformName);
+    if (LocProjMatUniform != -1)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ProjMatUniformName), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+    }
+    else if (!SlotErrorReported[SlotNumber][2])
+    {
+        SlotErrorReported[SlotNumber][2] = true;
+        HandleUniformNameError(ProjMatUniformName, gameData->RenderSlotArray[SlotNumber].VertexShader, SlotNumber);
+    }
+
+}
 void TickGame(GLFWwindow* window,
-        EngineVariables* engineVariables,
-        struct GameData* gameData,
-        float DeltaTime,
-        int* WindowWidth,
-        int* WindowHeight,
-        void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime),
+              EngineVariables* engineVariables,
+              struct GameData* gameData,
+              float DeltaTime,
+              int* WindowWidth,
+              int* WindowHeight,
+              void(*GameTickFuncPtr)(GLFWwindow*, struct GameData*, float DeltaTime),
         std::vector<std::vector<bool>> &SlotErrorReported)
 {
     (*GameTickFuncPtr)(window, gameData, DeltaTime);
@@ -54,49 +103,16 @@ void TickGame(GLFWwindow* window,
                     glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
                     glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
-            /// --- START Transform matrix uniform setting --- ///
-
-            const char* ModelMatUniformName = engineVariables->transformMatrixUniformNames.ModelMatrixUniformName;
-            const char* ViewMatUniformName = engineVariables->transformMatrixUniformNames.ViewMatrixUniformName;
-            const char* ProjMatUniformName = engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName;
-
-            // Model Matrix Uniform
-            GLint LocModelMatUniform = glGetUniformLocation(ShaderProgram, ModelMatUniformName);
-            if (LocModelMatUniform != -1)
-            {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ModelMatUniformName), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
-            }
-            else if (!SlotErrorReported[i][0])
-            {
-                SlotErrorReported[i][0] = true;
-                HandleUniformNameError(ModelMatUniformName, gameData->RenderSlotArray[i].VertexShader, i);
-            }
-
-            // View Matrix Uniform
-            GLint LocViewMatUniform = glGetUniformLocation(ShaderProgram, ViewMatUniformName);
-            if (LocViewMatUniform != -1)
-            {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ViewMatUniformName), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-            }
-            else if (!SlotErrorReported[i][1])
-            {
-                SlotErrorReported[i][1] = true;
-                HandleUniformNameError(ViewMatUniformName, gameData->RenderSlotArray[i].VertexShader, i);
-            }
-
-            // Projection Matrix Uniform
-            GLint LocProjMatUniform = glGetUniformLocation(ShaderProgram, ProjMatUniformName);
-            if (LocProjMatUniform != -1)
-            {
-                glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ProjMatUniformName), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
-            }
-            else if (!SlotErrorReported[i][2])
-            {
-                SlotErrorReported[i][2] = true;
-                HandleUniformNameError(ProjMatUniformName, gameData->RenderSlotArray[i].VertexShader, i);
-            }
-
-            /// --- END Transform matrix uniform setting --- ///
+            SetTransformMatrixUniforms(ShaderProgram,
+                                       ModelMatrix,
+                                       ViewMatrix,
+                                       ProjectionMatrix,
+                                       engineVariables->transformMatrixUniformNames.ModelMatrixUniformName,
+                                       engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
+                                       engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
+                                       SlotErrorReported,
+                                       i,
+                                       gameData);
 
             for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Vec3)
             {
