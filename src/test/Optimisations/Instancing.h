@@ -64,12 +64,7 @@ void GameInit(GameData* gameData)
     gameData->RenderSlotArray[0].FragmentShader = gameData->shaders.FragmentShader;
     gameData->RenderSlotArray[0].ViewMatrix = glm::mat4(1.0f);
     gameData->RenderSlotArray[0].uniforms.Vec3.push_back({ "Color", glm::vec3(0.97f, 0.51f, 0.47f) });
-
-
-
-    //gameData->RenderSlotArray[0].ModelMatrix = ModelMatrixVec[0];
     gameData->RenderSlotArray[0].ModelMatrixCollection = ModelMatrixVec;
-
 }
 
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
