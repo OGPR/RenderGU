@@ -30,9 +30,7 @@ struct GameData
     unsigned int NumberOfRenderSlots = 1;
     RenderSlot RenderSlotArray[1] = {};
 
-    float TranslationX = 0.1f;
-    float TranslationY = 0.0f;
-    float TranslationZ = 0.0f;
+    glm::vec3 Translation = glm::vec3(0.1f, 0.0f, 0.0f);
 };
 
 glm::mat4 RGU_Translate(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
@@ -74,4 +72,17 @@ void GameInit(GameData* gameData)
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
     gameData->RenderSlotArray[0].Draw = true;
+
+    std::vector<glm::mat4> ModelMatrixVec;
+    for (unsigned int n = 1; n < gameData->RenderSlotArray[0].ModelMatrixCollection.size() ; n += 2)
+    {
+        float TransX = gameData->Translation.x * n;
+        float TransY = gameData->Translation.y + (0.01 * DeltaTime);
+        gameData->Translation.y = TransY;
+
+        // Remember, scale(translate) is T*S
+        ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(TransX, TransY, gameData->Translation.z)), glm::vec3(0.1f, 0.1f, 0.1f)));
+        ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-TransX, TransY, gameData->Translation.z)), glm::vec3(0.1f, 0.1f, 0.1f)));
+    }
+    gameData->RenderSlotArray[0].ModelMatrixCollection = ModelMatrixVec;
 }
