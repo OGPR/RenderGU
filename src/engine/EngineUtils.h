@@ -96,6 +96,7 @@ void LoadGame(struct GameData* gameData,
         glGenBuffers(1, & ModelMatrixBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gameData->RenderSlotArray[i].ModelMatrixCollection.size(), gameData->RenderSlotArray[i].ModelMatrixCollection.data(), GL_STATIC_DRAW);
+        engineVariables->RenderObjectSlotArray[i].ModelMatrixBuffer = ModelMatrixBuffer;
 
         // TODO Un-hardcode attribute number 3
         if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)

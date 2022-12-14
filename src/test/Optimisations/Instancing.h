@@ -29,6 +29,10 @@ struct GameData
 
     unsigned int NumberOfRenderSlots = 1;
     RenderSlot RenderSlotArray[1] = {};
+
+    float TranslationX = 0.1f;
+    float TranslationY = 0.0f;
+    float TranslationZ = 0.0f;
 };
 
 glm::mat4 RGU_Translate(glm::mat4 Matrix, float X ,float Y ,float Z = 0)

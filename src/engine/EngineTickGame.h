@@ -128,6 +128,25 @@ void TickGame(GLFWwindow* window,
             {
                 if (engineVariables->RenderObjectSlotArray[i].ModelMatrixCollection.size() >= 2)
                 {
+                    glBindBuffer(GL_ARRAY_BUFFER, engineVariables->RenderObjectSlotArray[i].ModelMatrixBuffer);
+
+                    // Map the buffer
+                    glm::mat4 * matrices = (glm::mat4 *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+
+                    for (size_t n = 0; n < engineVariables->RenderObjectSlotArray[i].ModelMatrixCollection.size(); n += 2)
+                    {
+
+                        float TransX = gameData->TranslationX * n;
+                        float TransY = gameData->TranslationY + (0.01 * DeltaTime);
+                        gameData->TranslationY = TransY;
+                        matrices[n] =
+                                glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(TransX, TransY, gameData->TranslationZ)), glm::vec3(0.1f, 0.1f, 0.1f));
+                        matrices[n + 1] =
+                                glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-TransX, TransY, gameData->TranslationZ)), glm::vec3(0.1f, 0.1f, 0.1f));
+
+                    }
+                    glUnmapBuffer(GL_ARRAY_BUFFER);
+
                     glDrawArraysInstanced(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices, engineVariables->RenderObjectSlotArray[i].ModelMatrixCollection.size());
                 }
                 else

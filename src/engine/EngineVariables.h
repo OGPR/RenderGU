@@ -17,6 +17,8 @@ struct EngineVariables
 
         std::vector<glm::mat4> ModelMatrixCollection;
 
+        unsigned int ModelMatrixBuffer = 0;
+
         bool IndexedDraw = false;
 
         bool DepthTest = false;
