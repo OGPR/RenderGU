@@ -50,12 +50,13 @@ void GameInit(GameData* gameData)
 {
     gameData->RenderSlotArray[0]._2D = true;
 
-    std::vector<glm::mat4> ModelMatrixVec
+    std::vector<glm::mat4> ModelMatrixVec;
+    for (unsigned int multiplier = 1; multiplier < 20; multiplier += 2)
     {
         // Remember, scale(translate) is T*S
-        glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)),
-        glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f))
-    };
+        ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-0.1f * multiplier, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
+        ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.1f * multiplier, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
+    }
 
     gameData->RenderSlotArray[0].Model = gameData->models.Triangle.modelData;
     gameData->RenderSlotArray[0].NumAttributes = 1;
