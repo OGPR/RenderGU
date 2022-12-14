@@ -90,6 +90,26 @@ void LoadGame(struct GameData* gameData,
                     gameData->RenderSlotArray[i].Model.AttributeArray[j].Offset);
         }
 
+        // TODO Add instancing buffer optimisation to VBO optimisation (including handling indexing)
+
+        unsigned int ModelMatrixBuffer;
+        glGenBuffers(1, & ModelMatrixBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gameData->RenderSlotArray[i].ModelMatrixCollection.size(), gameData->RenderSlotArray[i].ModelMatrixCollection.data(), GL_STATIC_DRAW);
+
+        // TODO Un-hardcode attribute number 3
+        if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)
+        {
+            for (unsigned int k = 3; k < 7; k++)
+            {
+                SetAttribute_Instanced(k,
+                             4,
+                             sizeof(glm::mat4),
+                             (void*)(sizeof(glm::vec4) * (k-3)));
+            }
+
+        }
+        //TODO handle < 2 case (and if there is no model matrix set)
 
 
         if (gameData->RenderSlotArray[i].Model.IndexArray)
@@ -176,7 +196,18 @@ void LoadGame(struct GameData* gameData,
 
         engineVariables->RenderObjectSlotArray[i].ShaderProgram = shaderProgram;
 
-        engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
+        // TODO handle case where we have a model matrix collection of size one (and no ModelMatrix)
+        // or we also have a model matrix
+        if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() < 2)
+        {
+            engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
+        }
+        else
+        {
+            // TODO change to pointers to allow adjusting model matrix per-frame (i.e allow animation)
+            engineVariables->RenderObjectSlotArray[i].ModelMatrixCollection = gameData->RenderSlotArray[i].ModelMatrixCollection;
+        }
+
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
 
         engineVariables->RenderObjectSlotArray[i].DepthTest = gameData->RenderSlotArray[i].DepthTest;
@@ -280,6 +311,42 @@ void SetTransformMatrixUniforms(unsigned int ShaderProgram,
         SlotErrorReported[SlotNumber][0] = true;
         HandleUniformNameError(ModelMatUniformName, gameData->RenderSlotArray[SlotNumber].VertexShader, SlotNumber);
     }
+
+    // View Matrix Uniform
+    GLint LocViewMatUniform = glGetUniformLocation(ShaderProgram, ViewMatUniformName);
+    if (LocViewMatUniform != -1)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ViewMatUniformName), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+    }
+    else if (!SlotErrorReported[SlotNumber][1])
+    {
+        SlotErrorReported[SlotNumber][1] = true;
+        HandleUniformNameError(ViewMatUniformName, gameData->RenderSlotArray[SlotNumber].VertexShader, SlotNumber);
+    }
+
+    // Projection Matrix Uniform
+    GLint LocProjMatUniform = glGetUniformLocation(ShaderProgram, ProjMatUniformName);
+    if (LocProjMatUniform != -1)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, ProjMatUniformName), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+    }
+    else if (!SlotErrorReported[SlotNumber][2])
+    {
+        SlotErrorReported[SlotNumber][2] = true;
+        HandleUniformNameError(ProjMatUniformName, gameData->RenderSlotArray[SlotNumber].VertexShader, SlotNumber);
+    }
+
+}
+
+void SetTransformMatrixUniforms_Instancing(unsigned int ShaderProgram,
+                                glm::mat4& ViewMatrix,
+                                glm::mat4& ProjectionMatrix,
+                                const char* ViewMatUniformName,
+                                const char* ProjMatUniformName,
+                                std::vector<std::vector<bool>>& SlotErrorReported,
+                                unsigned int SlotNumber,
+                                struct GameData* gameData)
+{
 
     // View Matrix Uniform
     GLint LocViewMatUniform = glGetUniformLocation(ShaderProgram, ViewMatUniformName);

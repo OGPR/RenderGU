@@ -15,6 +15,8 @@ struct EngineVariables
         glm::mat4* ModelMatrix = nullptr;
         glm::mat4* ViewMatrix = nullptr;
 
+        std::vector<glm::mat4> ModelMatrixCollection;
+
         bool IndexedDraw = false;
 
         bool DepthTest = false;

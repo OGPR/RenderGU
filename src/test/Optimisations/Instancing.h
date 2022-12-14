@@ -28,10 +28,7 @@ struct GameData
     }shaders;
 
     unsigned int NumberOfRenderSlots = 1;
-    RenderSlot RenderSlotArray[1] =
-            {
-            };
-
+    RenderSlot RenderSlotArray[1] = {};
 };
 
 glm::mat4 RGU_Translate(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
@@ -51,29 +48,30 @@ glm::mat4 RGU_Rotate(glm::mat4 Matrix, float RotDeg, float X ,float Y ,float Z =
 
 void GameInit(GameData* gameData)
 {
-    for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
+    gameData->RenderSlotArray[0]._2D = true;
+
+    std::vector<glm::mat4> ModelMatrixVec
     {
-        gameData->RenderSlotArray[i]._2D = true;
-        glm::mat4 ModelMatrix_0 = glm::mat4(1.0f);
+        // Remember, scale(translate) is T*S
+        glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)),
+        glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f))
+    };
 
-        gameData->RenderSlotArray[i].Model = gameData->models.Triangle.modelData;
-        gameData->RenderSlotArray[i].NumAttributes = 1;
-        gameData->RenderSlotArray[i].VertexShader = gameData->shaders.VertexShader;
-        gameData->RenderSlotArray[i].FragmentShader = gameData->shaders.FragmentShader;
-        gameData->RenderSlotArray[i].ViewMatrix = glm::mat4(1.0f);
-        gameData->RenderSlotArray[i].uniforms.Vec3.push_back({ "Color", glm::vec3(0.97f, 0.51f, 0.47f) });
+    gameData->RenderSlotArray[0].Model = gameData->models.Triangle.modelData;
+    gameData->RenderSlotArray[0].NumAttributes = 1;
+    gameData->RenderSlotArray[0].VertexShader = gameData->shaders.VertexShader;
+    gameData->RenderSlotArray[0].FragmentShader = gameData->shaders.FragmentShader;
+    gameData->RenderSlotArray[0].ViewMatrix = glm::mat4(1.0f);
+    gameData->RenderSlotArray[0].uniforms.Vec3.push_back({ "Color", glm::vec3(0.97f, 0.51f, 0.47f) });
 
-        ModelMatrix_0 = RGU_Scale(ModelMatrix_0, 0.1f, 0.1f);
 
-        gameData->RenderSlotArray[i].ModelMatrix = ModelMatrix_0;
 
-    }
+    //gameData->RenderSlotArray[0].ModelMatrix = ModelMatrixVec[0];
+    gameData->RenderSlotArray[0].ModelMatrixCollection = ModelMatrixVec;
+
 }
 
 void GameFrame(GLFWwindow* window, GameData* gameData, float DeltaTime)
 {
-    for (unsigned int i = 0; i < gameData->NumberOfRenderSlots; ++i)
-    {
-        gameData->RenderSlotArray[i].Draw = true;
-    }
+    gameData->RenderSlotArray[0].Draw = true;
 }
