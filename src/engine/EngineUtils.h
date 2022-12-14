@@ -59,6 +59,10 @@ void LoadGame(struct GameData* gameData,
 
     for (unsigned int i = 0; i < NumberOfSlots; ++i)
     {
+        // Bind VAO First
+        unsigned int VAO = CreateVAO();
+        BindVAO(VAO);
+
         assert(gameData->RenderSlotArray[i].Model.Name);
         if(ModelNameSetVBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetVBO))
         {
@@ -71,10 +75,6 @@ void LoadGame(struct GameData* gameData,
 
             AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
         }
-
-
-        unsigned int VAO = CreateVAO();
-        BindVAO(VAO);
 
         const unsigned int NumAttributes = gameData->RenderSlotArray[i].NumAttributes;
 
