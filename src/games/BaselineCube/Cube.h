@@ -128,6 +128,10 @@ struct GameData
 
     }shaders;
 
+    struct GlobalGameVariables
+    {
+        bool HasInstancing = false;
+    }globalGameVariables;
 
     RenderSlot renderSlot1, renderSlot2, renderSlot3;
 
@@ -172,6 +176,7 @@ void GameInit(GameData* gameData)
                 0,
                 ModelMatrix_0,
                 ViewMatrix_0,
+                std::vector<glm::mat4>{},
                 false,
                 true
             };

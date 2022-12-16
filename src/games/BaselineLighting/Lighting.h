@@ -34,6 +34,11 @@ struct GameData
 
     }shaders;
 
+    struct GlobalGameVariables
+    {
+        bool HasInstancing = false;
+    }globalGameVariables;
+
     RenderSlot renderSlot1, renderSlot2;
     unsigned int NumberOfRenderSlots = 2;
     RenderSlot RenderSlotArray[2] = { renderSlot1, renderSlot2 };
