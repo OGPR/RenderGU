@@ -35,21 +35,6 @@ struct GameData
     glm::vec3 Translation_Slot2 = glm::vec3(0.105f, 0.0f, 0.0f);
 };
 
-glm::mat4 RGU_Translate(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
-{
-    return glm::translate(Matrix, glm::vec3(X, Y, Z));
-}
-
-glm::mat4 RGU_Scale(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
-{
-    return glm::scale(Matrix, glm::vec3(X, Y, Z));
-}
-
-glm::mat4 RGU_Rotate(glm::mat4 Matrix, float RotDeg, float X ,float Y ,float Z = 0)
-{
-    return glm::rotate(Matrix, glm::radians(RotDeg), glm::vec3(X, Y, Z));
-}
-
 void GameInit(GameData* gameData)
 {
     // First slot
