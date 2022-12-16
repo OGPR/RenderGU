@@ -18,7 +18,8 @@ struct GameData
 
     struct Models
     {
-        EngineBasicShapes::Triangle Triangle;
+        //EngineBasicShapes::Triangle Triangle;
+        EngineBasicShapes::Plane Plane;
     }models;
 
     struct Shaders
@@ -30,7 +31,8 @@ struct GameData
     unsigned int NumberOfRenderSlots = 1;
     RenderSlot RenderSlotArray[1] = {};
 
-    glm::vec3 Translation = glm::vec3(0.1f, 0.0f, 0.0f);
+    //glm::vec3 Translation = glm::vec3(0.1f, 0.0f, 0.0f);
+    glm::vec3 Translation = glm::vec3(0.105f, 0.0f, 0.0f);
 };
 
 glm::mat4 RGU_Translate(glm::mat4 Matrix, float X ,float Y ,float Z = 0)
@@ -56,11 +58,13 @@ void GameInit(GameData* gameData)
     for (unsigned int multiplier = 1; multiplier < 20; multiplier += 2)
     {
         // Remember, scale(translate) is T*S
+        //ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-0.1f * multiplier, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
+        //ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.1f * multiplier, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
         ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-0.1f * multiplier, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
         ModelMatrixVec.push_back(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.1f * multiplier, 0.0f, 0.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
     }
 
-    gameData->RenderSlotArray[0].Model = gameData->models.Triangle.modelData;
+    gameData->RenderSlotArray[0].Model = gameData->models.Plane.modelData;
     gameData->RenderSlotArray[0].NumAttributes = 1;
     gameData->RenderSlotArray[0].VertexShader = gameData->shaders.VertexShader;
     gameData->RenderSlotArray[0].FragmentShader = gameData->shaders.FragmentShader;

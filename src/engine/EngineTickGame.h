@@ -120,7 +120,7 @@ void TickGame(GLFWwindow* window,
 
             glBindVertexArray(engineVariables->RenderObjectSlotArray[i].VAO);
 
-            if (engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+            if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() < 2 && engineVariables->RenderObjectSlotArray[i].IndexedDraw)
             {
                 glDrawElements(GL_TRIANGLES,engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0);
             }
@@ -140,7 +140,14 @@ void TickGame(GLFWwindow* window,
                     }
                     glUnmapBuffer(GL_ARRAY_BUFFER);
 
-                    glDrawArraysInstanced(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices, gameData->RenderSlotArray[i].ModelMatrixCollection.size());
+                    if (engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+                    {
+                        glDrawElementsInstanced(GL_TRIANGLES, engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0, gameData->RenderSlotArray[i].ModelMatrixCollection.size());
+                    }
+                    else
+                    {
+                        glDrawArraysInstanced(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices, gameData->RenderSlotArray[i].ModelMatrixCollection.size());
+                    }
                 }
                 else
                 {
