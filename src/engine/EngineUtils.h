@@ -203,11 +203,6 @@ void LoadGame(struct GameData* gameData,
         {
             engineVariables->RenderObjectSlotArray[i].ModelMatrix = &gameData->RenderSlotArray[i].ModelMatrix;
         }
-        else
-        {
-            // TODO change to pointers to allow adjusting model matrix per-frame (i.e allow animation)
-            engineVariables->RenderObjectSlotArray[i].ModelMatrixCollection = gameData->RenderSlotArray[i].ModelMatrixCollection;
-        }
 
         engineVariables->RenderObjectSlotArray[i].ViewMatrix = &gameData->RenderSlotArray[i].ViewMatrix;
 
