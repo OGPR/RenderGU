@@ -16,13 +16,13 @@
 #include "stb_image.h"
 #include "Camera.h"
 
-#include "games/BaselineTriangle/Triangle.h"
+//#include "games/BaselineTriangle/Triangle.h"
 //#include "games/BaselinePlane/Plane.h"
 //#include "games/BaselineCube/Cube.h"
 //#include "games/BaselineLighting/Lighting.h"
 //#include "test/Transformations/2D.h"
 //#include "test/Optimisations/VBO_OptimisationTest.h"
-//#include "test/Optimisations/Instancing.h"
+#include "test/Optimisations/Instancing.h"
 
 #include "engine/EngineVariables.h"
 #include "engine/EngineInputProcessing.h"
