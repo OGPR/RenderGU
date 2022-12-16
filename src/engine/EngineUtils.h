@@ -64,7 +64,7 @@ void LoadGame(struct GameData* gameData,
         BindVAO(VAO);
 
         assert(gameData->RenderSlotArray[i].Model.Name);
-        if(ModelNameSetVBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetVBO))
+        if(gameData->globalGameVariables.HasInstancing || ModelNameSetVBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetVBO))
         {
             ModelNameSetVBO.insert((gameData->RenderSlotArray[i].Model.Name));
             BindVBO(CreateVBO());
@@ -92,11 +92,14 @@ void LoadGame(struct GameData* gameData,
 
         // TODO Add instancing buffer optimisation to VBO optimisation (including handling indexing)
 
-        unsigned int ModelMatrixBuffer;
-        glGenBuffers(1, & ModelMatrixBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gameData->RenderSlotArray[i].ModelMatrixCollection.size(), gameData->RenderSlotArray[i].ModelMatrixCollection.data(), GL_STATIC_DRAW);
-        engineVariables->RenderObjectSlotArray[i].ModelMatrixBuffer = ModelMatrixBuffer;
+        if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)
+        {
+            unsigned int ModelMatrixBuffer;
+            glGenBuffers(1, & ModelMatrixBuffer);
+            glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBuffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gameData->RenderSlotArray[i].ModelMatrixCollection.size(), gameData->RenderSlotArray[i].ModelMatrixCollection.data(), GL_STATIC_DRAW);
+            engineVariables->RenderObjectSlotArray[i].ModelMatrixBuffer = ModelMatrixBuffer;
+        }
 
         // TODO Un-hardcode attribute number 3
         if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)

@@ -29,6 +29,11 @@ struct GameData
         const char* FragmentShader = "../../../SPIRV_Bin/2DTransformationTest.frag.spv";
     }shaders;
 
+    struct GlobalGameVariables
+    {
+        bool HasInstancing = false;
+    }globalGameVariables;
+
     unsigned int NumberOfRenderSlots = 22;
     RenderSlot RenderSlotArray[22] =
     {
