@@ -28,6 +28,11 @@ struct GameData
         const char* FragmentShader = "../../../SPIRV_Bin/InstancingTest.frag.spv";
     }shaders;
 
+    struct GlobalGameVariables
+    {
+        bool HasInstancing = true;
+    }globalGameVariables;
+
     unsigned int NumberOfRenderSlots = 2;
     RenderSlot RenderSlotArray[2] = {};
 
