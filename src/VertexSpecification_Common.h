@@ -101,6 +101,13 @@ void SetAttribute(GLuint index, GLint size, GLsizei stride, const void* offset)
     glVertexAttribPointer(index, size , GL_FLOAT, GL_FALSE, stride , offset);
     glEnableVertexAttribArray(index);
 }
+
+void SetAttribute_Instanced(GLuint index, GLint size, GLsizei stride, const void* offset)
+{
+    glVertexAttribPointer(index, size , GL_FLOAT, GL_FALSE, stride , offset);
+    glEnableVertexAttribArray(index);
+    glVertexAttribDivisor(index, 1);
+}
 //** End Helper function definitions
 
 //** Begin Helper data structures definitions

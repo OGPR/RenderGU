@@ -23,6 +23,8 @@ struct RenderSlot
     glm::mat4 ModelMatrix;
     glm::mat4 ViewMatrix;
 
+    std::vector<glm::mat4> ModelMatrixCollection;
+
     bool Draw = false; 
 
     bool DepthTest = false;

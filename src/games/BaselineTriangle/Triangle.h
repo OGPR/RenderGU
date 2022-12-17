@@ -52,6 +52,11 @@ struct GameData
 
     }shaders;
 
+    struct GlobalGameVariables
+    {
+        bool HasInstancing = false;
+    }globalGameVariables;
+
 
     RenderSlot renderSlot1, renderSlot2, renderSlot3;
 

@@ -38,7 +38,13 @@ void TickGame(GLFWwindow* window,
 
             unsigned int ShaderProgram = engineVariables->RenderObjectSlotArray[i].ShaderProgram;
 
-            glm::mat4 ModelMatrix = *engineVariables->RenderObjectSlotArray[i].ModelMatrix;
+            glm::mat4 ModelMatrix = glm::mat4(0.0f);
+            if (engineVariables->RenderObjectSlotArray[i].ModelMatrix)
+            {
+                ModelMatrix = *engineVariables->RenderObjectSlotArray[i].ModelMatrix;
+            }
+
+            assert(engineVariables->RenderObjectSlotArray[i].ViewMatrix);
             glm::mat4 ViewMatrix = *engineVariables->RenderObjectSlotArray[i].ViewMatrix;
 
             processWindowPos(window, WindowWidth, WindowHeight);
@@ -48,16 +54,31 @@ void TickGame(GLFWwindow* window,
                     glm::ortho(-OrthWidth, OrthWidth, -OrthHeight, OrthHeight, 0.0f, 0.01f) :
                     glm::perspective(glm::radians(45.f), float(*WindowWidth) / float(*WindowHeight), 0.1f, 100.f);
 
-            SetTransformMatrixUniforms(ShaderProgram,
-                                       ModelMatrix,
-                                       ViewMatrix,
-                                       ProjectionMatrix,
-                                       engineVariables->transformMatrixUniformNames.ModelMatrixUniformName,
-                                       engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
-                                       engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName,
-                                       SlotErrorReported,
-                                       i,
-                                       gameData);
+            if (engineVariables->RenderObjectSlotArray[i].ModelMatrix)
+            {
+                SetTransformMatrixUniforms(ShaderProgram,
+                                           ModelMatrix,
+                                           ViewMatrix,
+                                           ProjectionMatrix,
+                                           engineVariables->transformMatrixUniformNames.ModelMatrixUniformName,
+                                           engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
+                                           engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName,
+                                           SlotErrorReported,
+                                           i,
+                                           gameData);
+            }
+            else
+            {
+                SetTransformMatrixUniforms_Instancing(ShaderProgram,
+                                           ViewMatrix,
+                                           ProjectionMatrix,
+                                           engineVariables->transformMatrixUniformNames.ViewMatrixUniformName,
+                                           engineVariables->transformMatrixUniformNames.ProjectionMatrixUniformName,
+                                           SlotErrorReported,
+                                           i,
+                                           gameData);
+
+            }
 
             for (const auto& UniformPair : *engineVariables->RenderObjectSlotArray[i].uniforms.Vec3)
             {
@@ -99,10 +120,40 @@ void TickGame(GLFWwindow* window,
 
             glBindVertexArray(engineVariables->RenderObjectSlotArray[i].VAO);
 
-            if (engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+            if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() < 2 && engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+            {
                 glDrawElements(GL_TRIANGLES,engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0);
+            }
             else
-                glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
+            {
+                if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)
+                {
+                    glBindBuffer(GL_ARRAY_BUFFER, engineVariables->RenderObjectSlotArray[i].ModelMatrixBuffer);
+
+                    // Map the buffer
+                    glm::mat4 * matrices = (glm::mat4 *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+
+                    for (size_t n = 0; n < gameData->RenderSlotArray[i].ModelMatrixCollection.size(); n += 2)
+                    {
+                        matrices[n] = gameData->RenderSlotArray[i].ModelMatrixCollection[n];
+                        matrices[n + 1] = gameData->RenderSlotArray[i].ModelMatrixCollection[n + 1];
+                    }
+                    glUnmapBuffer(GL_ARRAY_BUFFER);
+
+                    if (engineVariables->RenderObjectSlotArray[i].IndexedDraw)
+                    {
+                        glDrawElementsInstanced(GL_TRIANGLES, engineVariables->RenderObjectSlotArray[i].Indices, GL_UNSIGNED_INT, 0, gameData->RenderSlotArray[i].ModelMatrixCollection.size());
+                    }
+                    else
+                    {
+                        glDrawArraysInstanced(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices, gameData->RenderSlotArray[i].ModelMatrixCollection.size());
+                    }
+                }
+                else
+                {
+                    glDrawArrays(GL_TRIANGLES, 0, engineVariables->RenderObjectSlotArray[i].Indices);
+                }
+            }
 
             if (engineVariables->RenderObjectSlotArray[i].DepthTest)
                 glDisable(GL_DEPTH_TEST);
