@@ -33,6 +33,7 @@ struct GameData
     struct GlobalGameVariables
     {
         bool HasInstancing = true;
+        unsigned int InstancingModelMatrixShaderInputLocation = 3;
     }globalGameVariables;
 
     unsigned int NumberOfRenderSlots = 3;

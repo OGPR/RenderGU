@@ -111,7 +111,7 @@ void LoadGame(struct GameData* gameData,
         // TODO Un-hardcode attribute number 3
         if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)
         {
-            for (unsigned int k = 3; k < 7; k++)
+            for (unsigned int k = gameData->globalGameVariables.InstancingModelMatrixShaderInputLocation; k < 7; k++)
             {
                 SetAttribute_Instanced(k,
                              4,
