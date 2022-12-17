@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <map>
 #include "../Utility.h"
 
 void EngineCleanUp(struct EngineVariables* engineVariables)
@@ -39,6 +40,7 @@ int IntegerToTextureUnit(unsigned int Integer)
 unsigned int EBO;
 std::set<const char*> ModelNameSetVBO;
 std::set<const char*> ModelNameSetEBO;
+std::map<const char*, unsigned int> ModelNameVertexBufferMap;
 
 // Load game data will include vertex specification, shader compilation
 void LoadGame(struct GameData* gameData,
@@ -67,12 +69,17 @@ void LoadGame(struct GameData* gameData,
         if(gameData->globalGameVariables.HasInstancing || ModelNameSetVBO.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameSetVBO))
         {
             ModelNameSetVBO.insert((gameData->RenderSlotArray[i].Model.Name));
-            BindVBO(CreateVBO());
+            if(ModelNameVertexBufferMap.find(gameData->RenderSlotArray[i].Model.Name) == std::end(ModelNameVertexBufferMap))
+            {
+                ModelNameVertexBufferMap.insert({gameData->RenderSlotArray[i].Model.Name, CreateVBO()});
+            }
+            BindVBO(ModelNameVertexBufferMap[gameData->RenderSlotArray[i].Model.Name]);
 
             //TODO handle this for dev/release build
             // Will crash if these are zero
             assert(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize);
 
+            // Note this does NOT send the same buffer twice - so if we already have a vertex buffer, we can call below without penalty
             AllocateMemoryVBO(gameData->RenderSlotArray[i].Model.VBOMemoryAllocationSize, gameData->RenderSlotArray[i].Model.VertexData);
         }
 
