@@ -97,8 +97,6 @@ void LoadGame(struct GameData* gameData,
                     gameData->RenderSlotArray[i].Model.AttributeArray[j].Offset);
         }
 
-        // TODO Add instancing buffer optimisation to VBO optimisation (including handling indexing)
-
         if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)
         {
             unsigned int ModelMatrixBuffer;
@@ -108,7 +106,6 @@ void LoadGame(struct GameData* gameData,
             engineVariables->RenderObjectSlotArray[i].ModelMatrixBuffer = ModelMatrixBuffer;
         }
 
-        // TODO Un-hardcode attribute number 3
         if (gameData->RenderSlotArray[i].ModelMatrixCollection.size() >= 2)
         {
             for (unsigned int k = gameData->globalGameVariables.InstancingModelMatrixShaderInputLocation; k < 7; k++)
@@ -120,8 +117,6 @@ void LoadGame(struct GameData* gameData,
             }
 
         }
-        //TODO handle < 2 case (and if there is no model matrix set)
-
 
         if (gameData->RenderSlotArray[i].Model.IndexArray)
         {
@@ -149,7 +144,6 @@ void LoadGame(struct GameData* gameData,
 
             }
         }
-
 
         engineVariables->RenderObjectSlotArray[i].VAO = VAO;
         engineVariables->RenderObjectSlotArray[i].Indices = gameData->RenderSlotArray[i].Model.Indices;
