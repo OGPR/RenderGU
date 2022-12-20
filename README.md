@@ -2,7 +2,7 @@
 Cross-platform rendering engine built from the ground up.
 
 ## Current Engine Information
-For current engine architecture and other features, see [przet.com](przet.com).
+For current engine architecture and other features, see [przet.com](http://przet.com).
 
 See also the [releases](https://github.com/OGPR/RenderGU/releases).
 <br>
