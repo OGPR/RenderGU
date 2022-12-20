@@ -1,7 +1,21 @@
 # RenderGU
-Rendering ground up (GU) using modern OpenGL.
+Cross-platform rendering engine built from the ground up.
 
-## Current Engine Features
+## Current Engine Information
+For current engine architecture and other features, see [przet.com](przet.com).
+
+See also the [releases](https://github.com/OGPR/RenderGU/releases).
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+------------------------------------------------------------------
+
+## *** Pre-v1.0.0-alpha.1 *** Engine Features
 ### Display state scene switching
 
 #### Scene Data Examples
